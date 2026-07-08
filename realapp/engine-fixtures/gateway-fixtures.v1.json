@@ -1,0 +1,2047 @@
+{
+  "meta": {
+    "contractVersion": "1.0.0",
+    "engineVersion": "0.1.0",
+    "ruleVersion": "krlt-yaja-2026.07",
+    "timezone": "Asia/Seoul",
+    "midnightModeDefault": "yaja"
+  },
+  "fourPillars": [
+    {
+      "id": "rep-1990-0315-1430-male",
+      "input": {
+        "year": 1990,
+        "month": 3,
+        "day": 15,
+        "hour": 14,
+        "minute": 30,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "庚",
+            "ji": "午"
+          },
+          "month": {
+            "gan": "己",
+            "ji": "卯"
+          },
+          "day": {
+            "gan": "己",
+            "ji": "卯"
+          },
+          "hour": {
+            "gan": "辛",
+            "ji": "未"
+          }
+        },
+        "dayMaster": "己",
+        "sipsin": {
+          "yearGan": "상관",
+          "monthGan": "비견",
+          "dayGan": "",
+          "hourGan": "식신",
+          "yearJi": "편인",
+          "monthJi": "편관",
+          "dayJi": "편관",
+          "hourJi": "비견"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "丁",
+            "己"
+          ],
+          "monthJi": [
+            "乙"
+          ],
+          "dayJi": [
+            "乙"
+          ],
+          "hourJi": [
+            "己",
+            "丁",
+            "乙"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "편인",
+            "junggi": "비견"
+          },
+          "monthJi": {
+            "bongi": "편관"
+          },
+          "dayJi": {
+            "bongi": "편관"
+          },
+          "hourJi": {
+            "bongi": "비견",
+            "junggi": "편인",
+            "yeogi": "편관"
+          }
+        }
+      }
+    },
+    {
+      "id": "rep-1985-1102-0320-female",
+      "input": {
+        "year": 1985,
+        "month": 11,
+        "day": 2,
+        "hour": 3,
+        "minute": 20,
+        "gender": "female",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "乙",
+            "ji": "丑"
+          },
+          "month": {
+            "gan": "丙",
+            "ji": "戌"
+          },
+          "day": {
+            "gan": "乙",
+            "ji": "巳"
+          },
+          "hour": {
+            "gan": "戊",
+            "ji": "寅"
+          }
+        },
+        "dayMaster": "乙",
+        "sipsin": {
+          "yearGan": "비견",
+          "monthGan": "상관",
+          "dayGan": "",
+          "hourGan": "정재",
+          "yearJi": "편재",
+          "monthJi": "정재",
+          "dayJi": "상관",
+          "hourJi": "겁재"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "己",
+            "癸",
+            "辛"
+          ],
+          "monthJi": [
+            "戊",
+            "辛",
+            "丁"
+          ],
+          "dayJi": [
+            "丙",
+            "庚",
+            "戊"
+          ],
+          "hourJi": [
+            "甲",
+            "丙",
+            "戊"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "편재",
+            "junggi": "편인",
+            "yeogi": "편관"
+          },
+          "monthJi": {
+            "bongi": "정재",
+            "junggi": "편관",
+            "yeogi": "식신"
+          },
+          "dayJi": {
+            "bongi": "상관",
+            "junggi": "정관",
+            "yeogi": "정재"
+          },
+          "hourJi": {
+            "bongi": "겁재",
+            "junggi": "상관",
+            "yeogi": "정재"
+          }
+        }
+      }
+    },
+    {
+      "id": "rep-2000-0229-1200-male-leapday",
+      "input": {
+        "year": 2000,
+        "month": 2,
+        "day": 29,
+        "hour": 12,
+        "minute": 0,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "庚",
+            "ji": "辰"
+          },
+          "month": {
+            "gan": "戊",
+            "ji": "寅"
+          },
+          "day": {
+            "gan": "丁",
+            "ji": "巳"
+          },
+          "hour": {
+            "gan": "丙",
+            "ji": "午"
+          }
+        },
+        "dayMaster": "丁",
+        "sipsin": {
+          "yearGan": "정재",
+          "monthGan": "상관",
+          "dayGan": "",
+          "hourGan": "겁재",
+          "yearJi": "상관",
+          "monthJi": "정인",
+          "dayJi": "겁재",
+          "hourJi": "비견"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "戊",
+            "乙",
+            "癸"
+          ],
+          "monthJi": [
+            "甲",
+            "丙",
+            "戊"
+          ],
+          "dayJi": [
+            "丙",
+            "庚",
+            "戊"
+          ],
+          "hourJi": [
+            "丁",
+            "己"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "상관",
+            "junggi": "편인",
+            "yeogi": "편관"
+          },
+          "monthJi": {
+            "bongi": "정인",
+            "junggi": "겁재",
+            "yeogi": "상관"
+          },
+          "dayJi": {
+            "bongi": "겁재",
+            "junggi": "정재",
+            "yeogi": "상관"
+          },
+          "hourJi": {
+            "bongi": "비견",
+            "junggi": "식신"
+          }
+        }
+      }
+    },
+    {
+      "id": "rep-1962-1231-2340-female-yearend",
+      "input": {
+        "year": 1962,
+        "month": 12,
+        "day": 31,
+        "hour": 23,
+        "minute": 40,
+        "gender": "female",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "壬",
+            "ji": "寅"
+          },
+          "month": {
+            "gan": "壬",
+            "ji": "子"
+          },
+          "day": {
+            "gan": "癸",
+            "ji": "卯"
+          },
+          "hour": {
+            "gan": "甲",
+            "ji": "子"
+          }
+        },
+        "dayMaster": "癸",
+        "sipsin": {
+          "yearGan": "겁재",
+          "monthGan": "겁재",
+          "dayGan": "",
+          "hourGan": "상관",
+          "yearJi": "상관",
+          "monthJi": "비견",
+          "dayJi": "식신",
+          "hourJi": "비견"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "甲",
+            "丙",
+            "戊"
+          ],
+          "monthJi": [
+            "癸",
+            "壬"
+          ],
+          "dayJi": [
+            "乙"
+          ],
+          "hourJi": [
+            "癸",
+            "壬"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "상관",
+            "junggi": "정재",
+            "yeogi": "정관"
+          },
+          "monthJi": {
+            "bongi": "비견",
+            "junggi": "겁재"
+          },
+          "dayJi": {
+            "bongi": "식신"
+          },
+          "hourJi": {
+            "bongi": "비견",
+            "junggi": "겁재"
+          }
+        }
+      }
+    },
+    {
+      "id": "rep-2026-0707-0915-male-today",
+      "input": {
+        "year": 2026,
+        "month": 7,
+        "day": 7,
+        "hour": 9,
+        "minute": 15,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "丙",
+            "ji": "午"
+          },
+          "month": {
+            "gan": "甲",
+            "ji": "午"
+          },
+          "day": {
+            "gan": "壬",
+            "ji": "午"
+          },
+          "hour": {
+            "gan": "乙",
+            "ji": "巳"
+          }
+        },
+        "dayMaster": "壬",
+        "sipsin": {
+          "yearGan": "편재",
+          "monthGan": "식신",
+          "dayGan": "",
+          "hourGan": "상관",
+          "yearJi": "정재",
+          "monthJi": "정재",
+          "dayJi": "정재",
+          "hourJi": "편재"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "丁",
+            "己"
+          ],
+          "monthJi": [
+            "丁",
+            "己"
+          ],
+          "dayJi": [
+            "丁",
+            "己"
+          ],
+          "hourJi": [
+            "丙",
+            "庚",
+            "戊"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "정재",
+            "junggi": "정관"
+          },
+          "monthJi": {
+            "bongi": "정재",
+            "junggi": "정관"
+          },
+          "dayJi": {
+            "bongi": "정재",
+            "junggi": "정관"
+          },
+          "hourJi": {
+            "bongi": "편재",
+            "junggi": "편인",
+            "yeogi": "편관"
+          }
+        }
+      }
+    },
+    {
+      "id": "lunar-1990-0219-1430-male",
+      "input": {
+        "year": 1990,
+        "month": 2,
+        "day": 19,
+        "hour": 14,
+        "minute": 30,
+        "gender": "male",
+        "isLunar": true,
+        "birthPlace": null,
+        "isLeapMonth": false
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "庚",
+            "ji": "午"
+          },
+          "month": {
+            "gan": "己",
+            "ji": "卯"
+          },
+          "day": {
+            "gan": "己",
+            "ji": "卯"
+          },
+          "hour": {
+            "gan": "辛",
+            "ji": "未"
+          }
+        },
+        "dayMaster": "己",
+        "sipsin": {
+          "yearGan": "상관",
+          "monthGan": "비견",
+          "dayGan": "",
+          "hourGan": "식신",
+          "yearJi": "편인",
+          "monthJi": "편관",
+          "dayJi": "편관",
+          "hourJi": "비견"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "丁",
+            "己"
+          ],
+          "monthJi": [
+            "乙"
+          ],
+          "dayJi": [
+            "乙"
+          ],
+          "hourJi": [
+            "己",
+            "丁",
+            "乙"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "편인",
+            "junggi": "비견"
+          },
+          "monthJi": {
+            "bongi": "편관"
+          },
+          "dayJi": {
+            "bongi": "편관"
+          },
+          "hourJi": {
+            "bongi": "비견",
+            "junggi": "편인",
+            "yeogi": "편관"
+          }
+        }
+      }
+    },
+    {
+      "id": "lunar-leap-1911-0608-1030-male",
+      "input": {
+        "year": 1911,
+        "month": 6,
+        "day": 8,
+        "hour": 10,
+        "minute": 30,
+        "gender": "male",
+        "isLunar": true,
+        "birthPlace": null,
+        "isLeapMonth": true
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "辛",
+            "ji": "亥"
+          },
+          "month": {
+            "gan": "乙",
+            "ji": "未"
+          },
+          "day": {
+            "gan": "甲",
+            "ji": "辰"
+          },
+          "hour": {
+            "gan": "己",
+            "ji": "巳"
+          }
+        },
+        "dayMaster": "甲",
+        "sipsin": {
+          "yearGan": "정관",
+          "monthGan": "겁재",
+          "dayGan": "",
+          "hourGan": "정재",
+          "yearJi": "편인",
+          "monthJi": "정재",
+          "dayJi": "편재",
+          "hourJi": "식신"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "壬",
+            "甲"
+          ],
+          "monthJi": [
+            "己",
+            "丁",
+            "乙"
+          ],
+          "dayJi": [
+            "戊",
+            "乙",
+            "癸"
+          ],
+          "hourJi": [
+            "丙",
+            "庚",
+            "戊"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "편인",
+            "junggi": "비견"
+          },
+          "monthJi": {
+            "bongi": "정재",
+            "junggi": "상관",
+            "yeogi": "겁재"
+          },
+          "dayJi": {
+            "bongi": "편재",
+            "junggi": "겁재",
+            "yeogi": "정인"
+          },
+          "hourJi": {
+            "bongi": "식신",
+            "junggi": "편관",
+            "yeogi": "편재"
+          }
+        }
+      }
+    },
+    {
+      "id": "lunar-nonleap-1911-0608-1030-male",
+      "input": {
+        "year": 1911,
+        "month": 6,
+        "day": 8,
+        "hour": 10,
+        "minute": 30,
+        "gender": "male",
+        "isLunar": true,
+        "birthPlace": null,
+        "isLeapMonth": false
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "辛",
+            "ji": "亥"
+          },
+          "month": {
+            "gan": "甲",
+            "ji": "午"
+          },
+          "day": {
+            "gan": "甲",
+            "ji": "戌"
+          },
+          "hour": {
+            "gan": "己",
+            "ji": "巳"
+          }
+        },
+        "dayMaster": "甲",
+        "sipsin": {
+          "yearGan": "정관",
+          "monthGan": "비견",
+          "dayGan": "",
+          "hourGan": "정재",
+          "yearJi": "편인",
+          "monthJi": "상관",
+          "dayJi": "편재",
+          "hourJi": "식신"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "壬",
+            "甲"
+          ],
+          "monthJi": [
+            "丁",
+            "己"
+          ],
+          "dayJi": [
+            "戊",
+            "辛",
+            "丁"
+          ],
+          "hourJi": [
+            "丙",
+            "庚",
+            "戊"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "편인",
+            "junggi": "비견"
+          },
+          "monthJi": {
+            "bongi": "상관",
+            "junggi": "정재"
+          },
+          "dayJi": {
+            "bongi": "편재",
+            "junggi": "정관",
+            "yeogi": "상관"
+          },
+          "hourJi": {
+            "bongi": "식신",
+            "junggi": "편관",
+            "yeogi": "편재"
+          }
+        }
+      }
+    },
+    {
+      "id": "unknown-time-1975-0820-female",
+      "input": {
+        "year": 1975,
+        "month": 8,
+        "day": 20,
+        "hour": null,
+        "minute": null,
+        "gender": "female",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "乙",
+            "ji": "卯"
+          },
+          "month": {
+            "gan": "甲",
+            "ji": "申"
+          },
+          "day": {
+            "gan": "戊",
+            "ji": "戌"
+          },
+          "hour": null
+        },
+        "dayMaster": "戊",
+        "sipsin": {
+          "yearGan": "정관",
+          "monthGan": "편관",
+          "dayGan": "",
+          "hourGan": "",
+          "yearJi": "정관",
+          "monthJi": "식신",
+          "dayJi": "비견",
+          "hourJi": ""
+        },
+        "jijanggan": {
+          "yearJi": [
+            "乙"
+          ],
+          "monthJi": [
+            "庚",
+            "壬",
+            "戊"
+          ],
+          "dayJi": [
+            "戊",
+            "辛",
+            "丁"
+          ],
+          "hourJi": []
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "정관"
+          },
+          "monthJi": {
+            "bongi": "식신",
+            "junggi": "편재",
+            "yeogi": "비견"
+          },
+          "dayJi": {
+            "bongi": "비견",
+            "junggi": "상관",
+            "yeogi": "정인"
+          }
+        }
+      }
+    },
+    {
+      "id": "boundary-2330-yaja",
+      "input": {
+        "year": 1993,
+        "month": 5,
+        "day": 10,
+        "hour": 23,
+        "minute": 30,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": {
+        "midnightMode": "yaja"
+      },
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "癸",
+            "ji": "酉"
+          },
+          "month": {
+            "gan": "丁",
+            "ji": "巳"
+          },
+          "day": {
+            "gan": "辛",
+            "ji": "卯"
+          },
+          "hour": {
+            "gan": "庚",
+            "ji": "子"
+          }
+        },
+        "dayMaster": "辛",
+        "sipsin": {
+          "yearGan": "식신",
+          "monthGan": "편관",
+          "dayGan": "",
+          "hourGan": "겁재",
+          "yearJi": "비견",
+          "monthJi": "정관",
+          "dayJi": "편재",
+          "hourJi": "식신"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "辛"
+          ],
+          "monthJi": [
+            "丙",
+            "庚",
+            "戊"
+          ],
+          "dayJi": [
+            "乙"
+          ],
+          "hourJi": [
+            "癸",
+            "壬"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "비견"
+          },
+          "monthJi": {
+            "bongi": "정관",
+            "junggi": "겁재",
+            "yeogi": "정인"
+          },
+          "dayJi": {
+            "bongi": "편재"
+          },
+          "hourJi": {
+            "bongi": "식신",
+            "junggi": "상관"
+          }
+        }
+      }
+    },
+    {
+      "id": "boundary-2330-joja",
+      "input": {
+        "year": 1993,
+        "month": 5,
+        "day": 10,
+        "hour": 23,
+        "minute": 30,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": {
+        "midnightMode": "joja"
+      },
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "癸",
+            "ji": "酉"
+          },
+          "month": {
+            "gan": "丁",
+            "ji": "巳"
+          },
+          "day": {
+            "gan": "壬",
+            "ji": "辰"
+          },
+          "hour": {
+            "gan": "庚",
+            "ji": "子"
+          }
+        },
+        "dayMaster": "壬",
+        "sipsin": {
+          "yearGan": "겁재",
+          "monthGan": "정재",
+          "dayGan": "",
+          "hourGan": "편인",
+          "yearJi": "정인",
+          "monthJi": "편재",
+          "dayJi": "편관",
+          "hourJi": "겁재"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "辛"
+          ],
+          "monthJi": [
+            "丙",
+            "庚",
+            "戊"
+          ],
+          "dayJi": [
+            "戊",
+            "乙",
+            "癸"
+          ],
+          "hourJi": [
+            "癸",
+            "壬"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "정인"
+          },
+          "monthJi": {
+            "bongi": "편재",
+            "junggi": "편인",
+            "yeogi": "편관"
+          },
+          "dayJi": {
+            "bongi": "편관",
+            "junggi": "상관",
+            "yeogi": "겁재"
+          },
+          "hourJi": {
+            "bongi": "겁재",
+            "junggi": "비견"
+          }
+        }
+      }
+    },
+    {
+      "id": "gender-independence-female",
+      "input": {
+        "year": 1990,
+        "month": 3,
+        "day": 15,
+        "hour": 14,
+        "minute": 30,
+        "gender": "female",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "expected": {
+        "pillars": {
+          "year": {
+            "gan": "庚",
+            "ji": "午"
+          },
+          "month": {
+            "gan": "己",
+            "ji": "卯"
+          },
+          "day": {
+            "gan": "己",
+            "ji": "卯"
+          },
+          "hour": {
+            "gan": "辛",
+            "ji": "未"
+          }
+        },
+        "dayMaster": "己",
+        "sipsin": {
+          "yearGan": "상관",
+          "monthGan": "비견",
+          "dayGan": "",
+          "hourGan": "식신",
+          "yearJi": "편인",
+          "monthJi": "편관",
+          "dayJi": "편관",
+          "hourJi": "비견"
+        },
+        "jijanggan": {
+          "yearJi": [
+            "丁",
+            "己"
+          ],
+          "monthJi": [
+            "乙"
+          ],
+          "dayJi": [
+            "乙"
+          ],
+          "hourJi": [
+            "己",
+            "丁",
+            "乙"
+          ]
+        },
+        "jijangganSipsin": {
+          "yearJi": {
+            "bongi": "편인",
+            "junggi": "비견"
+          },
+          "monthJi": {
+            "bongi": "편관"
+          },
+          "dayJi": {
+            "bongi": "편관"
+          },
+          "hourJi": {
+            "bongi": "비견",
+            "junggi": "편인",
+            "yeogi": "편관"
+          }
+        }
+      }
+    },
+    {
+      "id": "err-ambiguous-1954-0321-0015",
+      "input": {
+        "year": 1954,
+        "month": 3,
+        "day": 21,
+        "hour": 0,
+        "minute": 15,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "error": {
+        "name": "AmbiguousCivilTimeError",
+        "code": "AMBIGUOUS_CIVIL_TIME"
+      }
+    },
+    {
+      "id": "err-nonexistent-1961-0810-0015",
+      "input": {
+        "year": 1961,
+        "month": 8,
+        "day": 10,
+        "hour": 0,
+        "minute": 15,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "error": {
+        "name": "NonexistentCivilTimeError",
+        "code": "NONEXISTENT_CIVIL_TIME"
+      }
+    },
+    {
+      "id": "err-range-1908-0331-below",
+      "input": {
+        "year": 1908,
+        "month": 3,
+        "day": 31,
+        "hour": 12,
+        "minute": 0,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "error": {
+        "name": "ManseryeokPolicyError",
+        "code": "MANSERYEOK_POLICY_ERROR"
+      }
+    },
+    {
+      "id": "err-range-2102-0101-above",
+      "input": {
+        "year": 2102,
+        "month": 1,
+        "day": 1,
+        "hour": 12,
+        "minute": 0,
+        "gender": "male",
+        "isLunar": false,
+        "birthPlace": null
+      },
+      "options": null,
+      "error": {
+        "name": "Error",
+        "code": null
+      }
+    }
+  ],
+  "dailyCycle": [
+    {
+      "id": "daily-2026-07-07",
+      "date": {
+        "year": 2026,
+        "month": 7,
+        "day": 7
+      },
+      "expected": {
+        "yearPillar": {
+          "gan": "丙",
+          "ji": "午"
+        },
+        "monthPillar": {
+          "gan": "乙",
+          "ji": "未"
+        },
+        "dayPillar": {
+          "gan": "壬",
+          "ji": "午"
+        },
+        "solarContext": {
+          "solar": {
+            "year": 2026,
+            "month": 7,
+            "day": 7,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "lunar": {
+            "year": 2026,
+            "month": 5,
+            "day": 23,
+            "isLeapMonth": false,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "ganji": {
+            "year": {
+              "gan": "丙",
+              "ji": "午",
+              "ganji": "丙午"
+            },
+            "month": {
+              "gan": "乙",
+              "ji": "未",
+              "ganji": "乙未"
+            },
+            "day": {
+              "gan": "壬",
+              "ji": "午",
+              "ganji": "壬午"
+            },
+            "hour": {
+              "gan": "丙",
+              "ji": "午",
+              "ganji": "丙午"
+            }
+          },
+          "currentSolarTerm": {
+            "sourceName": "小暑",
+            "koreanName": "소서",
+            "year": 2026,
+            "month": 7,
+            "day": 7,
+            "hour": 10,
+            "minute": 56,
+            "second": 57,
+            "julianDay": 2461228.956215278
+          },
+          "exactSolarTerm": "소서"
+        }
+      }
+    },
+    {
+      "id": "daily-2026-02-03-before-ipchun",
+      "date": {
+        "year": 2026,
+        "month": 2,
+        "day": 3
+      },
+      "expected": {
+        "yearPillar": {
+          "gan": "乙",
+          "ji": "巳"
+        },
+        "monthPillar": {
+          "gan": "己",
+          "ji": "丑"
+        },
+        "dayPillar": {
+          "gan": "戊",
+          "ji": "申"
+        },
+        "solarContext": {
+          "solar": {
+            "year": 2026,
+            "month": 2,
+            "day": 3,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "lunar": {
+            "year": 2025,
+            "month": 12,
+            "day": 16,
+            "isLeapMonth": false,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "ganji": {
+            "year": {
+              "gan": "乙",
+              "ji": "巳",
+              "ganji": "乙巳"
+            },
+            "month": {
+              "gan": "己",
+              "ji": "丑",
+              "ganji": "己丑"
+            },
+            "day": {
+              "gan": "戊",
+              "ji": "申",
+              "ganji": "戊申"
+            },
+            "hour": {
+              "gan": "戊",
+              "ji": "午",
+              "ganji": "戊午"
+            }
+          },
+          "currentSolarTerm": {
+            "sourceName": "大寒",
+            "koreanName": "대한",
+            "year": 2026,
+            "month": 1,
+            "day": 20,
+            "hour": 10,
+            "minute": 44,
+            "second": 56,
+            "julianDay": 2461060.94787037
+          }
+        }
+      }
+    },
+    {
+      "id": "daily-2026-02-04-ipchun",
+      "date": {
+        "year": 2026,
+        "month": 2,
+        "day": 4
+      },
+      "expected": {
+        "yearPillar": {
+          "gan": "丙",
+          "ji": "午"
+        },
+        "monthPillar": {
+          "gan": "庚",
+          "ji": "寅"
+        },
+        "dayPillar": {
+          "gan": "己",
+          "ji": "酉"
+        },
+        "solarContext": {
+          "solar": {
+            "year": 2026,
+            "month": 2,
+            "day": 4,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "lunar": {
+            "year": 2025,
+            "month": 12,
+            "day": 17,
+            "isLeapMonth": false,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "ganji": {
+            "year": {
+              "gan": "丙",
+              "ji": "午",
+              "ganji": "丙午"
+            },
+            "month": {
+              "gan": "庚",
+              "ji": "寅",
+              "ganji": "庚寅"
+            },
+            "day": {
+              "gan": "己",
+              "ji": "酉",
+              "ganji": "己酉"
+            },
+            "hour": {
+              "gan": "庚",
+              "ji": "午",
+              "ganji": "庚午"
+            }
+          },
+          "currentSolarTerm": {
+            "sourceName": "立春",
+            "koreanName": "입춘",
+            "year": 2026,
+            "month": 2,
+            "day": 4,
+            "hour": 5,
+            "minute": 2,
+            "second": 8,
+            "julianDay": 2461075.709814815
+          },
+          "exactSolarTerm": "입춘"
+        }
+      }
+    },
+    {
+      "id": "daily-2025-12-31",
+      "date": {
+        "year": 2025,
+        "month": 12,
+        "day": 31
+      },
+      "expected": {
+        "yearPillar": {
+          "gan": "乙",
+          "ji": "巳"
+        },
+        "monthPillar": {
+          "gan": "戊",
+          "ji": "子"
+        },
+        "dayPillar": {
+          "gan": "甲",
+          "ji": "戌"
+        },
+        "solarContext": {
+          "solar": {
+            "year": 2025,
+            "month": 12,
+            "day": 31,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "lunar": {
+            "year": 2025,
+            "month": 11,
+            "day": 12,
+            "isLeapMonth": false,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "ganji": {
+            "year": {
+              "gan": "乙",
+              "ji": "巳",
+              "ganji": "乙巳"
+            },
+            "month": {
+              "gan": "戊",
+              "ji": "子",
+              "ganji": "戊子"
+            },
+            "day": {
+              "gan": "甲",
+              "ji": "戌",
+              "ganji": "甲戌"
+            },
+            "hour": {
+              "gan": "庚",
+              "ji": "午",
+              "ganji": "庚午"
+            }
+          },
+          "currentSolarTerm": {
+            "sourceName": "冬至",
+            "koreanName": "동지",
+            "year": 2025,
+            "month": 12,
+            "day": 22,
+            "hour": 0,
+            "minute": 3,
+            "second": 5,
+            "julianDay": 2461031.5021412037
+          }
+        }
+      }
+    },
+    {
+      "id": "daily-2026-01-01",
+      "date": {
+        "year": 2026,
+        "month": 1,
+        "day": 1
+      },
+      "expected": {
+        "yearPillar": {
+          "gan": "乙",
+          "ji": "巳"
+        },
+        "monthPillar": {
+          "gan": "戊",
+          "ji": "子"
+        },
+        "dayPillar": {
+          "gan": "乙",
+          "ji": "亥"
+        },
+        "solarContext": {
+          "solar": {
+            "year": 2026,
+            "month": 1,
+            "day": 1,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "lunar": {
+            "year": 2025,
+            "month": 11,
+            "day": 13,
+            "isLeapMonth": false,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "ganji": {
+            "year": {
+              "gan": "乙",
+              "ji": "巳",
+              "ganji": "乙巳"
+            },
+            "month": {
+              "gan": "戊",
+              "ji": "子",
+              "ganji": "戊子"
+            },
+            "day": {
+              "gan": "乙",
+              "ji": "亥",
+              "ganji": "乙亥"
+            },
+            "hour": {
+              "gan": "壬",
+              "ji": "午",
+              "ganji": "壬午"
+            }
+          },
+          "currentSolarTerm": {
+            "sourceName": "冬至",
+            "koreanName": "동지",
+            "year": 2025,
+            "month": 12,
+            "day": 22,
+            "hour": 0,
+            "minute": 3,
+            "second": 5,
+            "julianDay": 2461031.5021412037
+          }
+        }
+      }
+    },
+    {
+      "id": "daily-2024-02-29-leapday",
+      "date": {
+        "year": 2024,
+        "month": 2,
+        "day": 29
+      },
+      "expected": {
+        "yearPillar": {
+          "gan": "甲",
+          "ji": "辰"
+        },
+        "monthPillar": {
+          "gan": "丙",
+          "ji": "寅"
+        },
+        "dayPillar": {
+          "gan": "癸",
+          "ji": "亥"
+        },
+        "solarContext": {
+          "solar": {
+            "year": 2024,
+            "month": 2,
+            "day": 29,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "lunar": {
+            "year": 2024,
+            "month": 1,
+            "day": 20,
+            "isLeapMonth": false,
+            "hour": 12,
+            "minute": 0,
+            "second": 0
+          },
+          "ganji": {
+            "year": {
+              "gan": "甲",
+              "ji": "辰",
+              "ganji": "甲辰"
+            },
+            "month": {
+              "gan": "丙",
+              "ji": "寅",
+              "ganji": "丙寅"
+            },
+            "day": {
+              "gan": "癸",
+              "ji": "亥",
+              "ganji": "癸亥"
+            },
+            "hour": {
+              "gan": "戊",
+              "ji": "午",
+              "ganji": "戊午"
+            }
+          },
+          "currentSolarTerm": {
+            "sourceName": "雨水",
+            "koreanName": "우수",
+            "year": 2024,
+            "month": 2,
+            "day": 19,
+            "hour": 13,
+            "minute": 13,
+            "second": 12,
+            "julianDay": 2460360.0508333333
+          }
+        }
+      }
+    }
+  ],
+  "dailyAnalysis": [
+    {
+      "id": "analysis-rep1990-on-2026-07-07",
+      "natalId": "rep-1990-0315-1430-male",
+      "date": {
+        "year": 2026,
+        "month": 7,
+        "day": 7
+      },
+      "expected": {
+        "interaction": {
+          "dayStemSipsin": "정재",
+          "seun": {
+            "gan": "丙",
+            "ji": "午"
+          },
+          "wolun": {
+            "gan": "乙",
+            "ji": "未"
+          }
+        }
+      }
+    },
+    {
+      "id": "analysis-unknown-on-2026-07-07",
+      "natalId": "unknown-time-1975-0820-female",
+      "date": {
+        "year": 2026,
+        "month": 7,
+        "day": 7
+      },
+      "expected": {
+        "interaction": {
+          "dayStemSipsin": "편재",
+          "seun": {
+            "gan": "丙",
+            "ji": "午"
+          },
+          "wolun": {
+            "gan": "乙",
+            "ji": "未"
+          }
+        }
+      }
+    }
+  ],
+  "lunarSolar": [
+    {
+      "id": "solar-to-lunar-1990-0315",
+      "direction": "solarToLunar",
+      "input": {
+        "year": 1990,
+        "month": 3,
+        "day": 15,
+        "hour": 14,
+        "minute": 30
+      },
+      "expected": {
+        "year": 1990,
+        "month": 2,
+        "day": 19,
+        "isLeapMonth": false,
+        "hour": 14,
+        "minute": 30,
+        "second": 0
+      }
+    },
+    {
+      "id": "lunar-to-solar-1990-0219",
+      "direction": "lunarToSolar",
+      "input": {
+        "year": 1990,
+        "month": 2,
+        "day": 19,
+        "isLeapMonth": false,
+        "hour": 14,
+        "minute": 30
+      },
+      "expected": {
+        "year": 1990,
+        "month": 3,
+        "day": 15,
+        "hour": 14,
+        "minute": 30,
+        "second": 0
+      }
+    },
+    {
+      "id": "lunar-to-solar-1900-0801-leap",
+      "direction": "lunarToSolar",
+      "input": {
+        "year": 1900,
+        "month": 8,
+        "day": 1,
+        "isLeapMonth": true
+      },
+      "expected": {
+        "year": 1900,
+        "month": 9,
+        "day": 24,
+        "hour": 0,
+        "minute": 0,
+        "second": 0
+      }
+    }
+  ],
+  "chemistry": [
+    {
+      "id": "chem-rep-1990x1992",
+      "input": {
+        "personA": {
+          "year": 1990,
+          "month": 3,
+          "day": 15,
+          "hour": 14,
+          "minute": 30,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        },
+        "personB": {
+          "year": 1992,
+          "month": 7,
+          "day": 21,
+          "hour": 9,
+          "minute": 0,
+          "gender": "female",
+          "isLunar": false,
+          "birthPlace": null
+        }
+      },
+      "expected": {
+        "totalScore": 78,
+        "grade": "A",
+        "dayGan": {
+          "score": 15,
+          "type": "비화"
+        },
+        "dayJi": {
+          "score": 25,
+          "type": "육합"
+        },
+        "ohaeng": {
+          "score": 18
+        },
+        "guseong": {
+          "score": 20,
+          "pair": "칠적금성(七赤金星) × 팔백토성(八白土星)"
+        },
+        "paljaA": {
+          "dayGan": "己",
+          "dayJi": "卯"
+        },
+        "paljaB": {
+          "dayGan": "戊",
+          "dayJi": "戌"
+        }
+      }
+    },
+    {
+      "id": "chem-rep-1985x1988",
+      "input": {
+        "personA": {
+          "year": 1985,
+          "month": 11,
+          "day": 2,
+          "hour": 3,
+          "minute": 20,
+          "gender": "female",
+          "isLunar": false,
+          "birthPlace": null
+        },
+        "personB": {
+          "year": 1988,
+          "month": 4,
+          "day": 13,
+          "hour": 18,
+          "minute": 45,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        }
+      },
+      "expected": {
+        "totalScore": 48,
+        "grade": "C",
+        "dayGan": {
+          "score": 10,
+          "type": "상극"
+        },
+        "dayJi": {
+          "score": 18,
+          "type": "상생"
+        },
+        "ohaeng": {
+          "score": 15
+        },
+        "guseong": {
+          "score": 5,
+          "pair": "삼벽목성(三碧木星) × 칠적금성(七赤金星)"
+        },
+        "paljaA": {
+          "dayGan": "乙",
+          "dayJi": "巳"
+        },
+        "paljaB": {
+          "dayGan": "戊",
+          "dayJi": "戌"
+        }
+      }
+    },
+    {
+      "id": "chem-rep-1995x1995",
+      "input": {
+        "personA": {
+          "year": 1995,
+          "month": 1,
+          "day": 30,
+          "hour": 7,
+          "minute": 10,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        },
+        "personB": {
+          "year": 1995,
+          "month": 12,
+          "day": 25,
+          "hour": 22,
+          "minute": 5,
+          "gender": "female",
+          "isLunar": false,
+          "birthPlace": null
+        }
+      },
+      "expected": {
+        "totalScore": 57,
+        "grade": "B",
+        "dayGan": {
+          "score": 15,
+          "type": "비화"
+        },
+        "dayJi": {
+          "score": 8,
+          "type": "상극"
+        },
+        "ohaeng": {
+          "score": 22
+        },
+        "guseong": {
+          "score": 12,
+          "pair": "삼벽목성(三碧木星) × 사록목성(四綠木星)"
+        },
+        "paljaA": {
+          "dayGan": "辛",
+          "dayJi": "酉"
+        },
+        "paljaB": {
+          "dayGan": "庚",
+          "dayJi": "寅"
+        }
+      }
+    },
+    {
+      "id": "chem-rep-2000x1999",
+      "input": {
+        "personA": {
+          "year": 2000,
+          "month": 2,
+          "day": 29,
+          "hour": 12,
+          "minute": 0,
+          "gender": "female",
+          "isLunar": false,
+          "birthPlace": null
+        },
+        "personB": {
+          "year": 1999,
+          "month": 9,
+          "day": 9,
+          "hour": 6,
+          "minute": 30,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        }
+      },
+      "expected": {
+        "totalScore": 60,
+        "grade": "B",
+        "dayGan": {
+          "score": 20,
+          "type": "상생"
+        },
+        "dayJi": {
+          "score": 8,
+          "type": "상극"
+        },
+        "ohaeng": {
+          "score": 20
+        },
+        "guseong": {
+          "score": 12,
+          "pair": "오황토성(五黃土星) × 이흑토성(二黑土星)"
+        },
+        "paljaA": {
+          "dayGan": "丁",
+          "dayJi": "巳"
+        },
+        "paljaB": {
+          "dayGan": "甲",
+          "dayJi": "子"
+        }
+      }
+    },
+    {
+      "id": "chem-unknown-time",
+      "input": {
+        "personA": {
+          "year": 1990,
+          "month": 3,
+          "day": 15,
+          "hour": 14,
+          "minute": 30,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        },
+        "personB": {
+          "year": 1975,
+          "month": 8,
+          "day": 20,
+          "hour": null,
+          "minute": null,
+          "gender": "female",
+          "isLunar": false,
+          "birthPlace": null
+        }
+      },
+      "expected": {
+        "totalScore": 76,
+        "grade": "A",
+        "dayGan": {
+          "score": 15,
+          "type": "비화"
+        },
+        "dayJi": {
+          "score": 25,
+          "type": "육합"
+        },
+        "ohaeng": {
+          "score": 16
+        },
+        "guseong": {
+          "score": 20,
+          "pair": "칠적금성(七赤金星) × 팔백토성(八白土星)"
+        },
+        "paljaA": {
+          "dayGan": "己",
+          "dayJi": "卯"
+        },
+        "paljaB": {
+          "dayGan": "戊",
+          "dayJi": "戌"
+        }
+      }
+    },
+    {
+      "id": "chem-same-person",
+      "input": {
+        "personA": {
+          "year": 1990,
+          "month": 3,
+          "day": 15,
+          "hour": 14,
+          "minute": 30,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        },
+        "personB": {
+          "year": 1990,
+          "month": 3,
+          "day": 15,
+          "hour": 14,
+          "minute": 30,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        }
+      },
+      "expected": {
+        "totalScore": 58,
+        "grade": "B",
+        "dayGan": {
+          "score": 15,
+          "type": "비화"
+        },
+        "dayJi": {
+          "score": 15,
+          "type": "비화"
+        },
+        "ohaeng": {
+          "score": 16
+        },
+        "guseong": {
+          "score": 12,
+          "pair": "칠적금성(七赤金星) × 칠적금성(七赤金星)"
+        },
+        "paljaA": {
+          "dayGan": "己",
+          "dayJi": "卯"
+        },
+        "paljaB": {
+          "dayGan": "己",
+          "dayJi": "卯"
+        }
+      }
+    },
+    {
+      "id": "chem-lunar-partner",
+      "input": {
+        "personA": {
+          "year": 1990,
+          "month": 3,
+          "day": 15,
+          "hour": 14,
+          "minute": 30,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        },
+        "personB": {
+          "year": 1990,
+          "month": 2,
+          "day": 19,
+          "hour": 14,
+          "minute": 30,
+          "gender": "female",
+          "isLunar": true,
+          "birthPlace": null,
+          "isLeapMonth": false
+        }
+      },
+      "expected": {
+        "totalScore": 58,
+        "grade": "B",
+        "dayGan": {
+          "score": 15,
+          "type": "비화"
+        },
+        "dayJi": {
+          "score": 15,
+          "type": "비화"
+        },
+        "ohaeng": {
+          "score": 16
+        },
+        "guseong": {
+          "score": 12,
+          "pair": "칠적금성(七赤金星) × 칠적금성(七赤金星)"
+        },
+        "paljaA": {
+          "dayGan": "己",
+          "dayJi": "卯"
+        },
+        "paljaB": {
+          "dayGan": "己",
+          "dayJi": "卯"
+        }
+      }
+    },
+    {
+      "id": "chem-wide-gap",
+      "input": {
+        "personA": {
+          "year": 1955,
+          "month": 5,
+          "day": 5,
+          "hour": 5,
+          "minute": 5,
+          "gender": "male",
+          "isLunar": false,
+          "birthPlace": null
+        },
+        "personB": {
+          "year": 2001,
+          "month": 10,
+          "day": 17,
+          "hour": 23,
+          "minute": 30,
+          "gender": "female",
+          "isLunar": false,
+          "birthPlace": null
+        }
+      },
+      "expected": {
+        "totalScore": 43,
+        "grade": "C",
+        "dayGan": {
+          "score": 10,
+          "type": "상극"
+        },
+        "dayJi": {
+          "score": 8,
+          "type": "상극"
+        },
+        "ohaeng": {
+          "score": 20
+        },
+        "guseong": {
+          "score": 5,
+          "pair": "일백수성(一白水星) × 오황토성(五黃土星)"
+        },
+        "paljaA": {
+          "dayGan": "丙",
+          "dayJi": "寅"
+        },
+        "paljaB": {
+          "dayGan": "癸",
+          "dayJi": "丑"
+        }
+      }
+    }
+  ]
+}

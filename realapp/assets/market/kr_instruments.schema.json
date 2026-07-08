@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ohaeng Guardians Korean market instruments",
+  "type": "object",
+  "required": ["schemaVersion", "source", "instruments"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "source": {
+      "type": "object",
+      "required": ["name", "url", "baseDate", "generatedAt"],
+      "properties": {
+        "name": { "type": "string" },
+        "url": { "type": "string" },
+        "baseDate": { "type": "string" },
+        "generatedAt": { "type": "string" }
+      }
+    },
+    "instruments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "symbol",
+          "market",
+          "name",
+          "normalizedName",
+          "corpName",
+          "isin",
+          "baseDate",
+          "source",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^KRX:[A-Z0-9_]+:.+" },
+          "symbol": { "type": "string", "minLength": 1 },
+          "market": { "type": "string", "minLength": 1 },
+          "name": { "type": "string", "minLength": 1 },
+          "normalizedName": { "type": "string", "minLength": 1 },
+          "corpName": { "type": "string", "minLength": 1 },
+          "isin": { "type": ["string", "null"] },
+          "baseDate": { "type": "string", "minLength": 1 },
+          "source": { "type": "string", "minLength": 1 },
+          "updatedAt": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

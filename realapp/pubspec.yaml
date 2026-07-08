@@ -1,0 +1,111 @@
+name: ohaeng_guardians
+description: "Ohaeng Guardians - daily five-element guardian, fortune, routine, and collection app."
+publish_to: 'none'
+
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1
+  go_router: ^17.3.0
+  drift: ^2.34.1
+  sqlite3_flutter_libs: ^0.6.0+eol
+  path_provider: ^2.1.6
+  shared_preferences: ^2.5.5
+  intl: ^0.20.3
+  share_plus: ^13.2.0
+  flutter_local_notifications: ^22.0.1
+  timezone: ^0.11.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  build_runner: ^2.15.0
+  drift_dev: ^2.34.2
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  # 실사용 런타임 WebP 파생본만 개별 등록한다.
+  # PNG 원본과 imagegen source는 assets 문서/소스 보관용이며 번들 제외.
+  assets:
+    - assets/engine/
+    - assets/market/kr_instruments.json
+    - assets/images/app_icon/brand_app_icon_symbol_2048_v1.webp
+    - assets/images/chemistry/chemistry_result_bg_1080x1920_v1.webp
+    - assets/images/app_icon/brand_splash_symbol_2048_v1.webp
+    - assets/images/backgrounds/element_bg_earth_1080x1920_v1.webp
+    - assets/images/backgrounds/element_bg_earth_card_1080x1620_v1.webp
+    - assets/images/backgrounds/element_bg_earth_wide_1920x1080_v1.webp
+    - assets/images/backgrounds/element_bg_fire_1080x1920_v1.webp
+    - assets/images/backgrounds/element_bg_fire_card_1080x1620_v1.webp
+    - assets/images/backgrounds/element_bg_fire_wide_1920x1080_v1.webp
+    - assets/images/backgrounds/element_bg_metal_1080x1920_v1.webp
+    - assets/images/backgrounds/element_bg_metal_card_1080x1620_v1.webp
+    - assets/images/backgrounds/element_bg_metal_wide_1920x1080_v1.webp
+    - assets/images/backgrounds/element_bg_water_1080x1920_v1.webp
+    - assets/images/backgrounds/element_bg_water_card_1080x1620_v1.webp
+    - assets/images/backgrounds/element_bg_water_wide_1920x1080_v1.webp
+    - assets/images/backgrounds/element_bg_wood_1080x1920_v1.webp
+    - assets/images/backgrounds/element_bg_wood_card_1080x1620_v1.webp
+    - assets/images/backgrounds/element_bg_wood_wide_1920x1080_v1.webp
+    - assets/images/backgrounds/fortune_condition_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/fortune_relationship_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/fortune_total_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/fortune_work_study_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/home_balance_panel_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/home_bg_default_1080x1920_v1.webp
+    - assets/images/backgrounds/home_routine_cta_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/routine_earth_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/routine_fire_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/routine_metal_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/routine_water_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/routine_wood_bg_1920x1080_v1.webp
+    - assets/images/backgrounds/splash_start_bg_1080x1920_v1.webp
+    - assets/images/cards/card_back_1080x1620_v2.webp
+    - assets/images/cards/card_element_earth_1080x1620_v1.webp
+    - assets/images/cards/card_element_fire_1080x1620_v1.webp
+    - assets/images/cards/card_element_metal_1080x1620_v1.webp
+    - assets/images/cards/card_element_water_1080x1620_v1.webp
+    - assets/images/cards/card_element_wood_1080x1620_v1.webp
+    - assets/images/cards/card_frame_common_1080x1620_v2.webp
+    - assets/images/cards/card_guardian_earth_yang_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_fire_yang_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_metal_yang_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_water_yang_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_wood_yang_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_earth_yin_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_fire_yin_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_metal_yin_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_water_yin_1080x1620_v1.webp
+    - assets/images/cards/card_guardian_wood_yin_1080x1620_v1.webp
+    - assets/images/cards/home_guardian_card_frame_1080x1620_v1.webp
+    - assets/images/collection/collection_empty_1920x1080_v1.webp
+    - assets/images/effects/routine_complete_badge_1024_v1.webp
+    - assets/images/errors/error_engine_illustration_1920x1080_v1.webp
+    - assets/images/guardians/guardian_earth_yang_idle_2048_v2.webp
+    - assets/images/guardians/guardian_fire_yang_idle_2048_v2.webp
+    - assets/images/guardians/guardian_metal_yang_idle_2048_v2.webp
+    - assets/images/guardians/guardian_water_yang_idle_2048_v2.webp
+    - assets/images/guardians/guardian_wood_yang_idle_2048_v2.webp
+    - assets/images/history/history_calendar_bg_1080x1920_v1.webp
+    - assets/images/history/history_empty_illustration_1920x1080_v1.webp
+    - assets/images/onboarding/onboarding_collection_record_1080x1920_v1.webp
+    - assets/images/onboarding/onboarding_first_guardian_reveal_1080x1920_v1.webp
+    - assets/images/onboarding/onboarding_guardian_intro_1080x1920_v1.webp
+    - assets/images/onboarding/onboarding_routine_intro_1080x1920_v1.webp
+    - assets/images/settings/settings_data_delete_illustration_1920x1080_v1.webp
+    - assets/images/settings/settings_entertainment_notice_1920x1080_v1.webp
+    - assets/images/settings/settings_my_page_bg_1080x1920_v1.webp
+    - assets/images/share/share_chemistry_result_1080x1920_v1.webp
+    - assets/images/share/share_today_guardian_1080x1920_v1.webp

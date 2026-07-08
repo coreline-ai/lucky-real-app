@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일진 수호신 카드 배틀 - 만세력 미니게임</title>
+  <!-- Google Fonts: Outfit & Inter for premium typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Outfit:wght@400;600;800&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <div id="app" class="game-container">
+    <!-- Header -->
+    <header class="game-header">
+      <div class="logo">☯️ MANSERYEOK BATTLE</div>
+      <h1 class="title">일진 수호신 카드 배틀</h1>
+      <p class="subtitle">당신의 생년월일시 오행과 오늘의 일진 보스의 대격돌!</p>
+    </header>
+
+    <!-- Setup Screen (Input form) -->
+    <section id="setup-screen" class="screen active">
+      <div class="card glassmorphism setup-card">
+        <h2 class="section-title">🔮 당신의 생년월일시 입력</h2>
+        <p class="description">사주 분석을 통해 당신만의 오행 수호신 카드를 소환합니다.</p>
+        
+        <form id="setup-form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="input-name">이름</label>
+            <input type="text" id="input-name" placeholder="홍길동" required value="홍길동">
+          </div>
+          
+          <div class="form-group">
+            <label for="input-gender">성별</label>
+            <select id="input-gender">
+              <option value="male" selected>남성</option>
+              <option value="female">여성</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="input-date">생년월일 (양력)</label>
+            <input type="date" id="input-date" required value="1990-03-15">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="input-hour">출생 시간</label>
+              <select id="input-hour">
+                <option value="">모름</option>
+                <!-- Generated dynamically via JS -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="input-minute">출생 분</label>
+              <select id="input-minute">
+                <option value="">모름</option>
+                <!-- Generated dynamically via JS -->
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-summon" class="btn btn-primary btn-glow">
+            수호신 소환하기 (Summon)
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Lobby Screen (Preparation) -->
+    <section id="lobby-screen" class="screen">
+      <div class="lobby-grid">
+        <!-- Player Info Card -->
+        <div class="card glassmorphism side-card" id="player-profile">
+          <h3 class="side-title">플레이어 일주</h3>
+          <div class="profile-avatar" id="player-avatar">☯️</div>
+          <div class="ganji-display" id="player-ganji">甲子</div>
+          <div class="name-display" id="player-name-display">홍길동</div>
+          <div class="ohaeng-tags" id="player-ohaeng-tags">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- VS Divider -->
+        <div class="vs-divider">VS</div>
+
+        <!-- Boss Info Card -->
+        <div class="card glassmorphism side-card" id="boss-profile">
+          <h3 class="side-title">오늘의 일진 보스</h3>
+          <div class="profile-avatar boss-avatar" id="boss-avatar">💀</div>
+          <div class="ganji-display boss-ganji" id="boss-ganji">庚午</div>
+          <div class="name-display" id="boss-name-display">일진수호마왕</div>
+          <div class="ohaeng-tags" id="boss-ohaeng-tags">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Selection / Hand Area -->
+      <div class="card glassmorphism deck-card">
+        <h3 class="deck-title">배틀 카드 덱 (소환 완료)</h3>
+        <p class="deck-subtitle">카드 3장은 라운드 순서대로 자동 배치됩니다. 카드를 클릭하면 배치에서 빼거나 다시 넣을 수 있습니다.</p>
+        
+        <div class="card-hand-slots" id="player-hand">
+          <!-- Dynamically populated card elements -->
+        </div>
+
+        <div class="deck-action">
+          <button id="btn-enter-battle" class="btn btn-secondary btn-glow">
+            배틀 아레나 입장 ⚔️
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Battle Screen (Combat Arena) -->
+    <section id="battle-screen" class="screen">
+      <!-- Boss HP Area -->
+      <div class="arena-header">
+        <div class="boss-health-bar-container">
+          <div class="boss-title-row">
+            <span class="boss-name">오늘의 일진 보스: <strong id="arena-boss-name">庚午</strong></span>
+            <span class="boss-hp-text"><span id="boss-hp-current">100</span> / 100 HP</span>
+          </div>
+          <div class="hp-bar-bg">
+            <div id="boss-hp-bar" class="hp-bar-fill fill-boss" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arena Battlefield -->
+      <div class="battlefield">
+        <!-- Round Slots (1, 2, 3) -->
+        <div class="round-slot" data-round="1">
+          <div class="round-label">ROUND 1</div>
+          <div class="slot-container">
+            <div class="slot-card boss-slot" id="boss-card-slot-1">
+              <div class="card-back">❓</div>
+            </div>
+            <div class="combat-impact" id="impact-slot-1"></div>
+            <div class="slot-card player-slot" id="player-card-slot-1">
+              <div class="card-back">EMPTY</div>
+            </div>
+          </div>
+          <div class="round-result" id="round-result-1">-</div>
+        </div>
+
+        <div class="round-slot" data-round="2">
+          <div class="round-label">ROUND 2</div>
+          <div class="slot-container">
+            <div class="slot-card boss-slot" id="boss-card-slot-2">
+              <div class="card-back">❓</div>
+            </div>
+            <div class="combat-impact" id="impact-slot-2"></div>
+            <div class="slot-card player-slot" id="player-card-slot-2">
+              <div class="card-back">EMPTY</div>
+            </div>
+          </div>
+          <div class="round-result" id="round-result-2">-</div>
+        </div>
+
+        <div class="round-slot" data-round="3">
+          <div class="round-label">ROUND 3</div>
+          <div class="slot-container">
+            <div class="slot-card boss-slot" id="boss-card-slot-3">
+              <div class="card-back">❓</div>
+            </div>
+            <div class="combat-impact" id="impact-slot-3"></div>
+            <div class="slot-card player-slot" id="player-card-slot-3">
+              <div class="card-back">EMPTY</div>
+            </div>
+          </div>
+          <div class="round-result" id="round-result-3">-</div>
+        </div>
+      </div>
+
+      <!-- Player HP Area -->
+      <div class="arena-footer">
+        <div class="player-health-bar-container">
+          <div class="player-title-row">
+            <span class="player-name">수호신 <strong id="arena-player-name">홍길동</strong> (<span id="arena-player-ganji">甲子</span>)</span>
+            <span class="player-hp-text"><span id="player-hp-current">100</span> / 100 HP</span>
+          </div>
+          <div class="hp-bar-bg">
+            <div id="player-hp-bar" class="hp-bar-fill fill-player" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="battle-controls">
+        <button id="btn-fight" class="btn btn-primary btn-glow">배틀 시작!</button>
+        <button id="btn-next-round" class="btn btn-secondary btn-glow" style="display: none;">다음 라운드 진행 ➡️</button>
+      </div>
+    </section>
+
+    <!-- Result Modal (Victory/Defeat popup) -->
+    <div id="result-modal" class="modal-overlay">
+      <div class="modal-content glassmorphism">
+        <div class="result-icon" id="modal-result-icon">🏆</div>
+        <h2 class="result-title" id="modal-result-title">대승리 (VICTORY)</h2>
+        <div class="result-summary" id="modal-result-summary">
+          당신의 수(水) 카드가 적의 화(火) 카드를 압도적으로 극(克)하여 극적인 승리를 쟁취했습니다!
+        </div>
+        <div class="result-details" id="modal-result-details">
+          <!-- Details and analysis -->
+        </div>
+        <div class="modal-buttons">
+          <button id="btn-modal-restart" class="btn btn-primary">다시 도전하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>

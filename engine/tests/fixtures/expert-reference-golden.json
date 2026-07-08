@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "requiredAcceptedCases": {
+    "min": 5,
+    "max": 10
+  },
+  "requiredCoverage": {
+    "minDistinctFocusAreas": 5,
+    "focusAreas": [
+      "ipchun-boundary",
+      "month-solar-term-boundary",
+      "midnight-yaja",
+      "midnight-joja",
+      "lunar-calendar",
+      "leap-month",
+      "true-solar-time",
+      "regional-birth-place"
+    ]
+  },
+  "requiredConsensus": {
+    "minDistinctReviewers": 2,
+    "minDistinctReferenceTools": 2
+  },
+  "policy": {
+    "timezone": "Asia/Seoul",
+    "yearBoundary": "ipchun",
+    "monthBoundary": "majorSolarTerms",
+    "dayBoundary": "configurable",
+    "trueSolarTime": "configurable"
+  },
+  "cases": []
+}

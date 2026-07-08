@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "automatedProviders": [
+    {
+      "id": "manseryeok",
+      "kind": "npm",
+      "packageName": "manseryeok",
+      "sourceUrl": "https://github.com/yhj1024/manseryeok",
+      "registryUrl": "https://www.npmjs.com/package/manseryeok",
+      "licenseReviewStatus": "public-package",
+      "ciStatus": "active"
+    },
+    {
+      "id": "fullstackfamily",
+      "kind": "npm",
+      "packageName": "@fullstackfamily/manseryeok",
+      "sourceUrl": "https://github.com/urstory/manseryeok-js",
+      "registryUrl": "https://classic.yarnpkg.com/en/package/%40fullstackfamily/manseryeok",
+      "licenseReviewStatus": "public-package",
+      "ciStatus": "active"
+    },
+    {
+      "id": "ssaju",
+      "kind": "npm",
+      "packageName": "ssaju",
+      "sourceUrl": "https://github.com/golbin/ssaju",
+      "registryUrl": "https://www.npmjs.com/package/ssaju",
+      "licenseReviewStatus": "public-package",
+      "ciStatus": "active"
+    }
+  ],
+  "manualBenchmarks": [
+    {
+      "id": "forceteller-posteller",
+      "name": "Forceteller/Posteller",
+      "kind": "commercial-app",
+      "status": "manual-capture-only",
+      "publicApiStatus": "not-verified",
+      "openSourceStatus": "not-verified",
+      "automationEligibility": "blocked-until-official-api-or-oss",
+      "captureMode": "manual-screenshot-or-export",
+      "evidenceRequired": [
+        "providerCaptureFile",
+        "providerCaptureSha256"
+      ],
+      "checkedAt": "2026-06-29",
+      "urls": [
+        "https://pro.forceteller.com/",
+        "https://pro.forceteller.com/app/",
+        "https://play.google.com/store/apps/details?id=com.forceteller.sajuAlmanac"
+      ],
+      "notes": "No public engine API or open-source engine repository is verified. Use app screenshots/manual exports only as external provider evidence, and keep the captured file hash with every accepted response."
+    }
+  ],
+  "candidateProviders": [
+    {
+      "id": "ablecity",
+      "name": "Ablecity Manse-force API",
+      "kind": "http-api",
+      "status": "candidate",
+      "publicApiStatus": "documented-key-required",
+      "openSourceStatus": "not-applicable",
+      "automationEligibility": "blocked-until-test-key-and-field-mapping",
+      "auth": "bearer-api-key",
+      "checkedAt": "2026-06-29",
+      "urls": [
+        "https://ablecity.kr/api/",
+        "https://api.ablecity.kr/api/v2/saju/fortune"
+      ],
+      "notes": "Official API reference documents GET /api/v2/saju/fortune with Authorization: Bearer <API_KEY>, city, calendar, and midnightType parameters. Add as an automated provider only after a test key is available, response fields are mapped, and a dedicated adapter test is committed."
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "name": "manseryeok-engine",
+  "version": "0.1.0",
+  "description": "Standalone Korean manseryeok and saju calculation engine.",
+  "license": "ISC",
+  "keywords": [
+    "manseryeok",
+    "saju",
+    "korean-calendar",
+    "four-pillars",
+    "명리",
+    "만세력",
+    "사주"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./engine/*": {
+      "types": "./dist/engine/*.d.ts",
+      "default": "./dist/engine/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "docs"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:engine": "vitest run tests/engine",
+    "solar-terms:verify": "node scripts/generate-solar-term-verification-report.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@fullstackfamily/manseryeok": "^1.0.8",
+    "@types/node": "^22.0.0",
+    "manseryeok": "^2.0.0",
+    "ssaju": "^0.2.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9"
+  }
+}

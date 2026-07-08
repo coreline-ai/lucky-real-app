@@ -1,0 +1,650 @@
+[
+  {
+    "asset_id": "BRAND-001",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/BRAND-001.md",
+    "final_path": "realapp/assets/images/app_icon/brand_app_icon_symbol_2048_v1.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "BRAND-002",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/BRAND-002.md",
+    "final_path": "realapp/assets/images/app_icon/brand_splash_symbol_2048_v1.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "SPLASH-001",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/SPLASH-001.md",
+    "final_path": "realapp/assets/images/backgrounds/splash_start_bg_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "SPLASH-002",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/SPLASH-002.md",
+    "final_path": "realapp/assets/images/backgrounds/splash_calculating_bg_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "SPLASH-003",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/SPLASH-003.md",
+    "final_path": "realapp/assets/images/effects/splash_particles_overlay_2048_v1.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ONB-001",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ONB-001.md",
+    "final_path": "realapp/assets/images/onboarding/onboarding_guardian_intro_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "ONB-002",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ONB-002.md",
+    "final_path": "realapp/assets/images/onboarding/onboarding_routine_intro_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "ONB-003",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ONB-003.md",
+    "final_path": "realapp/assets/images/onboarding/onboarding_collection_record_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "ONB-004",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ONB-004.md",
+    "final_path": "realapp/assets/images/onboarding/onboarding_first_guardian_reveal_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "HOME-001",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/HOME-001.md",
+    "final_path": "realapp/assets/images/backgrounds/home_bg_default_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "HOME-004",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/HOME-004.md",
+    "final_path": "realapp/assets/images/cards/home_guardian_card_frame_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "HOME-005",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/HOME-005.md",
+    "final_path": "realapp/assets/images/backgrounds/home_balance_panel_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "HOME-006",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/HOME-006.md",
+    "final_path": "realapp/assets/images/backgrounds/home_routine_cta_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "FORTUNE-001",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/FORTUNE-001.md",
+    "final_path": "realapp/assets/images/backgrounds/fortune_total_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "FORTUNE-002",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/FORTUNE-002.md",
+    "final_path": "realapp/assets/images/backgrounds/fortune_relationship_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "FORTUNE-003",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/FORTUNE-003.md",
+    "final_path": "realapp/assets/images/backgrounds/fortune_work_study_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "FORTUNE-004",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/FORTUNE-004.md",
+    "final_path": "realapp/assets/images/backgrounds/fortune_condition_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ROUTINE-001",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ROUTINE-001.md",
+    "final_path": "realapp/assets/images/backgrounds/routine_wood_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ROUTINE-002",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ROUTINE-002.md",
+    "final_path": "realapp/assets/images/backgrounds/routine_fire_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ROUTINE-003",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ROUTINE-003.md",
+    "final_path": "realapp/assets/images/backgrounds/routine_earth_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ROUTINE-004",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ROUTINE-004.md",
+    "final_path": "realapp/assets/images/backgrounds/routine_metal_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ROUTINE-005",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ROUTINE-005.md",
+    "final_path": "realapp/assets/images/backgrounds/routine_water_bg_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ROUTINE-006",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ROUTINE-006.md",
+    "final_path": "realapp/assets/images/effects/routine_complete_badge_1024_v1.png",
+    "width": 1024,
+    "height": 1024,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "GUARD-WOOD-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-WOOD-YANG-V2.md",
+    "final_path": "realapp/assets/images/guardians/guardian_wood_yang_idle_2048_v2.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "upgrade"
+  },
+  {
+    "asset_id": "GUARD-WOOD-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-WOOD-YIN.md",
+    "final_path": "realapp/assets/images/guardians/guardian_wood_yin_idle_2048_v1.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "GUARD-FIRE-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-FIRE-YANG-V2.md",
+    "final_path": "realapp/assets/images/guardians/guardian_fire_yang_idle_2048_v2.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "upgrade"
+  },
+  {
+    "asset_id": "GUARD-FIRE-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-FIRE-YIN.md",
+    "final_path": "realapp/assets/images/guardians/guardian_fire_yin_idle_2048_v1.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "GUARD-EARTH-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-EARTH-YANG-V2.md",
+    "final_path": "realapp/assets/images/guardians/guardian_earth_yang_idle_2048_v2.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "upgrade"
+  },
+  {
+    "asset_id": "GUARD-EARTH-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-EARTH-YIN.md",
+    "final_path": "realapp/assets/images/guardians/guardian_earth_yin_idle_2048_v1.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "GUARD-METAL-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-METAL-YANG-V2.md",
+    "final_path": "realapp/assets/images/guardians/guardian_metal_yang_idle_2048_v2.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "upgrade"
+  },
+  {
+    "asset_id": "GUARD-METAL-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-METAL-YIN.md",
+    "final_path": "realapp/assets/images/guardians/guardian_metal_yin_idle_2048_v1.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "GUARD-WATER-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-WATER-YANG-V2.md",
+    "final_path": "realapp/assets/images/guardians/guardian_water_yang_idle_2048_v2.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "upgrade"
+  },
+  {
+    "asset_id": "GUARD-WATER-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/GUARD-WATER-YIN.md",
+    "final_path": "realapp/assets/images/guardians/guardian_water_yin_idle_2048_v1.png",
+    "width": 2048,
+    "height": 2048,
+    "alpha": true,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-FRAME-COMMON",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-FRAME-COMMON-V2.md",
+    "final_path": "realapp/assets/images/cards/card_frame_common_1080x1620_v2.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": true,
+    "status": "upgrade"
+  },
+  {
+    "asset_id": "CARD-BACK",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-BACK-V2.md",
+    "final_path": "realapp/assets/images/cards/card_back_1080x1620_v2.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "upgrade"
+  },
+  {
+    "asset_id": "CARD-ELEMENT-WOOD",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-ELEMENT-WOOD.md",
+    "final_path": "realapp/assets/images/cards/card_element_wood_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-ELEMENT-FIRE",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-ELEMENT-FIRE.md",
+    "final_path": "realapp/assets/images/cards/card_element_fire_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-ELEMENT-EARTH",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-ELEMENT-EARTH.md",
+    "final_path": "realapp/assets/images/cards/card_element_earth_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-ELEMENT-METAL",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-ELEMENT-METAL.md",
+    "final_path": "realapp/assets/images/cards/card_element_metal_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-ELEMENT-WATER",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-ELEMENT-WATER.md",
+    "final_path": "realapp/assets/images/cards/card_element_water_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-WOOD-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-WOOD-YANG.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_wood_yang_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-WOOD-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-WOOD-YIN.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_wood_yin_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-FIRE-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-FIRE-YANG.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_fire_yang_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-FIRE-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-FIRE-YIN.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_fire_yin_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-EARTH-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-EARTH-YANG.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_earth_yang_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-EARTH-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-EARTH-YIN.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_earth_yin_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-METAL-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-METAL-YANG.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_metal_yang_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-METAL-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-METAL-YIN.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_metal_yin_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-WATER-YANG",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-WATER-YANG.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_water_yang_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "CARD-GUARD-WATER-YIN",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/CARD-GUARD-WATER-YIN.md",
+    "final_path": "realapp/assets/images/cards/card_guardian_water_yin_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "COLLECTION-EMPTY",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/COLLECTION-EMPTY.md",
+    "final_path": "realapp/assets/images/collection/collection_empty_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "HISTORY-001",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/HISTORY-001.md",
+    "final_path": "realapp/assets/images/history/history_calendar_bg_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "HISTORY-002",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/HISTORY-002.md",
+    "final_path": "realapp/assets/images/history/history_empty_illustration_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "SETTINGS-001",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/SETTINGS-001.md",
+    "final_path": "realapp/assets/images/settings/settings_my_page_bg_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "SETTINGS-002",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/SETTINGS-002.md",
+    "final_path": "realapp/assets/images/settings/settings_data_delete_illustration_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "SETTINGS-004",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/SETTINGS-004.md",
+    "final_path": "realapp/assets/images/settings/settings_entertainment_notice_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ERROR-ENGINE",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ERROR-ENGINE.md",
+    "final_path": "realapp/assets/images/errors/error_engine_illustration_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "missing"
+  },
+  {
+    "asset_id": "ELEMENT-BG-WOOD",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-WOOD.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_wood_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "ELEMENT-BG-FIRE",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-FIRE.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_fire_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "ELEMENT-BG-EARTH",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-EARTH.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_earth_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "ELEMENT-BG-METAL",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-METAL.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_metal_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "ELEMENT-BG-WATER",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-WATER.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_water_1080x1920_v1.png",
+    "width": 1080,
+    "height": 1920,
+    "alpha": false,
+    "status": "existing"
+  },
+  {
+    "asset_id": "ELEMENT-BG-WOOD-CARD",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-WOOD.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_wood_card_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-WOOD-WIDE",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-WOOD.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_wood_wide_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-FIRE-CARD",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-FIRE.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_fire_card_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-FIRE-WIDE",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-FIRE.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_fire_wide_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-EARTH-CARD",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-EARTH.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_earth_card_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-EARTH-WIDE",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-EARTH.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_earth_wide_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-METAL-CARD",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-METAL.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_metal_card_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-METAL-WIDE",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-METAL.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_metal_wide_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-WATER-CARD",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-WATER.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_water_card_1080x1620_v1.png",
+    "width": 1080,
+    "height": 1620,
+    "alpha": false,
+    "status": "derivative"
+  },
+  {
+    "asset_id": "ELEMENT-BG-WATER-WIDE",
+    "prompt_path": "realapp/assets/imagegen_sources/prompts/ELEMENT-BG-WATER.md",
+    "final_path": "realapp/assets/images/backgrounds/element_bg_water_wide_1920x1080_v1.png",
+    "width": 1920,
+    "height": 1080,
+    "alpha": false,
+    "status": "derivative"
+  }
+]

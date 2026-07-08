@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "provider": {
+    "name": "public package smoke fixture",
+    "type": "manual-export",
+    "url": "tests/fixtures/manseryeok-golden.json",
+    "capturedAt": "2026-06-29",
+    "notes": "Pipeline smoke fixture copied from public package comparison golden cases. This is not expert acceptance evidence."
+  },
+  "cases": [
+    {
+      "id": "manseryeok-readme-solar-1992-10-24-0530",
+      "input": {
+        "calendar": "solar",
+        "year": 1992,
+        "month": 10,
+        "day": 24,
+        "hour": 5,
+        "minute": 30,
+        "gender": "female",
+        "birthPlace": "Seoul"
+      },
+      "calculateOptions": {
+        "midnightMode": "yaja",
+        "trueSolarTime": false,
+        "longitude": 126.978
+      },
+      "providerExpected": {
+        "yearPillar": "壬申",
+        "monthPillar": "庚戌",
+        "dayPillar": "癸酉",
+        "hourPillar": "乙卯"
+      }
+    },
+    {
+      "id": "fullstackfamily-readme-solar-1990-05-15-1430",
+      "input": {
+        "calendar": "solar",
+        "year": 1990,
+        "month": 5,
+        "day": 15,
+        "hour": 14,
+        "minute": 30,
+        "gender": "male",
+        "birthPlace": "Seoul"
+      },
+      "calculateOptions": {
+        "midnightMode": "yaja",
+        "trueSolarTime": false,
+        "longitude": 126.978
+      },
+      "providerExpected": {
+        "yearPillar": "庚午",
+        "monthPillar": "辛巳",
+        "dayPillar": "庚辰",
+        "hourPillar": "癸未"
+      }
+    }
+  ]
+}

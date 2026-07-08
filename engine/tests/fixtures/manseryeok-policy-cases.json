@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 1,
+  "metadata": {
+    "policyName": "korean-legal-civil-time",
+    "createdFor": "Ultragoal G001",
+    "summary": "Korean birth input is a Korean legal civil clock label; longitude only affects true-solar observation correction after legal civil time is resolved.",
+    "documentation": "docs/engine/korean-legal-time-policy.md",
+    "sources": [
+      {
+        "id": "kasi-200307-pdf",
+        "label": "KASI historical calendar PDF",
+        "url": "https://harg.kasi.re.kr/pro_plus/down/200307/200307_all.pdf"
+      },
+      {
+        "id": "national-archives-1954-standard-time",
+        "label": "National Archives 1954 standard-time record",
+        "url": "https://theme.archives.go.kr/next/monthly/viewMain.do?month=03&year=2011"
+      },
+      {
+        "id": "donga-1961-standard-time",
+        "label": "Donga 1961 standard-time explainer",
+        "url": "https://www.donga.com/news/Society/article/all/20170810/85768074/1"
+      },
+      {
+        "id": "encykorea-dst",
+        "label": "EncyKorea daylight-saving article",
+        "url": "https://encykorea.aks.ac.kr/Article/E0047153"
+      },
+      {
+        "id": "national-archives-dst-decree",
+        "label": "National Archives daylight-saving decree record",
+        "url": "https://theme.archives.go.kr/next/chronology/archiveDetail.do?evntId=0049320523&flag=1&page=93&sort="
+      },
+      {
+        "id": "timeanddate-1987-seoul",
+        "label": "timeanddate 1987 Seoul clock changes",
+        "url": "https://www.timeanddate.com/time/change/south-korea/seoul?year=1987"
+      },
+      {
+        "id": "timeanddate-1988-seoul",
+        "label": "timeanddate 1988 Seoul clock changes",
+        "url": "https://www.timeanddate.com/time/change/south-korea/seoul?year=1988"
+      },
+      {
+        "id": "iana-tzdb-asia-seoul",
+        "label": "IANA/tzdb Asia/Seoul cross-check",
+        "url": "https://github.com/eggert/tz/blob/main/asia"
+      }
+    ]
+  },
+  "legalTimeCases": [
+    {
+      "id": "legal-1908-utc-plus-0830",
+      "title": "1908 Korean legal civil time uses UTC+08:30",
+      "dateRange": {
+        "from": "1908-04-01",
+        "to": "1911-12-31"
+      },
+      "legalOffsetMinutes": 510,
+      "dstOffsetMinutes": 0,
+      "effectiveOffsetMinutes": 510,
+      "sourceIds": [
+        "kasi-200307-pdf",
+        "iana-tzdb-asia-seoul"
+      ],
+      "assertion": "Korean civil labels in the 1908 policy interval resolve with UTC+08:30 before any true-solar correction."
+    },
+    {
+      "id": "legal-1912-utc-plus-0900",
+      "title": "1912 Korean legal civil time uses UTC+09:00",
+      "dateRange": {
+        "from": "1912-01-01",
+        "to": "1954-03-20"
+      },
+      "legalOffsetMinutes": 540,
+      "dstOffsetMinutes": 0,
+      "effectiveOffsetMinutes": 540,
+      "sourceIds": [
+        "kasi-200307-pdf",
+        "iana-tzdb-asia-seoul"
+      ],
+      "assertion": "Korean civil labels after the 1912 change resolve with UTC+09:00 until the 1954 change."
+    },
+    {
+      "id": "legal-1954-utc-plus-0830",
+      "title": "1954 Korean legal civil time returns to UTC+08:30",
+      "dateRange": {
+        "from": "1954-03-21",
+        "to": "1961-08-09"
+      },
+      "legalOffsetMinutes": 510,
+      "dstOffsetMinutes": 0,
+      "effectiveOffsetMinutes": 510,
+      "sourceIds": [
+        "national-archives-1954-standard-time",
+        "donga-1961-standard-time",
+        "iana-tzdb-asia-seoul"
+      ],
+      "assertion": "Korean civil labels in the 1954-1961 standard-time interval use UTC+08:30 unless a DST interval applies."
+    },
+    {
+      "id": "legal-1956-dst-utc-plus-0930",
+      "title": "1955/1956 daylight saving is applied on top of UTC+08:30 standard time",
+      "sampleDate": "1956-07-01",
+      "legalOffsetMinutes": 510,
+      "dstOffsetMinutes": 60,
+      "effectiveOffsetMinutes": 570,
+      "sourceIds": [
+        "encykorea-dst",
+        "national-archives-dst-decree",
+        "iana-tzdb-asia-seoul"
+      ],
+      "assertion": "During active 1955/1956 DST, Korean civil labels resolve with UTC+09:30 because DST is one hour ahead of the +08:30 standard."
+    },
+    {
+      "id": "legal-1961-utc-plus-0900",
+      "title": "1961 Korean legal civil time returns to UTC+09:00",
+      "dateRange": {
+        "from": "1961-08-10",
+        "to": "1986-12-31"
+      },
+      "legalOffsetMinutes": 540,
+      "dstOffsetMinutes": 0,
+      "effectiveOffsetMinutes": 540,
+      "sourceIds": [
+        "donga-1961-standard-time",
+        "iana-tzdb-asia-seoul"
+      ],
+      "assertion": "Korean civil labels after the 1961 change resolve with UTC+09:00 outside later DST intervals."
+    },
+    {
+      "id": "legal-1987-dst-utc-plus-1000",
+      "title": "1987 daylight saving uses UTC+10:00 civil labels",
+      "sampleDate": "1987-07-01",
+      "legalOffsetMinutes": 540,
+      "dstOffsetMinutes": 60,
+      "effectiveOffsetMinutes": 600,
+      "sourceIds": [
+        "timeanddate-1987-seoul",
+        "iana-tzdb-asia-seoul"
+      ],
+      "assertion": "During active 1987 DST, Korean civil labels resolve with UTC+10:00 before true-solar correction."
+    },
+    {
+      "id": "legal-1988-dst-utc-plus-1000",
+      "title": "1988 daylight saving uses UTC+10:00 civil labels",
+      "sampleDate": "1988-07-01",
+      "legalOffsetMinutes": 540,
+      "dstOffsetMinutes": 60,
+      "effectiveOffsetMinutes": 600,
+      "sourceIds": [
+        "timeanddate-1988-seoul",
+        "iana-tzdb-asia-seoul"
+      ],
+      "assertion": "During active 1988 DST, Korean civil labels resolve with UTC+10:00 before true-solar correction."
+    },
+    {
+      "id": "legal-post-1989-utc-plus-0900",
+      "title": "Post-1989 ordinary Korean civil time uses UTC+09:00 without DST",
+      "dateRange": {
+        "from": "1989-01-01",
+        "to": "2101-12-31"
+      },
+      "legalOffsetMinutes": 540,
+      "dstOffsetMinutes": 0,
+      "effectiveOffsetMinutes": 540,
+      "sourceIds": [
+        "encykorea-dst",
+        "iana-tzdb-asia-seoul"
+      ],
+      "assertion": "Modern Korean civil labels resolve with UTC+09:00 and no daylight-saving offset unless a future policy explicitly changes this fixture."
+    }
+  ],
+  "daeunPolicyCases": [
+    {
+      "id": "daeun-subyear-forward-0y-1m-after-birth",
+      "direction": "forward",
+      "birth": "2024-03-05T05:22:45+09:00",
+      "nextSolarTerm": "2024-03-05T11:22:45+09:00",
+      "targetPolicy": {
+        "allowZeroAge": true,
+        "displayYears": 0,
+        "displayMonths": 1
+      },
+      "assertion": "Forward Daeun intervals below one full year are representable as age 0 with month metadata."
+    },
+    {
+      "id": "daeun-subyear-reverse-0y-months-before-jeol",
+      "direction": "reverse",
+      "birth": "2024-03-05T17:22:45+09:00",
+      "previousSolarTerm": "2024-03-05T11:22:45+09:00",
+      "targetPolicy": {
+        "allowZeroAge": true,
+        "displayYears": 0,
+        "displayMonths": 1
+      },
+      "assertion": "Reverse Daeun intervals below one full year are not clamped to a minimum age of 1."
+    },
+    {
+      "id": "daeun-subyear-exact-hours-minutes-included",
+      "direction": "forward",
+      "birth": "2024-03-04T23:45:00+09:00",
+      "nextSolarTerm": "2024-03-05T11:23:00+09:00",
+      "targetPolicy": {
+        "precision": [
+          "days",
+          "hours",
+          "minutes"
+        ],
+        "allowSubDayInterval": true
+      },
+      "assertion": "Sub-year Daeun metadata preserves hour and minute precision instead of day-only rounding."
+    },
+    {
+      "id": "daeun-zero-age-display-metadata",
+      "direction": "forward",
+      "birth": "2024-03-05T05:22:45+09:00",
+      "targetPolicy": {
+        "displayYears": 0,
+        "metadataFields": [
+          "years",
+          "months",
+          "days",
+          "hours",
+          "minutes"
+        ]
+      },
+      "assertion": "Age 0 display is policy-valid when detailed interval metadata explains the sub-year start."
+    },
+    {
+      "id": "daeun-no-min-one-regression",
+      "direction": "both",
+      "birthCandidates": [
+        "2024-03-04T12:00:00+09:00",
+        "2024-03-06T12:00:00+09:00"
+      ],
+      "currentObserved": {
+        "calculateYunStartAge": 1
+      },
+      "targetPolicy": {
+        "minimumClamp": 0,
+        "allowsMonthLevelInterval": true
+      },
+      "assertion": "The implementation phase must remove minimum-age-one behavior for sub-year Daeun starts."
+    }
+  ],
+  "baselineReproductions": [
+    {
+      "id": "baseline-lunar-true-solar-2000-02-04",
+      "title": "Lunar true-solar conversion must preserve legal-civil target pillars",
+      "input": {
+        "calendar": "lunar",
+        "civilDate": "2000-02-04",
+        "locationPolicy": "korean-legal-civil-clock-label"
+      },
+      "currentObserved": {
+        "lunarCivilPillars": "庚辰 己卯 丙寅 癸巳",
+        "lunarTrueSolarBugPillars": "己卯 丁丑 壬辰 乙巳"
+      },
+      "targetAfterFix": {
+        "pillars": "庚辰 己卯 丙寅 癸巳"
+      }
+    },
+    {
+      "id": "baseline-1987-dst-hour-pillar-emulation",
+      "title": "1987 DST hour-pillar emulation",
+      "input": {
+        "civilDate": "1987-07-15",
+        "currentHour": 14,
+        "emulatedLegalHour": 13,
+        "effectiveOffsetMinutes": 600
+      },
+      "currentObserved": {
+        "pillarsAt1400": "丁卯 丁未 乙丑 癸未"
+      },
+      "targetAfterFix": {
+        "pillarsAt1300": "丁卯 丁未 乙丑 壬午"
+      }
+    },
+    {
+      "id": "baseline-1955-utc0830-emulation",
+      "title": "1955 UTC+08:30 standard-time emulation",
+      "input": {
+        "civilDate": "1955-07-15",
+        "currentClock": "13:10",
+        "emulatedUtc0830Clock": "13:40",
+        "effectiveOffsetMinutes": 510
+      },
+      "currentObserved": {
+        "pillarsAt1310": "乙未 癸未 丁丑 丙午"
+      },
+      "targetAfterFix": {
+        "pillarsAt1340": "乙未 癸未 丁丑 丁未"
+      }
+    },
+    {
+      "id": "baseline-host-timezone-shiftSolarDate",
+      "title": "Host timezone must not shift Korean civil labels through local DST gaps",
+      "input": {
+        "hostTimeZone": "America/New_York",
+        "function": "shiftSolarDate",
+        "args": {
+          "year": 2020,
+          "month": 3,
+          "day": 8,
+          "hour": 2,
+          "minute": 30,
+          "second": 0,
+          "deltaDays": 0
+        }
+      },
+      "currentObserved": {
+        "year": 2020,
+        "month": 3,
+        "day": 8,
+        "hour": 3,
+        "minute": 30,
+        "second": 0
+      },
+      "targetAfterFix": {
+        "year": 2020,
+        "month": 3,
+        "day": 8,
+        "hour": 2,
+        "minute": 30,
+        "second": 0
+      }
+    },
+    {
+      "id": "baseline-same-day-ipchun-current-term-context",
+      "title": "Same-day 입춘 context switches after the exact solar-term timestamp",
+      "input": {
+        "date": "2024-02-04",
+        "beforeTime": "17:20",
+        "afterTime": "17:35",
+        "ipchunTime": "17:27"
+      },
+      "currentObserved": {
+        "termBefore1720": "대한",
+        "termAfter1735": "대한"
+      },
+      "targetAfterFix": {
+        "termAfter1735": "입춘"
+      }
+    },
+    {
+      "id": "baseline-current-daeun-min-one-behavior",
+      "title": "Current Daeun minimum-one behavior for sub-year candidates",
+      "input": {
+        "candidateBirthDates": [
+          "2024-03-04",
+          "2024-03-06"
+        ],
+        "function": "calculateYunStartAge"
+      },
+      "currentObserved": {
+        "calculateYunStartAge": 1
+      },
+      "targetAfterFix": {
+        "allowsAgeZero": true,
+        "intervalMetadata": "month-level"
+      }
+    }
+  ]
+}
