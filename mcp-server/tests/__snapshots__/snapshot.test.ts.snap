@@ -1,0 +1,377 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MCP 표면 스냅샷 > prompts/list — 이름·인자명·필수 여부 1`] = `
+[
+  {
+    "arguments": [
+      {
+        "name": "person1",
+        "required": true,
+      },
+      {
+        "name": "person2",
+        "required": true,
+      },
+    ],
+    "name": "couple-reading",
+  },
+  {
+    "arguments": [
+      {
+        "name": "birth",
+        "required": false,
+      },
+      {
+        "name": "date",
+        "required": false,
+      },
+    ],
+    "name": "daily-briefing",
+  },
+  {
+    "arguments": [
+      {
+        "name": "birth",
+        "required": false,
+      },
+      {
+        "name": "candidates",
+        "required": false,
+      },
+      {
+        "name": "surname",
+        "required": true,
+      },
+    ],
+    "name": "naming-consult",
+  },
+]
+`;
+
+exports[`MCP 표면 스냅샷 > resources/list — uri·title·mimeType 1`] = `
+[
+  {
+    "mimeType": "text/markdown",
+    "title": "전문가 대조 fixture 규칙",
+    "uri": "manseryeok://docs/expert-reference-fixtures",
+  },
+  {
+    "mimeType": "text/markdown",
+    "title": "전문가 검토 절차",
+    "uri": "manseryeok://docs/expert-reference-intake",
+  },
+  {
+    "mimeType": "text/markdown",
+    "title": "외부 만세력 provider 대조 절차",
+    "uri": "manseryeok://docs/external-provider-intake",
+  },
+  {
+    "mimeType": "text/markdown",
+    "title": "한국 법정시 정책 (표준시·DST 이력)",
+    "uri": "manseryeok://docs/korean-legal-time-policy",
+  },
+  {
+    "mimeType": "text/markdown",
+    "title": "전문가용 준비도 체크",
+    "uri": "manseryeok://docs/professional-readiness",
+  },
+  {
+    "mimeType": "text/markdown",
+    "title": "참조 provider 등록부",
+    "uri": "manseryeok://docs/reference-provider-register",
+  },
+  {
+    "mimeType": "text/markdown",
+    "title": "절기 데이터 산출·검증",
+    "uri": "manseryeok://docs/solar-terms",
+  },
+  {
+    "mimeType": "application/json",
+    "title": "서버·엔진 메타 정보",
+    "uri": "manseryeok://meta",
+  },
+]
+`;
+
+exports[`MCP 표면 스냅샷 > tools/list — 이름·제목·설명·필수 입력·annotations·outputSchema 유무 1`] = `
+[
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "양력 날짜 하루의 일진(간지)·음력 날짜·오행·12신살·길흉·택일 정보·절기를 반환합니다. KST 기준.",
+    "hasOutputSchema": true,
+    "name": "calendar_day_info",
+    "required": [
+      "day",
+      "month",
+      "year",
+    ],
+    "title": "일진·역학달력 하루 정보",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "양력 연·월의 월간지와 일별 일진 배열을 반환합니다. compact=true면 일별 항목을 날짜·간지·길흉 3필드로 축약합니다(토큰 절약).",
+    "hasOutputSchema": true,
+    "name": "calendar_month",
+    "required": [
+      "month",
+      "year",
+    ],
+    "title": "월간 역학달력",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "두 사람의 생년월일시로 궁합을 계산합니다. 총점(100점: 일간 30·일지 25·오행 보완 25·구성 20)과 등급(S≥85/A≥70/B≥55/C≥40/D), 카테고리별 점수, 일간·일지 관계, 조언, 양쪽 팔자를 반환합니다. 오락·자기성찰 목적의 계산값입니다.",
+    "hasOutputSchema": true,
+    "name": "compatibility_score",
+    "required": [
+      "person1",
+      "person2",
+    ],
+    "title": "궁합(케미) 점수",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "사주 팔자의 선천수·후천수 합으로 64괘와 변효를 작괘합니다(대정수작괘). birth 또는 palja 중 하나로 팔자를 지정합니다. 시주 미상이면 3주(년월일) 기준으로 계산되며 결과가 달라집니다.",
+    "hasOutputSchema": true,
+    "name": "daejeong_reading",
+    "required": [],
+    "title": "대정수 작괘",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "대육임 과식(천지반 12궁·사과·삼전·12천장·과명)을 계산합니다. 점단 시각(양력 날짜+시) 기준. interpret=true면 사과/삼전 해석을 추가합니다.",
+    "hasOutputSchema": true,
+    "name": "daeyukim_chart",
+    "required": [
+      "day",
+      "hour",
+      "month",
+      "year",
+    ],
+    "title": "대육임 과식",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "양력↔음력 날짜를 변환합니다. direction=solar_to_lunar(양→음) 또는 lunar_to_solar(음→양). 음력 입력의 윤달은 isLeapMonth로 지정합니다.",
+    "hasOutputSchema": true,
+    "name": "date_convert",
+    "required": [
+      "day",
+      "direction",
+      "month",
+      "year",
+    ],
+    "title": "양력·음력 변환",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "간지 한자 문자열(예: "庚午" 또는 "甲乙丙")의 각 글자에 대해 한글 독음과 오행을 반환합니다. 천간 10자·지지 12자 외 글자는 unknown으로 표시됩니다.",
+    "hasOutputSchema": true,
+    "name": "ganji_info",
+    "required": [
+      "ganji",
+    ],
+    "title": "간지 한자 정보",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "구성기학의 본명성과 연반/월반/일반 구궁 배치를 계산합니다. 대상일(targetYear/Month/Day)은 셋 다 지정하거나 모두 생략합니다(생략 시 KST 오늘).",
+    "hasOutputSchema": true,
+    "name": "guseong_chart",
+    "required": [
+      "birthYear",
+      "gender",
+    ],
+    "title": "구성기학 포국",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "하락이수(河洛理數)로 생년월일의 하도수·낙서수와 64괘를 계산합니다. 연·월·일 숫자를 그대로 수리 계산에 사용합니다(시각 불필요).",
+    "hasOutputSchema": true,
+    "name": "harak_reading",
+    "required": [
+      "day",
+      "month",
+      "year",
+    ],
+    "title": "하락이수",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "홍연(홍국수) 분석: 팔자의 하도수 합산으로 홍국수·본명성·구궁 배치·통기도를 계산합니다. birth 또는 palja 중 하나로 팔자를 지정합니다. 시주 미상이면 3주의 하도수만 합산합니다(엔진 정본 동작).",
+    "hasOutputSchema": true,
+    "name": "hongyeon_reading",
+    "required": [],
+    "title": "홍연 분석",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "주어진 KST 시각의 법정시 오프셋(표준시·서머타임)을 해석합니다. 1948~1960·1987~1988 DST 구간의 모호(AMBIGUOUS_CIVIL_TIME)/부재(NONEXISTENT_CIVIL_TIME) 시각은 오류 코드로 반환됩니다.",
+    "hasOutputSchema": true,
+    "name": "korean_legal_time",
+    "required": [
+      "day",
+      "hour",
+      "minute",
+      "month",
+      "year",
+    ],
+    "title": "한국 법정시 해석 (전문가용)",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "매화역수(梅花易數)로 점괘를 냅니다. 세 가지 작괘 방식: time(날짜+시각), number(두 수), name(성/이름 획수). 본괘·변효·체용 관계와 해석을 반환합니다. 질문 내용은 입력하지 않습니다 — 해석 적용은 호출 측 책임입니다.",
+    "hasOutputSchema": true,
+    "name": "maehwa_divination",
+    "required": [
+      "cast",
+    ],
+    "title": "매화역수 점단",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "한국어 이름 후보(1~6개)를 성명학으로 분석합니다: 원형이정 사격, 81수리 길흉, 수리·발음 오행 관계, 종합 점수(0~100). 후보에 한자(hanjaChars: 성 포함 전체 글자)를 주면 자원오행과 3중 오행 비교가 추가됩니다(DB 미등재 한자는 null). school은 한자 획수 기준: kangxi(강희자전, 기본)/modern(현대 옥편).",
+    "hasOutputSchema": true,
+    "name": "naming_analyze",
+    "required": [
+      "candidates",
+      "surname",
+    ],
+    "title": "작명(성명학) 분석",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "기문둔갑 시국 포국(양둔/음둔·국수·9궁 문/성/신 배치·격국·직부/직사)을 계산합니다. 점단 시각(양력 날짜+시) 기준. interpret=true면 궁별 해석을, school 지정 시 학파 분석을 추가합니다(siguk 시국/yeonguk 연국/wolguk 월국/hongyeon 홍연기문 — hongyeon은 birth 또는 palja 추가 필수).",
+    "hasOutputSchema": true,
+    "name": "qimen_chart",
+    "required": [
+      "day",
+      "hour",
+      "month",
+      "year",
+    ],
+    "title": "기문둔갑 포국",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "생년월일시와 성별로 대운 목록을 계산합니다. 성별에 따라 순행/역행이 결정되며, 현재 나이에 해당하는 대운에 isCurrent가 표시됩니다.",
+    "hasOutputSchema": true,
+    "name": "saju_daeun",
+    "required": [
+      "birth",
+    ],
+    "title": "대운 계산",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "생년월일시로 사주 전체를 계산합니다: 팔자(사주), 십신, 지장간(본기/중기/여기), 운성, 대운/세운/월운, 신살, 지지 합충형, 공망, 납음오행, 원진, 격국, 용신. include로 필요한 섹션만 선택해 응답 크기를 줄일 수 있습니다(생략 시 전체). 계산 전용 — 해석 문구 생성은 호출 측 책임입니다.",
+    "hasOutputSchema": true,
+    "name": "saju_full_reading",
+    "required": [
+      "birth",
+    ],
+    "title": "사주 전체 분석",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "생년월일시로 사주팔자(년/월/일/시주 간지 8자)만 계산합니다. 출생시 미상이면 hourGan/hourJi가 빈 문자열로 반환됩니다. 결과 palja는 daejeong_reading·hongyeon_reading 등 palja 입력 툴에 재사용할 수 있습니다.",
+    "hasOutputSchema": true,
+    "name": "saju_palja",
+    "required": [
+      "birth",
+    ],
+    "title": "사주팔자 계산 (경량)",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "연도의 24절기 목록(정확한 KST 입절 시각 포함)을 반환합니다. month·day를 함께 주면 해당 날짜의 절기만 조회합니다(없으면 빈 배열).",
+    "hasOutputSchema": true,
+    "name": "solar_terms",
+    "required": [
+      "year",
+    ],
+    "title": "24절기 조회",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "토정비결로 대상 연도(targetYear)의 신수를 봅니다: 144괘 중 괘 번호·시구·총운·월별 12운. 출생 시각은 사용하지 않으며, 양력 생일은 서버가 음력으로 자동 변환합니다(응답의 lunarBirth가 실제 사용된 음력 생일).",
+    "hasOutputSchema": true,
+    "name": "tojeong_yearly",
+    "required": [
+      "birth",
+      "targetYear",
+    ],
+    "title": "토정비결 신수",
+  },
+  {
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "자미두수 명반(12궁 성요 배치)을 계산합니다. 출생 시각이 필수입니다(hour=null 거부). interpret=true면 궁별 해석·사화 분석을, school 지정 시 학파 분석(samhap 삼합파/sahwa 사화파/jungju 중주파)을 추가합니다.",
+    "hasOutputSchema": true,
+    "name": "ziwei_chart",
+    "required": [
+      "birth",
+    ],
+    "title": "자미두수 명반",
+  },
+]
+`;

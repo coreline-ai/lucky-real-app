@@ -350,6 +350,7 @@ TS `compatibility` 산식이 정본이며 총점 100점입니다.
 |---|---|
 | [`realapp/`](realapp/) | **오행가디언즈 Flutter 앱**. 화면, 로컬 DB, Dart 엔진 포팅, 공유/알림 포함 (Dart 소스 69개) |
 | [`engine/`](engine/) | TypeScript 만세력·명리 계산 엔진 패키지 `manseryeok-engine` (정본) |
+| [`mcp-server/`](mcp-server/) | `manseryeok-engine`을 MCP 툴 20종·리소스·프롬프트로 노출하는 stdio 서버 |
 | [`game/`](game/) | 엔진을 활용한 Vite 기반 브라우저 미니게임 *일진 수호신 카드 배틀* |
 | [`dev-plan-generator/`](dev-plan-generator/) | 단계형 개발 계획 문서를 생성하는 Claude 스킬/도구 |
 
