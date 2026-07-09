@@ -60,6 +60,8 @@ void main() {
       AssetPaths.marketTabBackground,
       AssetPaths.homeBalancePanel,
       AssetPaths.homeRoutineCta,
+      AssetPaths.homeLuckyNumbersPlate,
+      AssetPaths.homeShareCtaGlow,
       AssetPaths.fortuneTabBackground,
       AssetPaths.routineTabBackground,
       AssetPaths.routineCompleteBadge,

@@ -160,6 +160,7 @@ void main() {
     expect(find.text('삼성전자'), findsWidgets);
     expect(find.textContaining('이름 오행'), findsNothing);
     expect(find.textContaining('관찰 준비도'), findsOneWidget);
+    expect(find.textContaining('만세력 연결'), findsOneWidget);
     expect(
       find.textContaining(RegExp('기록부터 시작|체크 후 관찰|우선 관찰|오늘의 핵심 관찰')),
       findsOneWidget,

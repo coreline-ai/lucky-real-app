@@ -69,6 +69,8 @@ flutter:
     - assets/images/backgrounds/home_balance_panel_bg_1920x1080_v1.webp
     - assets/images/backgrounds/home_bg_default_1080x1920_v1.webp
     - assets/images/backgrounds/home_routine_cta_bg_1920x1080_v1.webp
+    - assets/images/home/home_lucky_numbers_chips_960x260_v2.webp
+    - assets/images/home/home_share_cta_glow_960x180_v2.webp
     - assets/images/backgrounds/market_observation_bg_1080x1920_v1.webp
     - assets/images/backgrounds/routine_earth_bg_1920x1080_v1.webp
     - assets/images/backgrounds/routine_fire_bg_1920x1080_v1.webp

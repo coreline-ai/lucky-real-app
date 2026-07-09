@@ -788,6 +788,15 @@ class _ObservationTile extends StatelessWidget {
                 '관찰 준비도 · $scoreBand',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              const SizedBox(height: 2),
+              Text(
+                marketEngineRelationSummary(score),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.68),
+                ),
+              ),
             ],
           ),
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

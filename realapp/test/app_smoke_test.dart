@@ -181,6 +181,8 @@ void main() {
 
     expect(find.textContaining('오늘의 일진 '), findsOneWidget);
     expect(find.textContaining('오늘의 수호신'), findsOneWidget);
+    expect(find.text('오늘의 행운 숫자'), findsOneWidget);
+    expect(find.text('오늘 수호신 공유하기'), findsOneWidget);
     expect(find.text('오행 밸런스'), findsOneWidget);
     expect(find.textContaining('보완하면 좋은 포인트'), findsOneWidget);
 

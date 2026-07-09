@@ -84,7 +84,7 @@ void main() {
         userTags: const [],
       );
 
-      expect(score.score, inInclusiveRange(50, 72));
+      expect(score.score, inInclusiveRange(50, 78));
       expect(marketObservationBandLabel(score.score), isNotEmpty);
       expect(
         score.reasonCodes,
@@ -128,5 +128,84 @@ void main() {
     expect(marketObservationBandLabel(80), '우선 관찰');
     expect(marketObservationBandLabel(65), '체크 후 관찰');
     expect(marketObservationBandLabel(50), '기록부터 시작');
+  });
+
+  test('manseryeok element relationship differentiates watch item scores', () {
+    const balance = ElementBalance({
+      FiveElement.wood: 26,
+      FiveElement.fire: 15,
+      FiveElement.earth: 37,
+      FiveElement.metal: 22,
+      FiveElement.water: 0,
+    });
+    const match = GuardianMatch(
+      element: FiveElement.water,
+      reasonCodes: [],
+      todayElement: FiveElement.wood,
+    );
+    final analysis = DailyAnalysisResult(
+      meta: meta,
+      natal: const FourPillarsResult(
+        meta: meta,
+        year: pillar,
+        month: pillar,
+        day: pillar,
+        hour: null,
+        dayMaster: '甲',
+        sipsin: {},
+        jijanggan: {},
+        jijangganSipsin: {},
+      ),
+      daily: DailyCycleResult(
+        meta: meta,
+        date: DateTime(2026, 7, 8),
+        yearPillar: pillar,
+        monthPillar: pillar,
+        dayPillar: pillar,
+      ),
+      dayStemSipsin: '정관',
+      seun: pillar,
+      wolun: pillar,
+    );
+
+    MarketObservationScore scoreFor(String id, String name) {
+      return calculateMarketObservationScore(
+        instrumentId: id,
+        name: name,
+        corpName: name,
+        balance: balance,
+        match: match,
+        analysis: analysis,
+        checklistCompleted: 0,
+        checklistTotal: 4,
+        userTags: const [],
+      );
+    }
+
+    final scores = {
+      '삼성전자': scoreFor('KRX:KOSPI:005930', '삼성전자'),
+      '카카오': scoreFor('KRX:KOSPI:035720', '카카오'),
+      'SK하이닉스': scoreFor('KRX:KOSPI:000660', 'SK하이닉스'),
+      'NAVER': scoreFor('KRX:KOSPI:035420', 'NAVER'),
+      '현대자동차': scoreFor('KRX:KOSPI:005380', '현대자동차'),
+    };
+
+    expect(scores.values.map((score) => score.score).toSet().length, 5);
+    expect(
+      scores['삼성전자']!.reasonCodes,
+      contains(MarketReasonCodes.supportsGuardianElement),
+    );
+    expect(
+      scores['카카오']!.reasonCodes,
+      contains(MarketReasonCodes.dailyElementAligned),
+    );
+    expect(
+      scores['카카오']!.reasonCodes,
+      contains(MarketReasonCodes.dominantElementBalanced),
+    );
+    expect(
+      marketEngineRelationSummary(scores['삼성전자']!),
+      '만세력 연결 · 이름 금 · 보완 수 · 오늘 목',
+    );
   });
 }

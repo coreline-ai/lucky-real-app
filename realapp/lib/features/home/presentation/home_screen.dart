@@ -10,6 +10,7 @@ import '../../../core/domain/five_element.dart';
 import '../../share/presentation/share_preview_screen.dart';
 import '../../shared/tab_background.dart';
 import '../application/today_fortune_provider.dart';
+import '../domain/lucky_numbers.dart';
 
 /// 오늘 홈 (02 상태표: 첫 방문/일반/루틴 완료/계산 실패/정보 부족).
 /// 루틴 완료 상태 연출은 Phase 5에서 routine_logs와 연결한다.
@@ -118,6 +119,14 @@ class _TodayView extends ConsumerWidget {
     final element = fortune.match.element;
     final elementColor = ElementColors.of(element);
     final timeUnknown = fortune.analysis.natal.hour == null;
+    final luckyNumbers = generateLuckyNumbers(
+      profileId: fortune.profile.id,
+      date: fortune.analysis.daily.date,
+      dailyGanji: fortune.analysis.daily.dayPillar.ganji,
+      guardianElement: fortune.match.element,
+      todayElement: fortune.match.todayElement,
+      dayStemSipsin: fortune.analysis.dayStemSipsin,
+    );
     final guardianFrameWidth = (MediaQuery.sizeOf(context).height * 0.37)
         .clamp(216.0, 340.0)
         .toDouble();
@@ -144,6 +153,9 @@ class _TodayView extends ConsumerWidget {
                       .toDouble();
                   final contentWidth =
                       constraints.maxWidth - horizontalInset * 2;
+                  final guardianReasonWidth = (contentWidth * 0.88)
+                      .clamp(168.0, 220.0)
+                      .toDouble();
                   final guardianHeight = (constraints.maxHeight * 0.29)
                       .clamp(102.0, 150.0)
                       .toDouble();
@@ -151,10 +163,6 @@ class _TodayView extends ConsumerWidget {
                   return Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.asset(
-                        AssetPaths.homeGuardianCardFrame,
-                        fit: BoxFit.contain,
-                      ),
                       Positioned(
                         left: horizontalInset,
                         top: topInset,
@@ -183,12 +191,23 @@ class _TodayView extends ConsumerWidget {
                                   ).textTheme.titleMedium,
                                 ),
                                 const SizedBox(height: 6),
-                                Text(
-                                  fortune.content.guardianReason,
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.bodySmall,
+                                SizedBox(
+                                  width: guardianReasonWidth,
+                                  child: Text(
+                                    _formatGuardianReason(
+                                      fortune.content.guardianReason,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.bodySmall,
+                                  ),
                                 ),
-                                TextButton.icon(
+                                const SizedBox(height: 8),
+                                _LuckyNumbersPlate(numbers: luckyNumbers),
+                                const SizedBox(height: 8),
+                                _HomeShareButton(
+                                  elementColor: elementColor,
                                   onPressed: () => openSharePreview(
                                     context,
                                     SharePreviewScreen.guardian(
@@ -198,18 +217,16 @@ class _TodayView extends ConsumerWidget {
                                       myNickname: fortune.profile.displayName,
                                     ),
                                   ),
-                                  icon: const Icon(Icons.ios_share, size: 16),
-                                  label: const Text('공유'),
-                                  style: TextButton.styleFrom(
-                                    minimumSize: const Size(0, 34),
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    visualDensity: VisualDensity.compact,
-                                  ),
                                 ),
                               ],
                             ),
                           ),
+                        ),
+                      ),
+                      IgnorePointer(
+                        child: Image.asset(
+                          AssetPaths.homeGuardianCardFrame,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     ],
@@ -327,6 +344,145 @@ class _TodayView extends ConsumerWidget {
             child: const Text('출생 시간을 알게 되면 여기서 보완해 주세요'),
           ),
       ],
+    );
+  }
+}
+
+String _formatGuardianReason(String reason) {
+  return reason
+      .replaceAll(' 기운을 채워주기 위해 ', ' 기운을\n채워주기 위해 ')
+      .replaceAll('. ', '.\n');
+}
+
+class _LuckyNumbersPlate extends StatelessWidget {
+  const _LuckyNumbersPlate({required this.numbers});
+
+  final List<int> numbers;
+
+  @override
+  Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.titleMedium?.copyWith(
+      fontWeight: FontWeight.w800,
+      color: const Color(0xFF284460),
+    );
+    return Semantics(
+      label: '오늘의 행운 숫자 ${numbers.join(', ')}. 오늘의 기운에서 뽑은 가벼운 리듬 숫자예요.',
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '오늘의 행운 숫자',
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: 3),
+          FractionallySizedBox(
+            widthFactor: 0.82,
+            child: AspectRatio(
+              aspectRatio: 960 / 260,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    const slotCenters = [0.27, 0.5, 0.73];
+                    final slotWidth = constraints.maxWidth * 0.2;
+                    final slotHeight = constraints.maxHeight * 0.5;
+                    return Stack(
+                      fit: StackFit.expand,
+                      alignment: Alignment.center,
+                      children: [
+                        Image.asset(
+                          AssetPaths.homeLuckyNumbersPlate,
+                          fit: BoxFit.fill,
+                        ),
+                        for (var i = 0; i < numbers.length; i++)
+                          Positioned(
+                            left:
+                                constraints.maxWidth * slotCenters[i] -
+                                slotWidth / 2,
+                            top: constraints.maxHeight * 0.49 - slotHeight / 2,
+                            width: slotWidth,
+                            height: slotHeight,
+                            child: Center(
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  numbers[i].toString().padLeft(2, '0'),
+                                  style: textStyle,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          Text(
+            '오늘의 기운에서 뽑은 가벼운 리듬 숫자예요.',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HomeShareButton extends StatelessWidget {
+  const _HomeShareButton({required this.elementColor, required this.onPressed});
+
+  final Color elementColor;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: '오늘 수호신 공유하기',
+      child: FractionallySizedBox(
+        widthFactor: 0.64,
+        child: SizedBox(
+          height: 44,
+          child: Stack(
+            fit: StackFit.expand,
+            alignment: Alignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Opacity(
+                  opacity: 0.26,
+                  child: Image.asset(
+                    AssetPaths.homeShareCtaGlow,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Center(
+                child: FilledButton.icon(
+                  onPressed: onPressed,
+                  icon: const Icon(Icons.ios_share, size: 17),
+                  label: const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text('오늘 수호신 공유하기'),
+                  ),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: elementColor.withValues(alpha: 0.92),
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(0, 36),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,6 +1,6 @@
 # Imagegen Asset Manifest
 
-Updated: 2026-07-09 10:05:00 Asia/Seoul
+Updated: 2026-07-09 16:10:58 Asia/Seoul
 Scope: Full HD P0, upgrades, and approved derivatives for the Ohaeng Guardians Flutter app.
 
 - Runtime bundle policy: Flutter uses WebP derivatives for the active P0 image set.
@@ -13,6 +13,7 @@ Scope: Full HD P0, upgrades, and approved derivatives for the Ohaeng Guardians F
 - Tab background B-plan WebP derivatives prepared: FORTUNE-002~004, HISTORY-001, SETTINGS-001.
 - Market tab background WebP derivative prepared: MARKET-001.
 - Bottom navigation WebP derivatives prepared: NAV-001~002.
+- Home lucky number/share CTA WebP derivatives prepared: HOME-007~010.
 - Contract source: `realapp/assets/imagegen_sources/full_hd_p0_contract.json`
 - Contract entries: 72
 - Existing baseline kept: 11
@@ -49,6 +50,10 @@ Scope: Full HD P0, upgrades, and approved derivatives for the Ohaeng Guardians F
 | HOME-004 | Today guardian card frame overlay | `realapp/assets/imagegen_sources/prompts/HOME-004.md` | `realapp/assets/imagegen_sources/masters/home_guardian_card_frame_1080x1620_v1_master.png` | `realapp/assets/images/cards/home_guardian_card_frame_1080x1620_v1.png` | 1080x1620 | Yes | Generated |
 | HOME-005 | Five-elements balance panel background | `realapp/assets/imagegen_sources/prompts/HOME-005.md` | `realapp/assets/imagegen_sources/masters/home_balance_panel_bg_1920x1080_v1_master.png` | `realapp/assets/images/backgrounds/home_balance_panel_bg_1920x1080_v1.png` | 1920x1080 | No | Generated |
 | HOME-006 | Routine CTA panel background | `realapp/assets/imagegen_sources/prompts/HOME-006.md` | `realapp/assets/imagegen_sources/masters/home_routine_cta_bg_1920x1080_v1_master.png` | `realapp/assets/images/backgrounds/home_routine_cta_bg_1920x1080_v1.png` | 1920x1080 | No | Generated |
+| HOME-007 | Lucky numbers plate | `realapp/assets/imagegen_sources/prompts/HOME-007.md` | `realapp/assets/imagegen_sources/masters/home_lucky_numbers_plate_960x260_v1_master.png` | `realapp/assets/images/home/home_lucky_numbers_plate_960x260_v1.png` | 960x260 | No | Generated, WebP ready |
+| HOME-008 | Share CTA glow background | `realapp/assets/imagegen_sources/prompts/HOME-008.md` | `realapp/assets/imagegen_sources/masters/home_share_cta_glow_960x180_v1_master.png` | `realapp/assets/images/home/home_share_cta_glow_960x180_v1.png` | 960x180 | No | Generated, WebP ready |
+| HOME-009 | Lucky numbers transparent chips | `realapp/assets/imagegen_sources/prompts/HOME-009.md` | `realapp/assets/imagegen_sources/masters/home_lucky_numbers_chips_960x260_v2_master.png` | `realapp/assets/images/home/home_lucky_numbers_chips_960x260_v2.png` | 960x260 | Yes | Derived, WebP runtime |
+| HOME-010 | Share CTA transparent glow | `realapp/assets/imagegen_sources/prompts/HOME-010.md` | `realapp/assets/imagegen_sources/masters/home_share_cta_glow_960x180_v2_master.png` | `realapp/assets/images/home/home_share_cta_glow_960x180_v2.png` | 960x180 | Yes | Derived, WebP runtime |
 | FORTUNE-001 | Total fortune panel background | `realapp/assets/imagegen_sources/prompts/FORTUNE-001.md` | `realapp/assets/imagegen_sources/masters/fortune_total_bg_1920x1080_v1_master.png` | `realapp/assets/images/backgrounds/fortune_total_bg_1920x1080_v1.png` | 1920x1080 | No | Generated |
 | FORTUNE-002 | Relationship fortune panel background | `realapp/assets/imagegen_sources/prompts/FORTUNE-002.md` | `realapp/assets/imagegen_sources/masters/fortune_relationship_bg_1920x1080_v1_master.png` | `realapp/assets/images/backgrounds/fortune_relationship_bg_1920x1080_v1.png` | 1920x1080 | No | Generated, WebP ready |
 | FORTUNE-003 | Work and study panel background | `realapp/assets/imagegen_sources/prompts/FORTUNE-003.md` | `realapp/assets/imagegen_sources/masters/fortune_work_study_bg_1920x1080_v1_master.png` | `realapp/assets/images/backgrounds/fortune_work_study_bg_1920x1080_v1.png` | 1920x1080 | No | Generated, WebP ready |

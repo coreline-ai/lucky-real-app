@@ -84,6 +84,10 @@ class AssetPaths {
   static const String homeRoutineCta =
       'assets/images/backgrounds/home_routine_cta_bg_1920x1080_v1.webp';
   static const String routineTabBackground = homeRoutineCta;
+  static const String homeLuckyNumbersPlate =
+      'assets/images/home/home_lucky_numbers_chips_960x260_v2.webp';
+  static const String homeShareCtaGlow =
+      'assets/images/home/home_share_cta_glow_960x180_v2.webp';
 
   static String routineBanner(FiveElement element) =>
       'assets/images/backgrounds/routine_${element.name}_bg_1920x1080_v1.webp';
