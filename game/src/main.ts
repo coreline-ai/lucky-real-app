@@ -1,4 +1,5 @@
-import { ManseryeokEngine } from '@/engine/core/manseryeok-engine';
+import { formatProviderError, resolveGameReadings } from './providers';
+import type { BirthFormInput, GameReadings, PillarSourceMeta } from './providers/types';
 
 // --- Type Definitions ---
 type Ohaeng = '목' | '화' | '토' | '금' | '수';
@@ -78,6 +79,8 @@ let playerOhaengs: Ohaeng[] = ['목', '수'];
 let bossName = '일진수호마왕';
 let bossGanJi = '庚午';
 let bossOhaengs: Ohaeng[] = ['금', '화'];
+let sourceMetas: PillarSourceMeta[] = [];
+let fallbackReason: string | undefined;
 
 let playerHand: Card[] = [];
 let bossHand: Card[] = [];
@@ -95,8 +98,13 @@ const battleScreen = document.getElementById('battle-screen')!;
 const resultModal = document.getElementById('result-modal')!;
 
 const setupForm = document.getElementById('setup-form') as HTMLFormElement;
+const btnSummon = document.getElementById('btn-summon') as HTMLButtonElement;
 const inputHour = document.getElementById('input-hour') as HTMLSelectElement;
 const inputMinute = document.getElementById('input-minute') as HTMLSelectElement;
+const sourceBadgeEl = document.getElementById('source-badge')!;
+const statusMessageEl = document.getElementById('status-message')!;
+const fallbackBannerEl = document.getElementById('fallback-banner')!;
+const mcpProofEl = document.getElementById('mcp-proof')!;
 
 const playerGanJiEl = document.getElementById('player-ganji')!;
 const playerNameEl = document.getElementById('player-name-display')!;
@@ -160,79 +168,133 @@ function createCard(element: Ohaeng, id: string): Card {
   };
 }
 
+function sourceLabel(meta: PillarSourceMeta | undefined): string {
+  if (meta?.source === 'mcp') return 'via manseryeok-mcp';
+  if (meta?.source === 'mcp-bridge') return 'via mcp-bridge';
+  if (meta?.source === 'local') return 'via local-engine';
+  return 'source: 준비 중';
+}
+
+function sourceClass(meta: PillarSourceMeta | undefined): string {
+  if (meta?.source === 'mcp') return 'source-badge source-mcp';
+  if (meta?.source === 'mcp-bridge') return 'source-badge source-bridge';
+  if (meta?.source === 'local') return 'source-badge source-local';
+  return 'source-badge source-idle';
+}
+
+function setStatus(message: string, tone: 'info' | 'warning' | 'error' = 'info') {
+  statusMessageEl.textContent = message;
+  statusMessageEl.className = `status-message status-${tone}`;
+}
+
+function clearStatus() {
+  statusMessageEl.textContent = '';
+  statusMessageEl.className = 'status-message';
+}
+
+function setLoading(isLoading: boolean) {
+  btnSummon.disabled = isLoading;
+  btnSummon.textContent = isLoading ? 'MCP 계산 중...' : '수호신 소환하기 (Summon)';
+  if (isLoading) {
+    sourceBadgeEl.className = 'source-badge source-loading';
+    sourceBadgeEl.textContent = 'source: MCP initialize → tools/call';
+    setStatus('manseryeok-mcp 연결 및 결정론 계산을 확인 중입니다.', 'info');
+  }
+}
+
+function ohaengFromGanJi(gan: string, ji: string, fallback: Ohaeng[]): Ohaeng[] {
+  return [GAN_OHAENG[gan] ?? fallback[0], BRANCH_OHAENG[ji] ?? fallback[1]];
+}
+
+function applyReadings(readings: GameReadings) {
+  const { player, boss } = readings;
+  playerGanJi = player.pillar.ganji;
+  bossGanJi = boss.pillar.ganji;
+  playerOhaengs = ohaengFromGanJi(player.pillar.gan, player.pillar.ji, ['목', '수']);
+  bossOhaengs = ohaengFromGanJi(boss.pillar.gan, boss.pillar.ji, ['금', '화']);
+  sourceMetas = [player.meta, boss.meta];
+  fallbackReason = readings.fallbackReason;
+}
+
+function updateProofUI() {
+  const primaryMeta = sourceMetas[0];
+  sourceBadgeEl.className = sourceClass(primaryMeta);
+  sourceBadgeEl.textContent = sourceLabel(primaryMeta);
+
+  const tools = sourceMetas.map((meta) => meta.tool).filter(Boolean).join(', ') || 'local-engine';
+  const engineVersion = sourceMetas.find((meta) => meta.engineVersion)?.engineVersion ?? '-';
+  const ruleVersion = sourceMetas.find((meta) => meta.ruleVersion)?.ruleVersion ?? '-';
+  mcpProofEl.textContent = `${sourceLabel(primaryMeta)} · tools: ${tools} · engine ${engineVersion} · rule ${ruleVersion}`;
+
+  if (fallbackReason) {
+    fallbackBannerEl.hidden = false;
+    fallbackBannerEl.textContent = `MCP 호출 실패로 local-engine 폴백을 사용했습니다: ${fallbackReason}`;
+    setStatus('MCP 실패를 감지해 로컬 엔진으로 데모를 계속합니다.', 'warning');
+  } else {
+    fallbackBannerEl.hidden = true;
+    fallbackBannerEl.textContent = '';
+    clearStatus();
+  }
+}
+
 // Initialize setup listener
 function setupGameInit() {
-  setupForm.addEventListener('submit', (event) => {
+  setupForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const name = (document.getElementById('input-name') as HTMLInputElement).value;
+    const name = (document.getElementById('input-name') as HTMLInputElement).value.trim() || '홍길동';
     const gender = (document.getElementById('input-gender') as HTMLSelectElement).value as 'male' | 'female';
     const dateVal = (document.getElementById('input-date') as HTMLInputElement).value;
     const hourVal = inputHour.value;
     const minVal = inputMinute.value;
 
-    if (!dateVal) return;
+    if (!dateVal) {
+      setStatus('생년월일을 입력해 주세요.', 'error');
+      return;
+    }
 
     const [year, month, day] = dateVal.split('-').map(Number);
     const hour = hourVal !== '' ? Number(hourVal) : null;
-    const minute = minVal !== '' ? Number(minVal) : null;
+    const minute = hour !== null && minVal !== '' ? Number(minVal) : null;
+    const input: BirthFormInput = { year, month, day, hour, minute, gender };
 
-    playerName = name;
-    playerGender = gender;
+    setLoading(true);
+    try {
+      const readings = await resolveGameReadings(input);
+      playerName = name;
+      playerGender = gender;
+      applyReadings(readings);
 
-    // 1. Calculate player Saju using ManseryeokEngine
-    const playerContext = ManseryeokEngine.getSolarContext({
-      year,
-      month,
-      day,
-      ...(hour !== null ? { hour } : {}),
-      ...(minute !== null ? { minute } : {}),
-    });
+      const [pGanOhaeng, pJiOhaeng] = playerOhaengs;
+      const [bGanOhaeng, bJiOhaeng] = bossOhaengs;
 
-    const pGan = playerContext.ganji.day.gan;
-    const pJi = playerContext.ganji.day.ji;
-    playerGanJi = `${pGan}${pJi}`;
-    
-    // Map GanJi to Ohaeng
-    const pGanOhaeng = GAN_OHAENG[pGan] ?? '목';
-    const pJiOhaeng = BRANCH_OHAENG[pJi] ?? '수';
-    playerOhaengs = [pGanOhaeng, pJiOhaeng];
+      // Player gets Day Gan card, Day Ji card, and 1 random card.
+      playerHand = [
+        createCard(pGanOhaeng, 'player-1'),
+        createCard(pJiOhaeng, 'player-2'),
+        createCard(getRandomElement(), 'player-3'),
+      ];
 
-    // 2. Calculate Boss (Today's Iljin)
-    const today = new Date();
-    const bossContext = ManseryeokEngine.getSolarContext({
-      year: today.getFullYear(),
-      month: today.getMonth() + 1,
-      day: today.getDate(),
-    });
-    const bGan = bossContext.ganji.day.gan;
-    const bJi = bossContext.ganji.day.ji;
-    bossGanJi = `${bGan}${bJi}`;
-    const bGanOhaeng = GAN_OHAENG[bGan] ?? '금';
-    const bJiOhaeng = BRANCH_OHAENG[bJi] ?? '화';
-    bossOhaengs = [bGanOhaeng, bJiOhaeng];
+      // Boss gets Boss Gan card, Boss Ji card, and 1 random card.
+      bossHand = [
+        createCard(bGanOhaeng, 'boss-1'),
+        createCard(bJiOhaeng, 'boss-2'),
+        createCard(getRandomElement(), 'boss-3'),
+      ];
 
-    // 3. Generate hands
-    // Player gets Day Gan card, Day Ji card, and 1 random card
-    playerHand = [
-      createCard(pGanOhaeng, 'player-1'),
-      createCard(pJiOhaeng, 'player-2'),
-      createCard(getRandomElement(), 'player-3'),
-    ];
+      // With exactly three cards and three rounds, start with a playable order.
+      slottedCards = [...playerHand];
+      btnEnterBattle.disabled = false;
 
-    // Boss gets Boss Gan card, Boss Ji card, and 1 random card
-    bossHand = [
-      createCard(bGanOhaeng, 'boss-1'),
-      createCard(bJiOhaeng, 'boss-2'),
-      createCard(getRandomElement(), 'boss-3'),
-    ];
-
-    // With exactly three cards and three rounds, start with a playable order.
-    slottedCards = [...playerHand];
-    btnEnterBattle.disabled = false;
-
-    // Transition to Lobby Screen
-    showLobby();
+      updateProofUI();
+      showLobby();
+    } catch (error) {
+      sourceBadgeEl.className = 'source-badge source-error';
+      sourceBadgeEl.textContent = 'source: MCP error';
+      setStatus(`소환 실패: ${formatProviderError(error)}`, 'error');
+    } finally {
+      setLoading(false);
+    }
   });
 }
 

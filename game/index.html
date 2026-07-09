@@ -17,6 +17,8 @@
       <div class="logo">☯️ MANSERYEOK BATTLE</div>
       <h1 class="title">일진 수호신 카드 배틀</h1>
       <p class="subtitle">당신의 생년월일시 오행과 오늘의 일진 보스의 대격돌!</p>
+      <div id="source-badge" class="source-badge source-idle">source: 준비 중</div>
+      <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
     </header>
 
     <!-- Setup Screen (Input form) -->
@@ -65,11 +67,14 @@
             수호신 소환하기 (Summon)
           </button>
         </form>
+        <p class="safety-copy">※ 이 미니게임은 오락·자기성찰용 계산 데모입니다. 의료·투자·법률·재무 판단의 근거로 사용할 수 없습니다.</p>
       </div>
     </section>
 
     <!-- Lobby Screen (Preparation) -->
     <section id="lobby-screen" class="screen">
+      <div id="fallback-banner" class="demo-banner" hidden></div>
+      <div id="mcp-proof" class="proof-panel glassmorphism">MCP proof 대기 중</div>
       <div class="lobby-grid">
         <!-- Player Info Card -->
         <div class="card glassmorphism side-card" id="player-profile">

@@ -6,3 +6,7 @@ coverage/
 .DS_Store
 .claude/
 .gemini/
+
+# Local tool metadata
+.grok/
+.repo-version

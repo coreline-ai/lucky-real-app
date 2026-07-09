@@ -790,3 +790,87 @@ select:focus {
     height: auto;
   }
 }
+
+/* MCP demo proof/status UI */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.source-mcp {
+  color: var(--color-secondary);
+  border-color: rgba(0, 242, 254, 0.5);
+  box-shadow: 0 0 18px rgba(0, 242, 254, 0.2);
+}
+
+.source-local {
+  color: var(--color-earth);
+  border-color: rgba(241, 196, 15, 0.5);
+  box-shadow: 0 0 18px rgba(241, 196, 15, 0.16);
+}
+
+.source-bridge,
+.source-loading {
+  color: #d8b4fe;
+  border-color: rgba(216, 180, 254, 0.5);
+}
+
+.source-error {
+  color: var(--color-fire);
+  border-color: rgba(255, 56, 56, 0.6);
+}
+
+.status-message {
+  min-height: 20px;
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.status-info { color: var(--color-secondary); }
+.status-warning { color: var(--color-earth); }
+.status-error { color: var(--color-fire); }
+
+.safety-copy {
+  margin-top: 18px;
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.proof-panel {
+  margin-bottom: 18px;
+  padding: 14px 18px;
+  color: #dbeafe;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  text-align: center;
+  border-color: rgba(0, 242, 254, 0.18);
+}
+
+.demo-banner {
+  margin-bottom: 14px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(241, 196, 15, 0.35);
+  background: rgba(241, 196, 15, 0.1);
+  color: var(--color-earth);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.demo-banner[hidden] {
+  display: none;
+}

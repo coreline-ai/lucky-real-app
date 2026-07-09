@@ -8,6 +8,12 @@ export default defineConfig({
     },
   },
   server: {
+    proxy: {
+      '/mcp': {
+        target: 'http://127.0.0.1:3100',
+        changeOrigin: false,
+      },
+    },
     fs: {
       allow: [
         path.resolve(__dirname),

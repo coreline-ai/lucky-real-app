@@ -352,6 +352,7 @@ TS `compatibility` 산식이 정본이며 총점 100점입니다.
 | [`engine/`](engine/) | TypeScript 만세력·명리 계산 엔진 패키지 `manseryeok-engine` (정본) |
 | [`mcp-server/`](mcp-server/) | `manseryeok-engine`을 MCP 툴 20종·리소스·프롬프트로 노출하는 stdio 서버 |
 | [`game/`](game/) | 엔진을 활용한 Vite 기반 브라우저 미니게임 *일진 수호신 카드 배틀* |
+| [`web-lucky/`](web-lucky/) | 경량 웹 도구 허브 — 일진·케미·작명·절기·토정 5모드 (`?mode=`) |
 | [`dev-plan-generator/`](dev-plan-generator/) | 단계형 개발 계획 문서를 생성하는 Claude 스킬/도구 |
 
 ### `engine/` — TypeScript 계산 엔진

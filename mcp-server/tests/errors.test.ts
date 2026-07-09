@@ -76,3 +76,26 @@ describe('교차 필드 검증 → INVALID_INPUT', () => {
     expect(payload.code).toBe('INVALID_INPUT');
   });
 });
+
+describe('스키마 검증 → SDK in-band 입력 오류', () => {
+  async function expectSdkValidationError(args: Record<string, unknown>, field: string): Promise<void> {
+    const result = await callTool(client, 'korean_legal_time', args);
+    expect(result.isError, `${field} 범위 오류는 성공 응답이면 안 됨`).toBe(true);
+    const text = (result.content as Array<{ text: string }>)[0].text;
+    expect(text).toContain('-32602');
+    expect(text).toContain('Input validation error');
+    expect(text).toContain(field);
+  }
+
+  it('korean_legal_time hour는 0~23 범위만 허용한다', async () => {
+    await expectSdkValidationError({ year: 2026, month: 1, day: 1, hour: 99, minute: 0 }, 'hour');
+  });
+
+  it('korean_legal_time minute은 0~59 범위만 허용한다', async () => {
+    await expectSdkValidationError({ year: 2026, month: 1, day: 1, hour: 1, minute: 99 }, 'minute');
+  });
+
+  it('korean_legal_time second는 0~59 범위만 허용한다', async () => {
+    await expectSdkValidationError({ year: 2026, month: 1, day: 1, hour: 1, minute: 0, second: 99 }, 'second');
+  });
+});

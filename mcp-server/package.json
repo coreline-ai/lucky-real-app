@@ -13,7 +13,11 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "pretest": "npm run build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "start:http": "node dist/http.js",
+    "dev:http": "npm run build && node dist/http.js",
+    "dashboard": "npm run build && node dist/http.js",
+    "smoke:prod": "node scripts/production-smoke.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",

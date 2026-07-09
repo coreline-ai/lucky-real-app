@@ -1,0 +1,23 @@
+{
+  "name": "web-lucky",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Seasonal lightweight web demos using manseryeok-engine (Tojeong yearly summary first).",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "manseryeok-engine": "file:../engine"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.10",
+    "vitest": "^3.2.4"
+  }
+}

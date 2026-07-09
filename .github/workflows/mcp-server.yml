@@ -41,3 +41,35 @@ jobs:
       - name: Test MCP server
         working-directory: mcp-server
         run: npm test
+
+      - name: Audit MCP runtime dependencies
+        working-directory: mcp-server
+        run: npm audit --omit=dev
+
+      - name: Start MCP HTTP server
+        working-directory: mcp-server
+        run: |
+          npm run start:http > /tmp/mcp-server.log 2>&1 &
+          echo $! > /tmp/mcp-server.pid
+          for i in {1..50}; do
+            if curl -fsS http://127.0.0.1:3100/health >/dev/null; then
+              exit 0
+            fi
+            sleep 0.2
+          done
+          cat /tmp/mcp-server.log
+          exit 1
+
+      - name: Production smoke MCP HTTP server
+        working-directory: mcp-server
+        run: npm run smoke:prod
+
+      - name: Stop MCP HTTP server
+        if: always()
+        run: |
+          if [ -f /tmp/mcp-server.pid ]; then
+            kill -TERM "$(cat /tmp/mcp-server.pid)" 2>/dev/null || true
+          fi
+          if [ -f /tmp/mcp-server.log ]; then
+            tail -100 /tmp/mcp-server.log || true
+          fi
