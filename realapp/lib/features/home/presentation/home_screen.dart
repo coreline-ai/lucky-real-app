@@ -268,6 +268,11 @@ class _TodayView extends ConsumerWidget {
                     element: e,
                     percent: fortune.balance.percentOf(e),
                   ),
+                const SizedBox(height: 8),
+                Text(
+                  '낮은 값은 부족함이 아니라 오늘 보완하면 좋은 포인트예요.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ],
             ),
           ),
@@ -332,8 +337,16 @@ class _BalanceRow extends StatelessWidget {
   final FiveElement element;
   final int percent;
 
+  String get _toneLabel {
+    if (percent < 10) return '보완 포인트';
+    if (percent < 20) return '은은한 기운';
+    if (percent < 30) return '안정적인 기운';
+    return '두드러진 기운';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final progressValue = percent <= 0 ? 0.02 : percent / 100;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
@@ -341,9 +354,9 @@ class _BalanceRow extends StatelessWidget {
           SizedBox(width: 24, child: Text(element.korean)),
           Expanded(
             child: Semantics(
-              label: '${element.korean} $percent퍼센트',
+              label: '${element.korean} $percent퍼센트, $_toneLabel',
               child: LinearProgressIndicator(
-                value: percent / 100,
+                value: progressValue,
                 minHeight: 8,
                 color: ElementColors.of(element),
                 backgroundColor: Theme.of(
@@ -354,8 +367,18 @@ class _BalanceRow extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 44,
-            child: Text('$percent%', textAlign: TextAlign.end),
+            width: 92,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text('$percent%', textAlign: TextAlign.end),
+                Text(
+                  _toneLabel,
+                  textAlign: TextAlign.end,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -159,7 +159,11 @@ void main() {
     expect(find.text('내 관심종목'), findsOneWidget);
     expect(find.text('삼성전자'), findsWidgets);
     expect(find.textContaining('이름 오행'), findsNothing);
-    expect(find.text('관찰 준비도'), findsOneWidget);
+    expect(find.textContaining('관찰 준비도'), findsOneWidget);
+    expect(
+      find.textContaining(RegExp('기록부터 시작|체크 후 관찰|우선 관찰|오늘의 핵심 관찰')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('checklist changes the displayed observation readiness', (
@@ -260,7 +264,7 @@ void main() {
     await pumpAsyncWork(tester);
     await addSamsung(tester);
 
-    await tester.ensureVisible(find.text('관찰 준비도'));
+    await tester.ensureVisible(find.textContaining('관찰 준비도'));
     await tester.tap(find.byType(ExpansionTile).first);
     await tester.pumpAndSettle();
     final editButton = find.widgetWithText(OutlinedButton, '메모/키워드');

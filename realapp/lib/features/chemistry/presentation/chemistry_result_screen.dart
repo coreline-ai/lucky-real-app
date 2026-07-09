@@ -82,6 +82,7 @@ class ChemistryResultScreen extends ConsumerWidget {
                 tooltip: '공유',
                 onPressed: () async {
                   final view = viewAsync.valueOrNull!;
+                  final displayScore = chemistryDisplayScore(view.analysis);
                   final me = await ref
                       .read(profileRepositoryProvider)
                       .getActiveBirthProfile();
@@ -90,7 +91,7 @@ class ChemistryResultScreen extends ConsumerWidget {
                   await openSharePreview(
                     context,
                     SharePreviewScreen.chemistry(
-                      title: '우리의 케미 ${view.analysis.totalScore}점',
+                      title: '우리의 케미 리듬 ${displayScore.score}',
                       subtitle: view.content.headline,
                       myNickname: me?.displayName ?? '',
                       onSharedChemistry: recordShared,
@@ -113,6 +114,7 @@ class ChemistryResultScreen extends ConsumerWidget {
               return const Center(child: Text('상대 정보를 찾을 수 없어요.'));
             }
             final analysis = view.analysis;
+            final displayScore = chemistryDisplayScore(analysis);
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
@@ -134,9 +136,15 @@ class ChemistryResultScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${analysis.totalScore}점',
+                        '케미 리듬 ${displayScore.score}',
                         style: Theme.of(context).textTheme.displaySmall,
-                        semanticsLabel: '케미 점수 ${analysis.totalScore}점',
+                        semanticsLabel:
+                            '케미 리듬 ${displayScore.score}, ${displayScore.label}',
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        displayScore.label,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       const SizedBox(height: 4),
                       Text(view.content.headline, textAlign: TextAlign.center),
@@ -212,23 +220,33 @@ class _ScoreRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final aspectLabel = chemistryAspectLabel(
+      score: score,
+      max: max,
+      note: note,
+    );
+    final detail = note.isEmpty ? aspectLabel : '$aspectLabel · $note';
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           SizedBox(width: 72, child: Text(label)),
           Expanded(
-            child: LinearProgressIndicator(
-              value: score / max,
-              minHeight: 8,
-              borderRadius: BorderRadius.circular(4),
+            child: Semantics(
+              label: '$label, $aspectLabel',
+              excludeSemantics: true,
+              child: LinearProgressIndicator(
+                value: max <= 0 ? 0 : score / max,
+                minHeight: 8,
+                borderRadius: BorderRadius.circular(4),
+              ),
             ),
           ),
           const SizedBox(width: 8),
           SizedBox(
-            width: 72,
+            width: 110,
             child: Text(
-              note.isEmpty ? '$score/$max' : '$score/$max · $note',
+              detail,
               textAlign: TextAlign.end,
               style: Theme.of(context).textTheme.bodySmall,
             ),

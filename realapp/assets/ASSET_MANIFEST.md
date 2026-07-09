@@ -1,6 +1,6 @@
 # Imagegen Asset Manifest
 
-Updated: 2026-07-08 11:21:12 Asia/Seoul
+Updated: 2026-07-09 10:05:00 Asia/Seoul
 Scope: Full HD P0, upgrades, and approved derivatives for the Ohaeng Guardians Flutter app.
 
 - Runtime bundle policy: Flutter uses WebP derivatives for the active P0 image set.
@@ -11,6 +11,8 @@ Scope: Full HD P0, upgrades, and approved derivatives for the Ohaeng Guardians F
 - APK optimization report: `realapp/assets/imagegen_sources/APK_ASSET_OPTIMIZATION_REPORT.md`
 - P2-ready WebP derivatives prepared: SHARE-001, SHARE-004, CHEM-002, and yin guardian/card art.
 - Tab background B-plan WebP derivatives prepared: FORTUNE-002~004, HISTORY-001, SETTINGS-001.
+- Market tab background WebP derivative prepared: MARKET-001.
+- Bottom navigation WebP derivatives prepared: NAV-001~002.
 - Contract source: `realapp/assets/imagegen_sources/full_hd_p0_contract.json`
 - Contract entries: 72
 - Existing baseline kept: 11
@@ -85,6 +87,7 @@ Scope: Full HD P0, upgrades, and approved derivatives for the Ohaeng Guardians F
 | CARD-GUARD-WATER-YANG | Water yang guardian card art | `realapp/assets/imagegen_sources/prompts/CARD-GUARD-WATER-YANG.md` | `realapp/assets/imagegen_sources/masters/card_guardian_water_yang_1080x1620_v1_master.png` | `realapp/assets/images/cards/card_guardian_water_yang_1080x1620_v1.png` | 1080x1620 | No | Generated |
 | CARD-GUARD-WATER-YIN | Water yin guardian card art | `realapp/assets/imagegen_sources/prompts/CARD-GUARD-WATER-YIN.md` | `realapp/assets/imagegen_sources/masters/card_guardian_water_yin_1080x1620_v1_master.png` | `realapp/assets/images/cards/card_guardian_water_yin_1080x1620_v1.png` | 1080x1620 | No | Generated |
 | COLLECTION-EMPTY | Empty collection illustration | `realapp/assets/imagegen_sources/prompts/COLLECTION-EMPTY.md` | `realapp/assets/imagegen_sources/masters/collection_empty_1920x1080_v1_master.png` | `realapp/assets/images/collection/collection_empty_1920x1080_v1.png` | 1920x1080 | No | Generated |
+| MARKET-001 | Market observation tab background | `realapp/assets/imagegen_sources/prompts/MARKET-001.md` | `realapp/assets/imagegen_sources/masters/market_observation_bg_1080x1920_v1_master.png` | `realapp/assets/images/backgrounds/market_observation_bg_1080x1920_v1.png` | 1080x1920 | No | Generated, WebP ready |
 | HISTORY-001 | History calendar background | `realapp/assets/imagegen_sources/prompts/HISTORY-001.md` | `realapp/assets/imagegen_sources/masters/history_calendar_bg_1080x1920_v1_master.png` | `realapp/assets/images/history/history_calendar_bg_1080x1920_v1.png` | 1080x1920 | No | Generated, WebP ready |
 | HISTORY-002 | Empty history illustration | `realapp/assets/imagegen_sources/prompts/HISTORY-002.md` | `realapp/assets/imagegen_sources/masters/history_empty_illustration_1920x1080_v1_master.png` | `realapp/assets/images/history/history_empty_illustration_1920x1080_v1.png` | 1920x1080 | No | Generated |
 | SETTINGS-001 | My Page and settings background | `realapp/assets/imagegen_sources/prompts/SETTINGS-001.md` | `realapp/assets/imagegen_sources/masters/settings_my_page_bg_1080x1920_v1_master.png` | `realapp/assets/images/settings/settings_my_page_bg_1080x1920_v1.png` | 1080x1920 | No | Generated, WebP ready |
@@ -116,3 +119,5 @@ These assets are kept for later/P2 flows and are not counted in the current Full
 | SHARE-001 | Today guardian share template | `realapp/assets/imagegen_sources/prompts/SHARE-001.md` | `realapp/assets/imagegen_sources/masters/share_today_guardian_master_v1.png` | `realapp/assets/images/share/share_today_guardian_1080x1920_v1.png` | 1080x1920 | No | Legacy/P2 existing, WebP ready |
 | SHARE-004 | Chemistry result share template | `realapp/assets/imagegen_sources/prompts/SHARE-004.md` | `realapp/assets/imagegen_sources/masters/share_chemistry_result_master_v1.png` | `realapp/assets/images/share/share_chemistry_result_1080x1920_v1.png` | 1080x1920 | No | Generated/P2 ready, WebP ready |
 | CHEM-002 | Chemistry result background | `realapp/assets/imagegen_sources/prompts/CHEM-002.md` | `realapp/assets/imagegen_sources/masters/chemistry_result_bg_master_v1.png` | `realapp/assets/images/chemistry/chemistry_result_bg_1080x1920_v1.png` | 1080x1920 | No | Legacy/P2 existing, WebP ready |
+| NAV-001 | Bottom navigation background | `realapp/assets/imagegen_sources/prompts/NAV-001.md` | `realapp/assets/imagegen_sources/masters/bottom_nav_bg_1080x300_v1_master.png` | `realapp/assets/images/navigation/bottom_nav_bg_1080x300_v1.png` | 1080x300 | No | Generated, WebP ready |
+| NAV-002 | Bottom navigation active glow | `realapp/assets/imagegen_sources/prompts/NAV-002.md` | `realapp/assets/imagegen_sources/masters/bottom_nav_active_glow_240x120_v1_master.png` | `realapp/assets/images/navigation/bottom_nav_active_glow_240x120_v1.png` | 240x120 | Yes | Generated, WebP ready |

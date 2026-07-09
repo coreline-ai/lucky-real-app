@@ -749,6 +749,7 @@ class _ObservationTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final instrument = entry.watch.instrument;
     final score = entry.score;
+    final scoreBand = marketObservationBandLabel(score.score);
     final tags = _decodeTags(entry.watch.item.userTagsJson)
         .map((code) => MarketWatchKeyword.byCode(code)?.label ?? code)
         .toList(growable: false);
@@ -772,14 +773,21 @@ class _ObservationTile extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: LinearProgressIndicator(value: score.score / 100),
+                    child: Semantics(
+                      label:
+                          '${instrument.name} 관찰 준비도 ${score.score}, $scoreBand',
+                      child: LinearProgressIndicator(value: score.score / 100),
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Text('${score.score}'),
                 ],
               ),
               const SizedBox(height: 4),
-              Text('관찰 준비도', style: Theme.of(context).textTheme.bodySmall),
+              Text(
+                '관찰 준비도 · $scoreBand',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             ],
           ),
           childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

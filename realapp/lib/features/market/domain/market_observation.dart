@@ -77,6 +77,13 @@ String marketReasonLabel(String reasonCode) => switch (reasonCode) {
   _ => '관찰 근거를 확인했어요',
 };
 
+String marketObservationBandLabel(int score) {
+  if (score >= 90) return '오늘의 핵심 관찰';
+  if (score >= 75) return '우선 관찰';
+  if (score >= 60) return '체크 후 관찰';
+  return '기록부터 시작';
+}
+
 MarketRiskMode calculateMarketRiskMode({
   required ElementBalance balance,
   required GuardianMatch match,
@@ -134,31 +141,33 @@ MarketObservationScore calculateMarketObservationScore({
       primaryPhoneticElement(name) ?? primaryPhoneticElement(corpName);
   final reasons = <String>[];
 
+  const baseScore = 50;
   final riskScore = switch (riskMode) {
-    MarketRiskMode.aggressive => 30,
-    MarketRiskMode.neutral => 25,
-    MarketRiskMode.defensive => checklistCompleted == checklistTotal ? 24 : 12,
+    MarketRiskMode.aggressive => 15,
+    MarketRiskMode.neutral => 12,
+    MarketRiskMode.defensive => 10,
   };
-  if (riskScore >= 24) reasons.add(MarketReasonCodes.riskModeAligned);
+  reasons.add(MarketReasonCodes.riskModeAligned);
 
-  var nameScore = 12;
+  var nameScore = 6;
   if (nameElement != null) {
     if (nameElement == match.element || nameElement == match.todayElement) {
-      nameScore = 25;
+      nameScore = 15;
       reasons.add(MarketReasonCodes.nameElementAligned);
     } else if (saeng[nameElement] == match.element ||
         saeng[match.element] == nameElement) {
-      nameScore = 18;
+      nameScore = 10;
     }
   }
 
   final safeTotal = checklistTotal <= 0 ? 1 : checklistTotal;
-  final checklistScore = (checklistCompleted / safeTotal * 25).round();
+  final safeCompleted = checklistCompleted.clamp(0, safeTotal);
+  final checklistScore = (safeCompleted / safeTotal * 12).round();
   if (checklistCompleted == checklistTotal && checklistTotal > 0) {
     reasons.add(MarketReasonCodes.checklistReady);
   }
 
-  final tagScore = userTags.isEmpty ? 8 : 15;
+  final tagScore = userTags.isEmpty ? 0 : 5;
   if (userTags.isNotEmpty) reasons.add(MarketReasonCodes.tagsPresent);
 
   if (riskMode == MarketRiskMode.defensive &&
@@ -166,9 +175,21 @@ MarketObservationScore calculateMarketObservationScore({
     reasons.add(MarketReasonCodes.defensiveChecklistRequired);
   }
 
+  final rawScore =
+      baseScore + riskScore + nameScore + checklistScore + tagScore;
+  final cap = checklistCompleted <= 0
+      ? 72
+      : riskMode == MarketRiskMode.defensive &&
+            checklistCompleted < checklistTotal
+      ? 76
+      : checklistCompleted < checklistTotal
+      ? 82
+      : 95;
+  final displayScore = rawScore.clamp(50, cap).toInt();
+
   return MarketObservationScore(
     instrumentId: instrumentId,
-    score: (riskScore + nameScore + checklistScore + tagScore).clamp(0, 100),
+    score: displayScore,
     nameElement: nameElement,
     riskMode: riskMode,
     reasonCodes: List.unmodifiable(reasons),

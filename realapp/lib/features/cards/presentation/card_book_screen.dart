@@ -52,6 +52,8 @@ class CardBookScreen extends ConsumerWidget {
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                Text('수집 현황', style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Expanded(
@@ -67,7 +69,12 @@ class CardBookScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '카드는 일일 확인과 루틴 완료로 모아요.',
+                  '카드는 일일 확인과 루틴 완료로 천천히 모아요.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '오늘 루틴을 완료하면 카드의 기운이 한 겹 더 쌓여요.',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 12),

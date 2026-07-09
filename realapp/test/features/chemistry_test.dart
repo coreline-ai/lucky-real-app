@@ -21,6 +21,42 @@ const List<String> _forbidden = [
 ];
 
 void main() {
+  test('케미 표시 점수는 원점수보다 부드러운 범위와 라벨을 제공한다', () {
+    const meta = EngineMeta(engineVersion: 't', ruleVersion: 't');
+    ChemistryAnalysis analysis(int raw) => ChemistryAnalysis(
+      meta: meta,
+      totalScore: raw,
+      grade: 'C',
+      dayGanScore: 10,
+      dayGanType: '상극',
+      dayJiScore: 5,
+      dayJiType: '형',
+      ohaengScore: 10,
+      missingElements: const [],
+      guseongScore: 5,
+      bonmyeongA: '일백수성(一白水星)',
+      bonmyeongB: '구자화성(九紫火星)',
+    );
+
+    final samples = [
+      20,
+      49,
+      70,
+      85,
+    ].map((raw) => chemistryDisplayScore(analysis(raw))).toList();
+
+    expect(samples.map((sample) => sample.score), [60, 70, 82, 92]);
+    expect(samples.every((sample) => sample.score >= 55), isTrue);
+    expect(samples.every((sample) => sample.score <= 98), isTrue);
+    expect(samples.map((sample) => sample.label), everyElement(contains('케미')));
+  });
+
+  test('케미 부분 점수는 낮은 분수 대신 해석 라벨을 제공한다', () {
+    expect(chemistryAspectLabel(score: 5, max: 25, note: '형'), '예민한 지점 확인');
+    expect(chemistryAspectLabel(score: 10, max: 30, note: '상극'), '서로 다른 관점');
+    expect(chemistryAspectLabel(score: 20, max: 25, note: ''), '보완 흐름이 부드러워요');
+  });
+
   test('케미 문구: 전 등급 × 전 관계 × 전 관계유형 조합에 금지 표현 없음', () {
     const meta = EngineMeta(engineVersion: 't', ruleVersion: 't');
     const grades = ['S', 'A', 'B', 'C', 'D'];

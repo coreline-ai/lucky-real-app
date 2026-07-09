@@ -134,7 +134,7 @@ class _SharePreviewScreenState extends ConsumerState<SharePreviewScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '• ${widget.isChemistry ? '케미 점수와 한 줄 설명' : '오늘의 수호신과 한 줄 운세'}\n'
+                        '• ${widget.isChemistry ? '케미 리듬과 한 줄 설명' : '오늘의 수호신과 한 줄 운세'}\n'
                         '${_showNickname ? '• 내 닉네임\n' : ''}'
                         '• 앱 이름',
                       ),

@@ -47,6 +47,72 @@ class ChemistryContent {
   final String balanceNote;
 }
 
+class ChemistryDisplayScore {
+  const ChemistryDisplayScore({required this.score, required this.label});
+
+  final int score;
+  final String label;
+}
+
+int _mapScoreBand(
+  int raw,
+  int rawMin,
+  int rawMax,
+  int displayMin,
+  int displayMax,
+) {
+  final safeRaw = raw.clamp(rawMin, rawMax);
+  if (rawMax == rawMin) return displayMin;
+  final ratio = (safeRaw - rawMin) / (rawMax - rawMin);
+  return (displayMin + (displayMax - displayMin) * ratio).round();
+}
+
+ChemistryDisplayScore chemistryDisplayScore(ChemistryAnalysis analysis) {
+  final raw = analysis.totalScore.clamp(0, 100).toInt();
+  final score = switch (raw) {
+    <= 39 => _mapScoreBand(raw, 0, 39, 55, 64),
+    <= 54 => _mapScoreBand(raw, 40, 54, 65, 72),
+    <= 69 => _mapScoreBand(raw, 55, 69, 73, 80),
+    <= 84 => _mapScoreBand(raw, 70, 84, 82, 91),
+    _ => _mapScoreBand(raw, 85, 100, 92, 98),
+  };
+  return ChemistryDisplayScore(
+    score: score,
+    label: chemistryDisplayLabel(score),
+  );
+}
+
+String chemistryDisplayLabel(int score) {
+  if (score >= 90) return '자연스러운 케미';
+  if (score >= 80) return '잘 맞춰가는 케미';
+  if (score >= 70) return '천천히 맞춰가는 케미';
+  if (score >= 60) return '조율 포인트가 보이는 케미';
+  return '서로를 알아가는 케미';
+}
+
+String chemistryAspectLabel({
+  required int score,
+  required int max,
+  required String note,
+}) {
+  final noteLabel = switch (note) {
+    '천간합' || '육합' => '자연스럽게 맞는 흐름',
+    '상생' => '서로 살려주는 흐름',
+    '비화' => '비슷해서 편한 흐름',
+    '천간충' || '충' => '다른 속도 조율',
+    '형' => '예민한 지점 확인',
+    '상극' => '서로 다른 관점',
+    '보통' => '천천히 알아가는 흐름',
+    _ => null,
+  };
+  if (noteLabel != null) return noteLabel;
+
+  final ratio = max <= 0 ? 0 : score / max;
+  if (ratio >= 0.75) return '보완 흐름이 부드러워요';
+  if (ratio >= 0.5) return '균형을 맞춰가요';
+  return '보완 포인트가 있어요';
+}
+
 String _headline(String grade, String relation) => switch (grade) {
   'S' => '서로를 자연스럽게 끌어당기는 흐름이에요.',
   'A' => '함께할수록 서로를 채워주는 흐름이에요.',

@@ -4,7 +4,8 @@ import '../../core/constants/system_ui_styles.dart';
 
 /// 스크림 강도 2단계 (배경 B안 결정: 옵션 최소화).
 /// [standard]는 본문 텍스트가 배경 위에 바로 놓이는 화면(홈·기록·설정),
-/// [strong]은 카드·그리드가 주인공이라 배경이 뒤로 빠지는 화면(루틴·도감).
+/// [strong]은 카드·그리드가 주인공인 화면에서 가독성을 지키되
+/// 배경색과 질감이 홈 탭 수준으로 남도록 조정한다.
 enum TabBackgroundScrim { standard, strong }
 
 /// 탭 화면 공통 배경: 풀스크린 이미지 + 상→하 화이트 스크림.
@@ -50,7 +51,7 @@ class TabBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     final (topOpacity, bottomOpacity) = switch (scrim) {
       TabBackgroundScrim.standard => (0.55, 0.75),
-      TabBackgroundScrim.strong => (0.78, 0.90),
+      TabBackgroundScrim.strong => (0.62, 0.80),
     };
     final topPadding = reserveAppBarSpace
         ? MediaQuery.paddingOf(context).top + kToolbarHeight

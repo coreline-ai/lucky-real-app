@@ -45,6 +45,8 @@ void main() {
     const paths = [
       AssetPaths.appIcon,
       AssetPaths.brandSplashSymbol,
+      AssetPaths.bottomNavBackground,
+      AssetPaths.bottomNavActiveGlow,
       AssetPaths.splashBackground,
       AssetPaths.homeBackground,
       AssetPaths.onboardingGuardianIntro,

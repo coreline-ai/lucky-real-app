@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../core/constants/asset_paths.dart';
 import '../features/cards/presentation/card_book_screen.dart';
 import '../features/chemistry/presentation/chemistry_result_screen.dart';
 import '../features/chemistry/presentation/chemistry_screen.dart';
@@ -119,27 +120,114 @@ class _TabScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: shell,
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: _OhaengNavigationBar(
         selectedIndex: shell.currentIndex,
         onDestinationSelected: shell.goBranch,
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.today), label: '홈'),
-          NavigationDestination(icon: Icon(Icons.auto_awesome), label: '운세'),
-          NavigationDestination(
-            icon: Icon(Icons.check_circle_outline),
-            label: '루틴',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.collections_bookmark),
-            label: '도감',
-          ),
-          NavigationDestination(icon: Icon(Icons.query_stats), label: '시장관찰'),
-          NavigationDestination(
-            icon: Icon(Icons.favorite_outline),
-            label: '케미',
-          ),
-        ],
       ),
+    );
+  }
+}
+
+class _OhaengNavigationBar extends StatelessWidget {
+  const _OhaengNavigationBar({
+    required this.selectedIndex,
+    required this.onDestinationSelected,
+  });
+
+  final int selectedIndex;
+  final ValueChanged<int> onDestinationSelected;
+
+  static const _destinations = [
+    NavigationDestination(icon: Icon(Icons.today), label: '홈'),
+    NavigationDestination(icon: Icon(Icons.auto_awesome), label: '운세'),
+    NavigationDestination(icon: Icon(Icons.check_circle_outline), label: '루틴'),
+    NavigationDestination(icon: Icon(Icons.collections_bookmark), label: '도감'),
+    NavigationDestination(icon: Icon(Icons.query_stats), label: '시장관찰'),
+    NavigationDestination(icon: Icon(Icons.favorite_outline), label: '케미'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final destinationCount = _destinations.length;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final itemWidth = constraints.maxWidth / destinationCount;
+        final glowWidth = (itemWidth * 0.88).clamp(56.0, 112.0).toDouble();
+        final glowHeight = glowWidth * 0.50;
+
+        return ClipRect(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  AssetPaths.bottomNavBackground,
+                  fit: BoxFit.cover,
+                  cacheWidth: 720,
+                  excludeFromSemantics: true,
+                ),
+              ),
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white.withValues(alpha: 0.30),
+                        Colors.white.withValues(alpha: 0.48),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              AnimatedPositioned(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                left: itemWidth * selectedIndex + (itemWidth - glowWidth) / 2,
+                top: 6,
+                width: glowWidth,
+                height: glowHeight,
+                child: IgnorePointer(
+                  child: Image.asset(
+                    AssetPaths.bottomNavActiveGlow,
+                    fit: BoxFit.fill,
+                    cacheWidth: 240,
+                    excludeFromSemantics: true,
+                  ),
+                ),
+              ),
+              NavigationBarTheme(
+                data: NavigationBarThemeData(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  indicatorColor: Colors.white.withValues(alpha: 0.12),
+                  surfaceTintColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  iconTheme: WidgetStateProperty.resolveWith((states) {
+                    final selected = states.contains(WidgetState.selected);
+                    return IconThemeData(
+                      color: selected
+                          ? colorScheme.primary
+                          : colorScheme.onSurfaceVariant,
+                    );
+                  }),
+                ),
+                child: NavigationBar(
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: onDestinationSelected,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  indicatorColor: Colors.white.withValues(alpha: 0.12),
+                  labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+                  destinations: _destinations,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

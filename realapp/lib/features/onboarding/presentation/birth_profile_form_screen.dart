@@ -160,9 +160,51 @@ class _BirthProfileFormScreenState
     ).showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void _handleBack() {
+  Future<void> _confirmExitToHome() async {
+    if (!_hasDraftInput()) {
+      _goHome();
+      return;
+    }
+
+    final exit = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('입력을 취소할까요?'),
+        content: const Text('입력 중인 내용은 저장되지 않아요.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('계속 입력'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('홈으로 이동'),
+          ),
+        ],
+      ),
+    );
+    if (exit == true) _goHome();
+  }
+
+  bool _hasDraftInput() {
+    return _nicknameController.text.trim().isNotEmpty ||
+        _birthDate != null ||
+        !_timeKnown ||
+        _hour != 12 ||
+        _minute != 0 ||
+        _calendarType != CalendarType.solar ||
+        _isLeapMonth ||
+        _genderMode != null;
+  }
+
+  void _goHome() {
+    if (!mounted) return;
+    context.go(RoutePaths.home);
+  }
+
+  Future<void> _handleBack() async {
     if (!_editingExistingProfile) {
-      context.go(RoutePaths.onboarding);
+      await _confirmExitToHome();
       return;
     }
     if (context.canPop()) {
@@ -184,7 +226,7 @@ class _BirthProfileFormScreenState
           backgroundColor: Colors.transparent,
           appBar: TabBackground.appBar(
             title: const Text('출생 정보 입력'),
-            leading: BackButton(onPressed: _handleBack),
+            leading: CloseButton(onPressed: _handleBack),
           ),
           body: const Center(child: CircularProgressIndicator()),
         ),
@@ -207,7 +249,9 @@ class _BirthProfileFormScreenState
           backgroundColor: Colors.transparent,
           appBar: TabBackground.appBar(
             title: Text(title),
-            leading: BackButton(onPressed: _handleBack),
+            leading: _editingExistingProfile
+                ? BackButton(onPressed: _handleBack)
+                : CloseButton(onPressed: _handleBack),
           ),
           body: Form(
             key: _formKey,
@@ -313,6 +357,13 @@ class _BirthProfileFormScreenState
                   onPressed: _saving ? null : _submit,
                   child: Text(_saving ? '확인 중…' : submitLabel),
                 ),
+                if (!_editingExistingProfile) ...[
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: _saving ? null : _confirmExitToHome,
+                    child: const Text('나중에 입력하기'),
+                  ),
+                ],
               ],
             ),
           ),

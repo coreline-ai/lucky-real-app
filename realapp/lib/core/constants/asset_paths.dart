@@ -6,7 +6,7 @@ import '../domain/five_element.dart';
 /// - All asset path literals live here; widgets never hard-code paths.
 /// - Runtime files use WebP derivatives of ASSET_MANIFEST.md PNG sources.
 /// - Chemistry/share runtime image assets are registered.
-/// - Market instruments are bundled as JSON; a dedicated market background asset is not yet generated.
+/// - Market instruments are bundled as JSON; market tab uses a dedicated WebP background.
 class AssetPaths {
   const AssetPaths._();
 
@@ -15,6 +15,12 @@ class AssetPaths {
       'assets/images/app_icon/brand_app_icon_symbol_2048_v1.webp';
   static const String brandSplashSymbol =
       'assets/images/app_icon/brand_splash_symbol_2048_v1.webp';
+
+  // 하단 탭
+  static const String bottomNavBackground =
+      'assets/images/navigation/bottom_nav_bg_1080x300_v1.webp';
+  static const String bottomNavActiveGlow =
+      'assets/images/navigation/bottom_nav_active_glow_240x120_v1.webp';
 
   // 배경 (세로)
   static const String splashBackground =
@@ -71,8 +77,8 @@ class AssetPaths {
       'assets/images/backgrounds/fortune_total_bg_1920x1080_v1.webp';
   static const String fortuneTabBackground = fortuneBanner;
 
-  /// Temporary alias until a dedicated market observation background is generated.
-  static const String marketTabBackground = fortuneTabBackground;
+  static const String marketTabBackground =
+      'assets/images/backgrounds/market_observation_bg_1080x1920_v1.webp';
   static const String homeBalancePanel =
       'assets/images/backgrounds/home_balance_panel_bg_1920x1080_v1.webp';
   static const String homeRoutineCta =

@@ -94,7 +94,7 @@ void main() {
     expect(find.text('닉네임 변경은 출생 정보 입력 후 사용할 수 있어요.'), findsOneWidget);
   });
 
-  testWidgets('onboarding birth info input can go back to the intro start', (
+  testWidgets('onboarding birth info input can leave to home before setup', (
     tester,
   ) async {
     await tester.pumpWidget(app());
@@ -110,13 +110,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('출생 정보 입력'), findsOneWidget);
-    expect(find.byType(BackButton), findsOneWidget);
+    expect(find.byType(CloseButton), findsOneWidget);
+    expect(find.text('나중에 입력하기'), findsOneWidget);
 
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
 
-    expect(find.text('오늘의 수호신을 만나요'), findsOneWidget);
-    expect(find.text('다음'), findsOneWidget);
+    expect(find.text('홈'), findsOneWidget);
+    expect(find.text('출생 정보 입력하기'), findsOneWidget);
   });
 
   testWidgets('onboarding intro backs through pages before leaving', (
@@ -181,12 +182,28 @@ void main() {
     expect(find.textContaining('오늘의 일진 '), findsOneWidget);
     expect(find.textContaining('오늘의 수호신'), findsOneWidget);
     expect(find.text('오행 밸런스'), findsOneWidget);
+    expect(find.textContaining('보완하면 좋은 포인트'), findsOneWidget);
 
     // 요약 3종은 첫 화면 아래에 있어 스크롤 후 확인한다.
     await tester.scrollUntilVisible(find.text('행동 조언'), 200);
     expect(find.text('총운'), findsOneWidget);
     expect(find.text('관계운'), findsOneWidget);
     expect(find.text('행동 조언'), findsOneWidget);
+  });
+
+  testWidgets('card book frames collection as a free progress record', (
+    tester,
+  ) async {
+    await seedProfile();
+    await tester.pumpWidget(app());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('도감').hitTestable());
+    await tester.pumpAndSettle();
+
+    expect(find.text('수집 현황'), findsOneWidget);
+    expect(find.textContaining('천천히 모아요'), findsOneWidget);
+    expect(find.textContaining('카드의 기운이 한 겹 더 쌓여요'), findsOneWidget);
   });
 
   testWidgets('settings birth info edit screen keeps a back affordance', (

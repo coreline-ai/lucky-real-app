@@ -36,7 +36,7 @@ void main() {
         const MaterialApp(
           home: ShareCardCanvas(
             data: ShareCardData.chemistry(
-              title: '우리의 케미 78점',
+              title: '우리의 케미 리듬 78',
               subtitle: '함께할수록 서로를 채워주는 흐름이에요.',
             ),
           ),
@@ -51,7 +51,7 @@ void main() {
         const ProviderScope(
           child: MaterialApp(
             home: SharePreviewScreen.chemistry(
-              title: '우리의 케미 78점',
+              title: '우리의 케미 리듬 78',
               subtitle: '함께할수록 서로를 채워주는 흐름이에요.',
               myNickname: '테스터',
             ),
@@ -78,7 +78,7 @@ void main() {
         ProviderScope(
           child: MaterialApp(
             home: SharePreviewScreen.chemistry(
-              title: '우리의 케미 78점',
+              title: '우리의 케미 리듬 78',
               subtitle: '함께할수록 서로를 채워주는 흐름이에요.',
               myNickname: '테스터',
               shareService: _FakeShareImageService(ShareResultStatus.dismissed),
@@ -110,7 +110,7 @@ void main() {
                 viewPadding: EdgeInsets.only(bottom: 48),
               ),
               child: SharePreviewScreen.chemistry(
-                title: '우리의 케미 78점',
+                title: '우리의 케미 리듬 78',
                 subtitle: '함께할수록 서로를 채워주는 흐름이에요.',
                 myNickname: '테스터',
               ),
