@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="2752" height="1536" alt="귀여운_인공지능_비서_코비서_V3" src="https://github.com/user-attachments/assets/ad5ef9b6-2c73-4bf5-a25f-592a64edce2c" />
+<img width="2752" height="1536" alt="나만의_작은_행운_오행가디언즈" src="https://github.com/user-attachments/assets/df82d1d8-0351-488d-a1f0-a060b2210a69" />
 
 # 🔮 오행가디언즈 · lucky-real-app
 
