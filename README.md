@@ -1,5 +1,7 @@
 <div align="center">
 
+<img width="2752" height="1536" alt="귀여운_인공지능_비서_코비서_V3" src="https://github.com/user-attachments/assets/ad5ef9b6-2c73-4bf5-a25f-592a64edce2c" />
+
 # 🔮 오행가디언즈 · lucky-real-app
 
 **만세력 엔진을 매일 쓰는 오행 라이프 RPG 경험으로 바꾸는 Flutter 앱 모노레포**
