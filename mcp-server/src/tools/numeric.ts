@@ -44,7 +44,7 @@ export function registerNumericTools(server: McpServer): void {
     {
       title: '하락이수',
       description:
-        '하락이수(河洛理數)로 생년월일의 하도수·낙서수와 64괘를 계산합니다. 연·월·일 숫자를 그대로 수리 계산에 사용합니다(시각 불필요).',
+        'Calculate Harak numerology from birth year, month, and day: Hado/Lakseo numbers and a 64-hexagram result. Birth time is not used. 하락이수 계산.',
       inputSchema: {
         year: z.number().int().describe('생년'),
         month: z.number().int().min(1).max(12).describe('생월'),
@@ -67,8 +67,8 @@ export function registerNumericTools(server: McpServer): void {
     {
       title: '대정수 작괘',
       description:
-        '사주 팔자의 선천수·후천수 합으로 64괘와 변효를 작괘합니다(대정수작괘). birth 또는 palja 중 하나로 팔자를 지정합니다. ' +
-        '시주 미상이면 3주(년월일) 기준으로 계산되며 결과가 달라집니다.',
+        'Calculate Daejeong numerology from a birth or reusable palja input, producing a 64-hexagram and changing line from pre/post-heaven numbers. ' +
+        '시주 미상은 3주 기준으로 계산됩니다.',
       inputSchema: birthOrPaljaFields,
       outputSchema: daejeongReadingOutput,
       annotations: READ_ONLY,
@@ -97,8 +97,8 @@ export function registerNumericTools(server: McpServer): void {
     {
       title: '홍연 분석',
       description:
-        '홍연(홍국수) 분석: 팔자의 하도수 합산으로 홍국수·본명성·구궁 배치·통기도를 계산합니다. birth 또는 palja 중 하나로 팔자를 지정합니다. ' +
-        '시주 미상이면 3주의 하도수만 합산합니다(엔진 정본 동작).',
+        'Analyze Hongyeon from a birth or reusable palja input: Hongguk number, personal star, nine-palace layout, and flow map. ' +
+        '시주 미상은 3주의 하도수만 합산합니다.',
       inputSchema: birthOrPaljaFields,
       outputSchema: hongyeonReadingOutput,
       annotations: READ_ONLY,
@@ -127,8 +127,8 @@ export function registerNumericTools(server: McpServer): void {
     {
       title: '매화역수 점단',
       description:
-        '매화역수(梅花易數)로 점괘를 냅니다. 세 가지 작괘 방식: time(날짜+시각), number(두 수), name(성/이름 획수). ' +
-        '본괘·변효·체용 관계와 해석을 반환합니다. 질문 내용은 입력하지 않습니다 — 해석 적용은 호출 측 책임입니다.',
+        'Cast a Meihua Yishu divination by time, two numbers, or name stroke counts. Returns base hexagram, changing line, body/use relation, and interpretation. ' +
+        '질문 내용은 입력하지 않으며 해석 적용은 호출 측 책임입니다.',
       inputSchema: {
         cast: z
           .discriminatedUnion('method', [

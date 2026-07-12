@@ -1,11 +1,14 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 
 const scratch =
   process.env.SCRATCH ||
-  '/var/folders/z6/f_c51l451gb8xyydfbxy92hh0000gn/T/grok-goal-c1d7d9dd0736/implementer';
+  path.join(tmpdir(), 'web-lucky-browser-hub-check');
 const base = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const log = [];
+fs.mkdirSync(scratch, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage();

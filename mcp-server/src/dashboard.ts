@@ -54,6 +54,41 @@ ${DASHBOARD_CSS}
         <div class="card"><div class="label">Tools</div><div id="toolsValue" class="value">-</div></div>
         <div class="card" id="passedCard"><div class="label">Passed</div><div id="passedValue" class="value">0</div></div>
         <div class="card" id="failedCard"><div class="label">Failed</div><div id="failedValue" class="value">0</div></div>
+        <div class="card"><div class="label">tools/list</div><div id="listSizeValue" class="value">-</div></div>
+        <div class="card"><div class="label">Largest</div><div id="largestSizeValue" class="value">-</div></div>
+      </section>
+
+      <section class="registration-panel" aria-label="PlayMCP registration preflight">
+        <div class="registration-head">
+          <div>
+            <h2>PlayMCP Preflight</h2>
+            <p>정보 불러오기 흐름을 로컬에서 먼저 확인합니다.</p>
+          </div>
+          <button type="button" id="infoLoadBtn" class="primary">정보 불러오기</button>
+          <button type="button" id="bodyLimitBtn" class="secondary">413 테스트</button>
+        </div>
+        <div class="auth-controls">
+          <label>
+            <span>Auth</span>
+            <select id="authMode">
+              <option value="none">none</option>
+              <option value="x-header">X-MCP-Auth-Token</option>
+              <option value="bearer">Authorization Bearer</option>
+            </select>
+          </label>
+          <label class="token-field">
+            <span>Token</span>
+            <input type="password" id="authToken" autocomplete="off" placeholder="메모리에서만 사용" />
+          </label>
+          <button type="button" id="clearAuthBtn" class="secondary">Clear</button>
+        </div>
+        <div class="registration-status">
+          <span class="pill"><span id="authDot" class="dot"></span><span id="authText">auth none</span></span>
+          <span class="pill"><span id="infoDot" class="dot"></span><span id="infoText">정보 불러오기 대기</span></span>
+          <span class="pill"><span id="sizeDot" class="dot"></span><span id="sizeText">size 대기</span></span>
+          <span class="pill"><span id="errorDot" class="dot"></span><span id="errorText">error classification 대기</span></span>
+        </div>
+        <pre id="registrationResult" class="registration-result">아직 실행된 등록 검증이 없습니다.</pre>
       </section>
 
       <div class="statusbar">

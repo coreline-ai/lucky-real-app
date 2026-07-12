@@ -1,54 +1,49 @@
 import { type ModeId } from './app/constants';
 import { getModeFromLocation, onRouteChange, setMode } from './app/router';
-import { renderHome } from './modes/home';
-import { renderIljinMode } from './modes/iljin';
-import { renderChemiMode } from './modes/chemi';
-import { renderNamingMode } from './modes/naming';
-import { renderSolarTermsMode } from './modes/solar-terms';
-import { renderTojeongMode } from './modes/tojeong';
+
+type ModeRenderer = (root: HTMLElement, onHome: () => void) => void;
+
+const modeRenderers: Record<ModeId, () => Promise<ModeRenderer>> = {
+  iljin: async () => (await import('./modes/iljin')).renderIljinMode,
+  chemi: async () => (await import('./modes/chemi')).renderChemiMode,
+  naming: async () => (await import('./modes/naming')).renderNamingMode,
+  'solar-terms': async () =>
+    (await import('./modes/solar-terms')).renderSolarTermsMode,
+  tojeong: async () => (await import('./modes/tojeong')).renderTojeongMode,
+};
 
 const appEl = document.querySelector<HTMLDivElement>('#app');
 if (!appEl) {
   throw new Error('#app missing');
 }
 const app: HTMLElement = appEl;
+let routeSequence = 0;
 
 function goHome(): void {
   setMode(null);
-  route();
+  void route();
 }
 
 function openMode(mode: ModeId): void {
   setMode(mode);
-  route();
+  void route();
 }
 
-function route(): void {
+async function route(): Promise<void> {
+  const sequence = ++routeSequence;
   const mode = getModeFromLocation();
   if (mode == null) {
+    const { renderHome } = await import('./modes/home');
+    if (sequence !== routeSequence) return;
     renderHome(app, openMode);
     return;
   }
-  switch (mode) {
-    case 'iljin':
-      renderIljinMode(app, goHome);
-      break;
-    case 'chemi':
-      renderChemiMode(app, goHome);
-      break;
-    case 'naming':
-      renderNamingMode(app, goHome);
-      break;
-    case 'solar-terms':
-      renderSolarTermsMode(app, goHome);
-      break;
-    case 'tojeong':
-      renderTojeongMode(app, goHome);
-      break;
-    default:
-      goHome();
-  }
+  const renderMode = await modeRenderers[mode]();
+  if (sequence !== routeSequence) return;
+  renderMode(app, goHome);
 }
 
-onRouteChange(route);
-route();
+onRouteChange(() => {
+  void route();
+});
+void route();

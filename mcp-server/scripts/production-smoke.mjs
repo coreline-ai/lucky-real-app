@@ -131,8 +131,20 @@ async function checkAuthIfConfigured() {
     headers: { ...baseHeaders, Authorization: 'Bearer wrong-token' },
     body,
   });
+  const wrongCustomHeader = await fetch(`${baseUrl}/mcp`, {
+    method: 'POST',
+    headers: { ...baseHeaders, 'X-MCP-Auth-Token': 'wrong-token' },
+    body,
+  });
+  const customHeaderAuthorized = await fetch(`${baseUrl}/mcp`, {
+    method: 'POST',
+    headers: { ...baseHeaders, 'X-MCP-Auth-Token': authToken },
+    body,
+  });
   log(missing.status === 401, 'auth rejects missing token', `HTTP ${missing.status}`);
   log(wrong.status === 401, 'auth rejects wrong token', `HTTP ${wrong.status}`);
+  log(wrongCustomHeader.status === 401, 'auth rejects wrong X-MCP-Auth-Token', `HTTP ${wrongCustomHeader.status}`);
+  log(customHeaderAuthorized.status === 200, 'auth accepts X-MCP-Auth-Token', `HTTP ${customHeaderAuthorized.status}`);
 }
 
 async function checkCorsAndBodyLimit() {

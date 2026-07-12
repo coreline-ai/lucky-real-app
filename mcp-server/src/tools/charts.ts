@@ -53,8 +53,8 @@ export function registerChartTools(server: McpServer): void {
     {
       title: '자미두수 명반',
       description:
-        '자미두수 명반(12궁 성요 배치)을 계산합니다. 출생 시각이 필수입니다(hour=null 거부). ' +
-        'interpret=true면 궁별 해석·사화 분석을, school 지정 시 학파 분석(samhap 삼합파/sahwa 사화파/jungju 중주파)을 추가합니다.',
+        'Calculate a Ziwei Dou Shu chart with 12 palace star placements. Birth hour is required. ' +
+        'Set interpret=true or school=samhap/sahwa/jungju only when detailed interpretation is needed. 자미두수 명반 계산.',
       inputSchema: {
         birth: BirthInputSchema,
         school: z.enum(ZIWEI_SCHOOLS).optional().describe('학파 분석 선택 (미지정 시 명반만)'),
@@ -110,8 +110,8 @@ export function registerChartTools(server: McpServer): void {
     {
       title: '기문둔갑 포국',
       description:
-        '기문둔갑 시국 포국(양둔/음둔·국수·9궁 문/성/신 배치·격국·직부/직사)을 계산합니다. 점단 시각(양력 날짜+시) 기준. ' +
-        'interpret=true면 궁별 해석을, school 지정 시 학파 분석을 추가합니다(siguk 시국/yeonguk 연국/wolguk 월국/hongyeon 홍연기문 — hongyeon은 birth 또는 palja 추가 필수).',
+        'Calculate a Qimen Dunjia chart for a solar date and hour, including dun type, ju number, nine palaces, doors, stars, gods, and structure. ' +
+        'Use interpret=true or school=siguk/yeonguk/wolguk/hongyeon only for deeper analysis. 기문둔갑 포국 계산.',
       inputSchema: {
         ...dateFields,
         school: z.enum(QIMEN_SCHOOLS).optional().describe('학파 분석 선택 (기본 포국은 시국 기준)'),
@@ -182,7 +182,7 @@ export function registerChartTools(server: McpServer): void {
     {
       title: '대육임 과식',
       description:
-        '대육임 과식(천지반 12궁·사과·삼전·12천장·과명)을 계산합니다. 점단 시각(양력 날짜+시) 기준. interpret=true면 사과/삼전 해석을 추가합니다.',
+        'Calculate a Daeyukim chart for a solar date and hour: heaven/earth plates, four lessons, three transmissions, generals, and class name. Set interpret=true for interpretation. 대육임 과식 계산.',
       inputSchema: {
         ...dateFields,
         interpret: z.boolean().default(false).describe('true면 사과·삼전·과명 해석 포함'),
@@ -212,7 +212,7 @@ export function registerChartTools(server: McpServer): void {
     {
       title: '구성기학 포국',
       description:
-        '구성기학의 본명성과 연반/월반/일반 구궁 배치를 계산합니다. 대상일(targetYear/Month/Day)은 셋 다 지정하거나 모두 생략합니다(생략 시 KST 오늘).',
+        'Calculate Guseong astrology values: personal star and yearly/monthly/daily nine-palace layouts. Provide all target date fields or omit all to use KST today. 구성기학 포국 계산.',
       inputSchema: {
         birthYear: z.number().int().describe('출생 연도 (양력)'),
         gender: z.enum(['male', 'female']),

@@ -5,6 +5,7 @@ coverage/
 *.tsbuildinfo
 .DS_Store
 .claude/
+.codex/
 .gemini/
 
 # Local tool metadata

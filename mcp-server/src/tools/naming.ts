@@ -26,9 +26,8 @@ export function registerNamingTools(server: McpServer): void {
     {
       title: '작명(성명학) 분석',
       description:
-        '한국어 이름 후보(1~6개)를 성명학으로 분석합니다: 원형이정 사격, 81수리 길흉, 수리·발음 오행 관계, 종합 점수(0~100). ' +
-        '후보에 한자(hanjaChars: 성 포함 전체 글자)를 주면 자원오행과 3중 오행 비교가 추가됩니다(DB 미등재 한자는 null). ' +
-        'school은 한자 획수 기준: kangxi(강희자전, 기본)/modern(현대 옥편).',
+        'Analyze 1-6 Korean name candidates with naming numerology: four grids, 81-number luck, stroke/pronunciation elements, and 0-100 score. ' +
+        'Provide hanjaChars to add source-element comparison. 성명학 후보 분석이며 오락·자기성찰용입니다.',
       inputSchema: {
         surname: z.string().min(1).max(2).describe('성씨 (한글, 예: 김)'),
         candidates: z
@@ -74,7 +73,7 @@ export function registerNamingTools(server: McpServer): void {
     {
       title: '간지 한자 정보',
       description:
-        '간지 한자 문자열(예: "庚午" 또는 "甲乙丙")의 각 글자에 대해 한글 독음과 오행을 반환합니다. 천간 10자·지지 12자 외 글자는 unknown으로 표시됩니다.',
+        'Explain each ganji hanja character in a string: Korean reading, stem/branch kind, and five-element value. Unknown characters are marked unknown. 간지 한자 정보 조회.',
       inputSchema: {
         ganji: z.string().min(1).max(60).describe('간지 한자 문자열 (공백 없이, 예: 庚午己卯)'),
       },

@@ -43,7 +43,7 @@ export function registerCalendarTools(server: McpServer): void {
     {
       title: '일진·역학달력 하루 정보',
       description:
-        '양력 날짜 하루의 일진(간지)·음력 날짜·오행·12신살·길흉·택일 정보·절기를 반환합니다. KST 기준.',
+        'Get one Korean calendar day: daily ganji, lunar date, five elements, 12 sinsal, auspicious notes, selection hints, and solar terms. KST 기준 하루 일진 정보를 반환합니다.',
       inputSchema: { year: yearField, month: monthField, day: dayField },
       outputSchema: calendarDayInfoOutput,
       annotations: READ_ONLY,
@@ -62,7 +62,7 @@ export function registerCalendarTools(server: McpServer): void {
     {
       title: '월간 역학달력',
       description:
-        '양력 연·월의 월간지와 일별 일진 배열을 반환합니다. compact=true면 일별 항목을 날짜·간지·길흉 3필드로 축약합니다(토큰 절약).',
+        'Get a Korean monthly calendar with month ganji and daily ganji rows. Use compact=true to return only date, ganji, and auspicious summary for lower token use. 월간 역학달력 조회.',
       inputSchema: {
         year: yearField,
         month: monthField,
@@ -95,7 +95,7 @@ export function registerCalendarTools(server: McpServer): void {
     {
       title: '양력·음력 변환',
       description:
-        '양력↔음력 날짜를 변환합니다. direction=solar_to_lunar(양→음) 또는 lunar_to_solar(음→양). 음력 입력의 윤달은 isLeapMonth로 지정합니다.',
+        'Convert between solar and lunar Korean calendar dates. direction selects solar_to_lunar or lunar_to_solar; set isLeapMonth for leap lunar months. 양력·음력 변환.',
       inputSchema: {
         direction: z.enum(['solar_to_lunar', 'lunar_to_solar']).describe('변환 방향'),
         year: yearField,
@@ -139,7 +139,7 @@ export function registerCalendarTools(server: McpServer): void {
     {
       title: '24절기 조회',
       description:
-        '연도의 24절기 목록(정확한 KST 입절 시각 포함)을 반환합니다. month·day를 함께 주면 해당 날짜의 절기만 조회합니다(없으면 빈 배열).',
+        'List the 24 solar terms for a year with exact KST transition times, or filter one date with month+day. 24절기와 입절 시각 조회.',
       inputSchema: {
         year: yearField,
         month: monthField.optional().describe('특정일 조회 시 월 — day와 함께 지정'),
@@ -169,7 +169,7 @@ export function registerCalendarTools(server: McpServer): void {
     {
       title: '한국 법정시 해석 (전문가용)',
       description:
-        '주어진 KST 시각의 법정시 오프셋(표준시·서머타임)을 해석합니다. 1948~1960·1987~1988 DST 구간의 모호(AMBIGUOUS_CIVIL_TIME)/부재(NONEXISTENT_CIVIL_TIME) 시각은 오류 코드로 반환됩니다.',
+        'Resolve Korean legal time offset for a KST civil time, including historical standard time and DST. Ambiguous/nonexistent DST times return explicit error codes. 한국 법정시 해석.',
       inputSchema: {
         year: yearField,
         month: monthField,

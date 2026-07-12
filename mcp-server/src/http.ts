@@ -97,6 +97,11 @@ function isLocalHost(host: string): boolean {
   return normalized === '127.0.0.1' || normalized === 'localhost' || normalized === '::1' || normalized === '[::1]';
 }
 
+function assertAuthPolicy(host: string, authToken: string | undefined): void {
+  if (isLocalHost(host) || authToken !== undefined) return;
+  throw new Error(`MCP_AUTH_TOKEN is required when HOST is non-local: ${host}`);
+}
+
 function createMetrics(): HttpMetrics {
   const now = new Date();
   return {
@@ -179,16 +184,28 @@ function applyCors(req: IncomingMessage, res: ServerResponse, corsOrigins: reado
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, MCP-Protocol-Version, Mcp-Session-Id');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Accept, Authorization, X-MCP-Auth-Token, MCP-Protocol-Version, Mcp-Session-Id',
+  );
   res.setHeader('Access-Control-Expose-Headers', 'MCP-Protocol-Version, Mcp-Session-Id');
   return true;
 }
 
-function isAuthorized(req: IncomingMessage, authToken: string | undefined): boolean {
-  if (authToken === undefined) return true;
+function isAuthorizedHeader(req: IncomingMessage, authToken: string): boolean {
   const authorization = req.headers.authorization;
   if (typeof authorization !== 'string') return false;
   return authorization === `Bearer ${authToken}`;
+}
+
+function isCustomTokenHeader(req: IncomingMessage, authToken: string): boolean {
+  const token = req.headers['x-mcp-auth-token'];
+  return typeof token === 'string' && token === authToken;
+}
+
+function isAuthorized(req: IncomingMessage, authToken: string | undefined): boolean {
+  if (authToken === undefined) return true;
+  return isAuthorizedHeader(req, authToken) || isCustomTokenHeader(req, authToken);
 }
 
 function clientKey(req: IncomingMessage): string {
@@ -288,6 +305,7 @@ export function createHttpRequestListener(options: HttpServerOptions = {}): Requ
   const maxBodyBytes = options.maxBodyBytes ?? DEFAULT_MAX_BODY_BYTES;
   const dashboardEnabled = options.dashboardEnabled ?? isLocalHost(host);
   const authToken = parseOptionalToken(options.authToken);
+  assertAuthPolicy(host, authToken);
   const rateLimitWindowMs = options.rateLimitWindowMs ?? DEFAULT_RATE_LIMIT_WINDOW_MS;
   const rateLimitMax = options.rateLimitMax ?? DEFAULT_RATE_LIMIT_MAX;
   const metrics = createMetrics();

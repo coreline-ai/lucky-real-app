@@ -20,8 +20,8 @@ export function registerTojeongTools(server: McpServer): void {
     {
       title: '토정비결 신수',
       description:
-        '토정비결로 대상 연도(targetYear)의 신수를 봅니다: 144괘 중 괘 번호·시구·총운·월별 12운. ' +
-        '출생 시각은 사용하지 않으며, 양력 생일은 서버가 음력으로 자동 변환합니다(응답의 lunarBirth가 실제 사용된 음력 생일).',
+        'Calculate a Tojeong yearly fortune for targetYear: 144-gwae number, poem, overall reading, and 12 monthly readings. ' +
+        '출생 시각은 사용하지 않으며 양력 생일은 서버가 음력으로 변환합니다. 오락·자기성찰용입니다.',
       inputSchema: {
         birth: BirthInputSchema,
         targetYear: z.number().int().describe('신수를 볼 대상 연도 (예: 2026)'),

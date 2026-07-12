@@ -202,11 +202,12 @@ describe('Streamable HTTP transport', () => {
         headers: {
           Origin: tempBaseUrl,
           'Access-Control-Request-Method': 'POST',
-          'Access-Control-Request-Headers': 'authorization,content-type',
+          'Access-Control-Request-Headers': 'authorization,x-mcp-auth-token,content-type',
         },
       });
       expect(preflight.status).toBe(204);
       expect(preflight.headers.get('access-control-allow-headers')).toContain('Authorization');
+      expect(preflight.headers.get('access-control-allow-headers')).toContain('X-MCP-Auth-Token');
 
       const missing = await postMcp(listRequest, tempBaseUrl);
       expect(missing.status).toBe(401);
@@ -217,15 +218,27 @@ describe('Streamable HTTP transport', () => {
       const wrong = await postMcp(listRequest, tempBaseUrl, { Authorization: 'Bearer wrong-secret' });
       expect(wrong.status).toBe(401);
 
+      const wrongCustomHeader = await postMcp(listRequest, tempBaseUrl, { 'X-MCP-Auth-Token': 'wrong-secret' });
+      expect(wrongCustomHeader.status).toBe(401);
+
       const authorized = await postMcp(listRequest, tempBaseUrl, { Authorization: 'Bearer test-secret' });
       expect(authorized.status).toBe(200);
       const payload = (await authorized.json()) as { result?: { tools?: unknown[] }; error?: unknown };
       expect(payload.error).toBeUndefined();
       expect(payload.result?.tools).toHaveLength(20);
 
+      const customHeaderAuthorized = await postMcp(listRequest, tempBaseUrl, { 'X-MCP-Auth-Token': 'test-secret' });
+      expect(customHeaderAuthorized.status).toBe(200);
+
       const health = await fetch(`${tempBaseUrl}/health`);
       expect(await health.text()).not.toContain('test-secret');
     });
+  });
+
+  it('fails closed for non-local bind without an MCP auth token', () => {
+    expect(() => createHttpServer({ host: '0.0.0.0' })).toThrow(/MCP_AUTH_TOKEN is required/);
+    expect(() => createHttpServer({ host: '::' })).toThrow(/MCP_AUTH_TOKEN is required/);
+    expect(() => createHttpServer({ host: '0.0.0.0', authToken: 'test-secret' })).not.toThrow();
   });
 
   it('rate limits /mcp POST by remote address but excludes /health and OPTIONS', async () => {
@@ -273,6 +286,12 @@ describe('Streamable HTTP transport', () => {
     expect(html).toContain('kpi-fail');
     expect(html).toContain('view-cards');
     expect(html).toContain('details class="fold"');
+    expect(html).toContain('PlayMCP Preflight');
+    expect(html).toContain('X-MCP-Auth-Token');
+    expect(html).toContain('id="infoLoadBtn"');
+    expect(html).toContain('id="bodyLimitBtn"');
+    expect(html).toContain('id="listSizeValue"');
+    expect(html).toContain('error classification');
 
 
     const headResponse = await fetch(`${baseUrl}/dashboard`, { method: 'HEAD' });
@@ -352,14 +371,14 @@ describe('Streamable HTTP transport', () => {
   });
 
   it('dashboard is local-by-default and blocked for external bind unless explicitly enabled', async () => {
-    await withTempServer({ host: '0.0.0.0' }, async (tempBaseUrl) => {
+    await withTempServer({ host: '0.0.0.0', authToken: 'test-secret' }, async (tempBaseUrl) => {
       const dashboard = await fetch(`${tempBaseUrl}/dashboard`);
       const fixtures = await fetch(`${tempBaseUrl}/dashboard/fixtures`);
       expect(dashboard.status).toBe(404);
       expect(fixtures.status).toBe(404);
     });
 
-    await withTempServer({ host: '0.0.0.0', dashboardEnabled: true }, async (tempBaseUrl) => {
+    await withTempServer({ host: '0.0.0.0', authToken: 'test-secret', dashboardEnabled: true }, async (tempBaseUrl) => {
       const dashboard = await fetch(`${tempBaseUrl}/dashboard`);
       expect(dashboard.status).toBe(200);
       expect(await dashboard.text()).toContain('manseryeok-mcp Tool Dashboard');

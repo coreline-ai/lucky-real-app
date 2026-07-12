@@ -19,6 +19,10 @@ export function buildDashboardClient(fixturesJson: string): string {
   let searchQuery = '';
   let viewMode = 'cards'; // cards | table
   let runProgress = { done: 0, total: 0, visible: false };
+  let authMode = 'none'; // none | x-header | bearer
+  let authToken = '';
+  let listSizeBytes = null;
+  let largestResponse = { name: '-', bytes: 0, status: 'OK' };
 
   const el = (id) => document.getElementById(id);
 
@@ -31,6 +35,112 @@ export function buildDashboardClient(fixturesJson: string): string {
     return String(value).replace(/[&<>"']/g, (char) =>
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char],
     );
+  }
+
+  function byteLength(value) {
+    return new TextEncoder().encode(String(value || '')).length;
+  }
+
+  function formatBytes(bytes) {
+    if (bytes == null) return '-';
+    if (bytes >= 1024 * 1024) return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+    if (bytes >= 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return bytes + ' B';
+  }
+
+  function sizeStatus(bytes) {
+    if (bytes == null) return 'IDLE';
+    if (bytes > 100 * 1024) return 'LARGE';
+    if (bytes > 32 * 1024) return 'WATCH';
+    return 'OK';
+  }
+
+  function sizeClass(status) {
+    if (status === 'LARGE') return 'size-large';
+    if (status === 'WATCH') return 'size-watch';
+    if (status === 'OK') return 'size-ok';
+    return '';
+  }
+
+  function authHeader() {
+    const token = authToken.trim();
+    if (authMode === 'x-header' && token) return { 'X-MCP-Auth-Token': token };
+    if (authMode === 'bearer' && token) return { Authorization: 'Bearer ' + token };
+    return {};
+  }
+
+  function mcpHeaders(protocolHeader) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json, text/event-stream',
+    };
+    if (protocolHeader !== false) headers['MCP-Protocol-Version'] = '2025-11-25';
+    return Object.assign(headers, authHeader());
+  }
+
+  function classifyFailure(status, body, text) {
+    const message = String((body && body.error && body.error.message) || text || '');
+    const code = body && body.error ? body.error.code : undefined;
+    if (status === 401 || code === -32001) return 'auth';
+    if (status === 403) return 'cors';
+    if (status === 404) return 'endpoint';
+    if (status === 405) return 'protocol';
+    if (status === 413 || message.toLowerCase().includes('too large')) return 'size';
+    if (status >= 500 || code === -32603) return 'server';
+    if (code === -32602 || code === -32000) return 'protocol';
+    if (body && body.error) return 'json-rpc';
+    return 'unknown';
+  }
+
+  function requestError(message, classification, bytes, details) {
+    const error = new Error(message);
+    error.classification = classification;
+    error.bytes = bytes;
+    error.details = details;
+    return error;
+  }
+
+  function setDot(id, tone) {
+    const node = el(id);
+    if (!node) return;
+    node.className = 'dot' + (tone ? ' ' + tone : '');
+  }
+
+  function updateAuthStatus() {
+    const modeLabel = authMode === 'x-header' ? 'X-MCP-Auth-Token' : authMode === 'bearer' ? 'Bearer' : 'none';
+    const needsToken = authMode !== 'none';
+    setDot('authDot', needsToken && !authToken.trim() ? 'run' : 'ok');
+    el('authText').textContent = needsToken
+      ? 'auth ' + modeLabel + (authToken.trim() ? ' ready' : ' token empty')
+      : 'auth none';
+  }
+
+  function updateErrorStatus(classification, message, ok) {
+    setDot('errorDot', ok ? 'ok' : 'fail');
+    el('errorText').textContent = ok
+      ? 'error classification OK'
+      : 'error ' + classification + ' · ' + clip(message, 70);
+  }
+
+  function updateSizeKpis() {
+    el('listSizeValue').textContent = listSizeBytes == null ? '-' : formatBytes(listSizeBytes);
+    const listStatus = sizeStatus(listSizeBytes);
+    el('listSizeValue').className = 'value ' + sizeClass(listStatus);
+
+    const values = [...state.entries()]
+      .filter(([, value]) => typeof value.responseBytes === 'number')
+      .map(([name, value]) => ({ name, bytes: value.responseBytes, status: sizeStatus(value.responseBytes) }));
+    if (listSizeBytes != null) values.push({ name: 'tools/list', bytes: listSizeBytes, status: listStatus });
+    largestResponse = values.sort((a, b) => b.bytes - a.bytes)[0] || { name: '-', bytes: 0, status: 'OK' };
+    el('largestSizeValue').textContent = largestResponse.name === '-' ? '-' : formatBytes(largestResponse.bytes);
+    el('largestSizeValue').className = 'value ' + sizeClass(largestResponse.status);
+
+    const hasLarge = values.some((item) => item.status === 'LARGE');
+    const hasWatch = values.some((item) => item.status === 'WATCH');
+    setDot('sizeDot', hasLarge ? 'fail' : hasWatch ? 'run' : values.length ? 'ok' : '');
+    el('sizeText').textContent = values.length
+      ? 'size ' + (hasLarge ? 'LARGE' : hasWatch ? 'WATCH' : 'OK') + ' · largest ' + largestResponse.name + ' ' + formatBytes(largestResponse.bytes)
+      : 'size 대기';
   }
 
   function formatResultSummary(result, ms) {
@@ -50,36 +160,44 @@ export function buildDashboardClient(fixturesJson: string): string {
     return 'OK' + timing + ' · keys: ' + (keys.slice(0, 6).join(', ') || '(meta only)');
   }
 
-  function formatRawDebug(result) {
+  function formatRawDebug(result, sizeInfo) {
     const structured = result.structuredContent || {};
     const keys = Object.keys(structured).filter((key) => key !== 'meta');
     const meta = structured.meta || {};
     const firstText = result.content && result.content[0] && result.content[0].text
       ? result.content[0].text : '';
-    return JSON.stringify({ keys, meta, text: clip(firstText, 180) }, null, 2);
+    return JSON.stringify({ keys, meta, size: sizeInfo || null, text: clip(firstText, 180) }, null, 2);
   }
 
   async function rpc(method, params, protocolHeader) {
-    const headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json, text/event-stream',
-    };
-    if (protocolHeader !== false) headers['MCP-Protocol-Version'] = '2025-11-25';
     const response = await fetch('/mcp', {
       method: 'POST',
-      headers,
+      headers: mcpHeaders(protocolHeader),
       body: JSON.stringify({ jsonrpc: '2.0', id: nextId++, method, params }),
     });
-    const body = await response.json();
-    if (!response.ok) throw new Error('HTTP ' + response.status + ': ' + JSON.stringify(body.error || body));
-    if (body.error) throw new Error('JSON-RPC ' + body.error.code + ': ' + body.error.message);
-    return body.result;
+    const text = await response.text();
+    const bytes = byteLength(text);
+    let body = null;
+    try {
+      body = text ? JSON.parse(text) : null;
+    } catch (_) {
+      body = null;
+    }
+    if (!response.ok) {
+      const classification = classifyFailure(response.status, body, text);
+      throw requestError('HTTP ' + response.status + ': ' + clip(text || JSON.stringify(body || {}), 180), classification, bytes, body);
+    }
+    if (body && body.error) {
+      const classification = classifyFailure(response.status, body, text);
+      throw requestError('JSON-RPC ' + body.error.code + ': ' + body.error.message, classification, bytes, body.error);
+    }
+    return { result: body ? body.result : undefined, bytes, status: response.status };
   }
 
   async function notify(method, params) {
     await fetch('/mcp', {
       method: 'POST',
-      headers: MCP_HEADERS,
+      headers: Object.assign({}, MCP_HEADERS, authHeader()),
       body: JSON.stringify({ jsonrpc: '2.0', method, params: params || {} }),
     });
   }
@@ -108,27 +226,43 @@ export function buildDashboardClient(fixturesJson: string): string {
         clientInfo: { name: 'mcp-dashboard', version: '0.1.0' },
       }, false);
       await notify('notifications/initialized');
-      const result = await rpc('tools/list', {});
+      const response = await rpc('tools/list', {});
+      const result = response.result || {};
       tools = result.tools || [];
+      listSizeBytes = response.bytes;
       dot.className = 'dot ok';
-      el('listText').textContent = 'tools/list OK · ' + tools.length + ' tools';
+      el('listText').textContent = 'tools/list OK · ' + tools.length + ' tools · ' + formatBytes(response.bytes);
       el('toolsValue').textContent = String(tools.length);
+      updateErrorStatus('none', 'OK', true);
       renderAll();
     } catch (error) {
       tools = [];
       dot.className = 'dot fail';
       el('listText').textContent = 'tools/list FAIL · ' + error.message;
       el('toolsValue').textContent = '—';
+      updateErrorStatus(error.classification || 'unknown', error.message, false);
       const grid = el('toolGridWrap');
       const tbody = el('toolRows');
-      const msg = '툴 목록을 불러오지 못했습니다. HTTP 서버가 실행 중인지 확인하세요. (' + error.message + ')';
+      const msg = '툴 목록을 불러오지 못했습니다. 분류: ' + (error.classification || 'unknown') + ' (' + error.message + ')';
       if (grid) grid.innerHTML = '<div class="empty">' + escapeHtml(msg) + '</div>';
       if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="empty">' + escapeHtml(msg) + '</td></tr>';
+      updateSizeKpis();
     }
   }
 
   function toolStatus(name) {
-    return state.get(name) || { status: 'idle', message: '대기', ms: null, summary: '', raw: '', openFail: false };
+    return state.get(name) || {
+      status: 'idle',
+      message: '대기',
+      ms: null,
+      summary: '',
+      raw: '',
+      openFail: false,
+      responseBytes: null,
+      resultBytes: null,
+      structuredBytes: null,
+      classification: '',
+    };
   }
 
   function statusClass(status) {
@@ -192,6 +326,7 @@ export function buildDashboardClient(fixturesJson: string): string {
     const failCard = el('failedCard');
     passCard.className = 'card' + (passed > 0 ? ' kpi-ok' : '');
     failCard.className = 'card' + (failed > 0 ? ' kpi-fail' : '');
+    updateSizeKpis();
   }
 
   function toolCardHtml(tool) {
@@ -199,6 +334,8 @@ export function buildDashboardClient(fixturesJson: string): string {
     const current = toolStatus(tool.name);
     const st = statusClass(current.status);
     const openAttr = current.status === 'fail' ? ' open' : '';
+    const sz = sizeStatus(current.responseBytes);
+    const classification = current.classification || (current.status === 'fail' ? 'unknown' : '');
     return (
       '<article class="tool-card status-' + current.status + '" data-tool-card="' + tool.name + '">' +
         '<div class="top">' +
@@ -208,6 +345,11 @@ export function buildDashboardClient(fixturesJson: string): string {
         '</div>' +
         '<div class="one-line-summary" data-summary="' + tool.name + '">' +
           escapeHtml(current.summary || current.message || '—') +
+        '</div>' +
+        '<div class="metric-row">' +
+          '<span class="metric-chip ' + sizeClass(sz) + '">size ' +
+            (current.responseBytes == null ? '-' : sz + ' ' + formatBytes(current.responseBytes)) + '</span>' +
+          (classification ? '<span class="metric-chip">error ' + escapeHtml(classification) + '</span>' : '') +
         '</div>' +
         '<div class="fixture-label">' + escapeHtml(fixture ? fixture.label : 'fixture 없음') + '</div>' +
         '<div class="desc-clamp">' + escapeHtml(clip(tool.description || '', 160)) + '</div>' +
@@ -233,6 +375,8 @@ export function buildDashboardClient(fixturesJson: string): string {
     const current = toolStatus(tool.name);
     const st = statusClass(current.status);
     const openAttr = current.status === 'fail' ? ' open' : '';
+    const sz = sizeStatus(current.responseBytes);
+    const classification = current.classification || (current.status === 'fail' ? 'unknown' : '');
     return (
       '<tr class="row-status-' + current.status + '">' +
         '<td>' + String(index + 1).padStart(2, '0') + '</td>' +
@@ -245,6 +389,10 @@ export function buildDashboardClient(fixturesJson: string): string {
           escapeHtml(JSON.stringify(fixture ? fixture.args : {}, null, 2)) + '</pre></details></td>' +
         '<td><div class="badge-status ' + st + '">' + current.status.toUpperCase() +
           (current.ms != null ? ' · ' + current.ms + 'ms' : '') + '</div>' +
+          '<div class="metric-row"><span class="metric-chip ' + sizeClass(sz) + '">size ' +
+          (current.responseBytes == null ? '-' : sz + ' ' + formatBytes(current.responseBytes)) + '</span>' +
+          (classification ? '<span class="metric-chip">error ' + escapeHtml(classification) + '</span>' : '') +
+          '</div>' +
           '<div class="one-line-summary">' + escapeHtml(current.summary || current.message || '') + '</div>' +
           '<details class="fold"' + openAttr + '><summary>응답 디버그</summary><pre class="block">' +
           escapeHtml(current.raw || '') + '</pre></details></td>' +
@@ -319,15 +467,152 @@ export function buildDashboardClient(fixturesJson: string): string {
       : 'Last run: —';
   }
 
+  function registrationPayload(status, details) {
+    el('registrationResult').textContent = JSON.stringify(Object.assign({
+      status,
+      authMode,
+      tokenStored: false,
+    }, details), null, 2);
+  }
+
+  async function runInfoLoad() {
+    const button = el('infoLoadBtn');
+    button.disabled = true;
+    setDot('infoDot', 'run');
+    el('infoText').textContent = '정보 불러오기 실행 중';
+    el('registrationResult').textContent = 'initialize → notifications/initialized → tools/list 실행 중...';
+    try {
+      const initialize = await rpc('initialize', {
+        protocolVersion: '2025-11-25',
+        capabilities: {},
+        clientInfo: { name: 'playmcp-preflight-dashboard', version: '0.1.0' },
+      }, false);
+      await notify('notifications/initialized');
+      const list = await rpc('tools/list', {});
+      const listedTools = (list.result && list.result.tools) || [];
+      tools = listedTools;
+      listSizeBytes = list.bytes;
+      el('toolsValue').textContent = String(tools.length);
+      el('listText').textContent = 'tools/list OK · ' + tools.length + ' tools · ' + formatBytes(list.bytes);
+      setDot('listDot', 'ok');
+      setDot('infoDot', 'ok');
+      el('infoText').textContent = '정보 불러오기 OK · ' + tools.length + ' tools';
+      updateErrorStatus('none', 'OK', true);
+      registrationPayload('PASS', {
+        server: initialize.result && initialize.result.serverInfo ? initialize.result.serverInfo : null,
+        toolsListCount: tools.length,
+        toolsListSize: {
+          bytes: list.bytes,
+          display: formatBytes(list.bytes),
+          status: sizeStatus(list.bytes),
+        },
+        representativeTools: tools.slice(0, 5).map((tool) => tool.name),
+      });
+      renderAll();
+    } catch (error) {
+      setDot('infoDot', 'fail');
+      el('infoText').textContent = '정보 불러오기 FAIL · ' + (error.classification || 'unknown');
+      updateErrorStatus(error.classification || 'unknown', error.message, false);
+      registrationPayload('FAIL', {
+        classification: error.classification || 'unknown',
+        responseBytes: error.bytes || null,
+        message: error.message,
+      });
+      renderAll();
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  async function runBodyLimitProbe() {
+    const button = el('bodyLimitBtn');
+    button.disabled = true;
+    setDot('infoDot', 'run');
+    el('infoText').textContent = '413 테스트 실행 중';
+    try {
+      const body = JSON.stringify({
+        jsonrpc: '2.0',
+        id: nextId++,
+        method: 'tools/list',
+        params: { padding: 'x'.repeat(1024 * 1024 + 256) },
+      });
+      const response = await fetch('/mcp', {
+        method: 'POST',
+        headers: mcpHeaders(true),
+        body,
+      });
+      const text = await response.text();
+      let parsed = null;
+      try {
+        parsed = text ? JSON.parse(text) : null;
+      } catch (_) {
+        parsed = null;
+      }
+      const bytes = byteLength(text);
+      const classification = classifyFailure(response.status, parsed, text);
+      if (response.status === 413 && classification === 'size') {
+        setDot('infoDot', 'ok');
+        el('infoText').textContent = '413 테스트 OK · size';
+        updateErrorStatus('size', '413 classified as size', true);
+        registrationPayload('PASS', {
+          probe: 'body-limit',
+          httpStatus: response.status,
+          classification,
+          responseBytes: bytes,
+        });
+      } else {
+        setDot('infoDot', 'fail');
+        el('infoText').textContent = '413 테스트 FAIL · ' + classification;
+        updateErrorStatus(classification, 'Expected 413 size classification, got HTTP ' + response.status, false);
+        registrationPayload('FAIL', {
+          probe: 'body-limit',
+          httpStatus: response.status,
+          classification,
+          responseBytes: bytes,
+        });
+      }
+    } catch (error) {
+      setDot('infoDot', 'fail');
+      el('infoText').textContent = '413 테스트 FAIL · ' + (error.classification || 'unknown');
+      updateErrorStatus(error.classification || 'unknown', error.message, false);
+      registrationPayload('FAIL', {
+        probe: 'body-limit',
+        classification: error.classification || 'unknown',
+        message: error.message,
+      });
+    } finally {
+      button.disabled = false;
+    }
+  }
+
   async function runTool(name) {
     const fixture = TOOL_SMOKE_FIXTURES[name];
     if (!fixture) return;
     const started = performance.now();
-    state.set(name, { status: 'running', message: 'tools/call 실행 중', ms: null, summary: '실행 중…', raw: '' });
+    state.set(name, {
+      status: 'running',
+      message: 'tools/call 실행 중',
+      ms: null,
+      summary: '실행 중…',
+      raw: '',
+      responseBytes: null,
+      resultBytes: null,
+      structuredBytes: null,
+      classification: '',
+    });
     renderAll();
     try {
-      const result = await rpc('tools/call', { name, arguments: fixture.args });
+      const call = await rpc('tools/call', { name, arguments: fixture.args });
+      const result = call.result || {};
       const ms = Math.round(performance.now() - started);
+      const resultBytes = byteLength(JSON.stringify(result));
+      const structuredBytes = result.structuredContent ? byteLength(JSON.stringify(result.structuredContent)) : 0;
+      const sizeInfo = {
+        responseBytes: call.bytes,
+        resultBytes,
+        structuredBytes,
+        status: sizeStatus(call.bytes),
+      };
       if (result.isError) {
         const text = result.content && result.content[0] && result.content[0].text
           ? result.content[0].text : 'unknown MCP error';
@@ -336,7 +621,11 @@ export function buildDashboardClient(fixturesJson: string): string {
           message: text,
           ms,
           summary: formatResultSummary(result, ms),
-          raw: formatRawDebug(result),
+          raw: formatRawDebug(result, sizeInfo),
+          responseBytes: call.bytes,
+          resultBytes,
+          structuredBytes,
+          classification: 'tool',
         });
       } else if (!result.structuredContent) {
         state.set(name, {
@@ -344,7 +633,11 @@ export function buildDashboardClient(fixturesJson: string): string {
           message: 'structuredContent missing',
           ms,
           summary: formatResultSummary(result, ms),
-          raw: formatRawDebug(result),
+          raw: formatRawDebug(result, sizeInfo),
+          responseBytes: call.bytes,
+          resultBytes,
+          structuredBytes,
+          classification: 'tool',
         });
       } else {
         state.set(name, {
@@ -352,18 +645,32 @@ export function buildDashboardClient(fixturesJson: string): string {
           message: 'structuredContent OK',
           ms,
           summary: formatResultSummary(result, ms),
-          raw: formatRawDebug(result),
+          raw: formatRawDebug(result, sizeInfo),
+          responseBytes: call.bytes,
+          resultBytes,
+          structuredBytes,
+          classification: '',
         });
       }
+      updateErrorStatus('none', 'OK', true);
     } catch (error) {
       const ms = Math.round(performance.now() - started);
       state.set(name, {
         status: 'fail',
         message: error.message,
         ms,
-        summary: 'FAIL · ' + ms + 'ms · ' + clip(error.message, 120),
-        raw: '',
+        summary: 'FAIL · ' + ms + 'ms · ' + (error.classification || 'unknown') + ' · ' + clip(error.message, 120),
+        raw: JSON.stringify({
+          classification: error.classification || 'unknown',
+          responseBytes: error.bytes || null,
+          message: error.message,
+        }, null, 2),
+        responseBytes: error.bytes || null,
+        resultBytes: null,
+        structuredBytes: null,
+        classification: error.classification || 'unknown',
       });
+      updateErrorStatus(error.classification || 'unknown', error.message, false);
     }
     window.__lastRunAt = new Date().toLocaleTimeString();
     renderAll();
@@ -420,6 +727,21 @@ export function buildDashboardClient(fixturesJson: string): string {
     await refreshTools();
   });
   el('runAllBtn').addEventListener('click', runAll);
+  el('infoLoadBtn').addEventListener('click', runInfoLoad);
+  el('bodyLimitBtn').addEventListener('click', runBodyLimitProbe);
+  el('authMode').addEventListener('change', (event) => {
+    authMode = event.target.value;
+    updateAuthStatus();
+  });
+  el('authToken').addEventListener('input', (event) => {
+    authToken = event.target.value;
+    updateAuthStatus();
+  });
+  el('clearAuthBtn').addEventListener('click', () => {
+    authToken = '';
+    el('authToken').value = '';
+    updateAuthStatus();
+  });
   el('failedOnlyChip').addEventListener('click', () => setFilter(filterGroup, true));
   document.querySelectorAll('.filter-chip[data-group]').forEach((chip) => {
     chip.addEventListener('click', () => setFilter(chip.dataset.group, false));
@@ -431,6 +753,8 @@ export function buildDashboardClient(fixturesJson: string): string {
   el('viewCardsBtn').addEventListener('click', () => { viewMode = 'cards'; renderAll(); });
   el('viewTableBtn').addEventListener('click', () => { viewMode = 'table'; renderAll(); });
 
+  updateAuthStatus();
+  updateSizeKpis();
   refreshHealth().then(refreshTools);
 })();
 `;

@@ -20,8 +20,8 @@ export function registerCompatibilityTools(server: McpServer): void {
     {
       title: '궁합(케미) 점수',
       description:
-        '두 사람의 생년월일시로 궁합을 계산합니다. 총점(100점: 일간 30·일지 25·오행 보완 25·구성 20)과 등급(S≥85/A≥70/B≥55/C≥40/D), ' +
-        '카테고리별 점수, 일간·일지 관계, 조언, 양쪽 팔자를 반환합니다. 오락·자기성찰 목적의 계산값입니다.',
+        'Calculate a Korean saju compatibility score for two people. Returns total score, grade, category scores, day stem/branch relations, advice, and both palja. ' +
+        '궁합 계산값은 오락·자기성찰용이며 의료·법률·재무 판단에 사용할 수 없습니다.',
       inputSchema: {
         person1: BirthInputSchema.describe('첫 번째 사람의 출생 정보'),
         person2: BirthInputSchema.describe('두 번째 사람의 출생 정보'),

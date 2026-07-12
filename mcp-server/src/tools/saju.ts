@@ -53,8 +53,8 @@ export function registerSajuTools(server: McpServer): void {
     {
       title: '사주 전체 분석',
       description:
-        '생년월일시로 사주 전체를 계산합니다: 팔자(사주), 십신, 지장간(본기/중기/여기), 운성, 대운/세운/월운, 신살, 지지 합충형, 공망, 납음오행, 원진, 격국, 용신. ' +
-        'include로 필요한 섹션만 선택해 응답 크기를 줄일 수 있습니다(생략 시 전체). 계산 전용 — 해석 문구 생성은 호출 측 책임입니다.',
+        'Calculate a full Korean saju reading from birth data: palja, sipsin, hidden stems, unsung, luck cycles, sinsal, relations, gyeokguk, and yongsin. ' +
+        'Use include to reduce response size. 사주 전체 계산 전용이며 해석 문구 작성은 호출 측 책임입니다.',
       inputSchema: {
         birth: BirthInputSchema,
         subSchool: z.enum(SAJU_SUB_SCHOOLS).default('gyeokguk').describe('용신 판단 학파 (기본 격국용신)'),
@@ -112,8 +112,8 @@ export function registerSajuTools(server: McpServer): void {
     {
       title: '사주팔자 계산 (경량)',
       description:
-        '생년월일시로 사주팔자(년/월/일/시주 간지 8자)만 계산합니다. 출생시 미상이면 hourGan/hourJi가 빈 문자열로 반환됩니다. ' +
-        '결과 palja는 daejeong_reading·hongyeon_reading 등 palja 입력 툴에 재사용할 수 있습니다.',
+        'Calculate only the four-pillar palja from birth data. Unknown birth time returns empty hourGan/hourJi. ' +
+        '팔자 결과는 daejeong_reading, hongyeon_reading, qimen_chart(hongyeon) 등에 재사용할 수 있습니다.',
       inputSchema: { birth: BirthInputSchema },
       outputSchema: sajuPaljaOutput,
       annotations: READ_ONLY,
@@ -133,7 +133,7 @@ export function registerSajuTools(server: McpServer): void {
     {
       title: '대운 계산',
       description:
-        '생년월일시와 성별로 대운 목록을 계산합니다. 성별에 따라 순행/역행이 결정되며, 현재 나이에 해당하는 대운에 isCurrent가 표시됩니다.',
+        'Calculate daeun major luck cycles from birth data and gender. Direction depends on gender rules, and the current cycle is marked with isCurrent. 대운 목록 계산.',
       inputSchema: {
         birth: BirthInputSchema,
         count: z.number().int().min(1).max(12).default(8).describe('반환할 대운 개수 (기본 8, 최대 12)'),
