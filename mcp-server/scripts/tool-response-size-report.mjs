@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+
 import { TOOL_SMOKE_FIXTURES } from '../dist/dashboard.js';
 
 const baseUrl = (process.env.MCP_SIZE_BASE_URL || process.env.MCP_SMOKE_BASE_URL || 'http://127.0.0.1:3100').replace(
@@ -7,10 +10,82 @@ const baseUrl = (process.env.MCP_SIZE_BASE_URL || process.env.MCP_SMOKE_BASE_URL
 );
 const authToken = process.env.MCP_SIZE_AUTH_TOKEN || process.env.MCP_SMOKE_AUTH_TOKEN || process.env.MCP_AUTH_TOKEN || '';
 const authMode = (process.env.MCP_SIZE_AUTH_MODE || 'x-header').trim().toLowerCase();
-const okThresholdBytes = Number(process.env.MCP_SIZE_OK_BYTES || 32 * 1024);
-const largeThresholdBytes = Number(process.env.MCP_SIZE_LARGE_BYTES || 100 * 1024);
+let okThresholdBytes = 0;
+let largeThresholdBytes = 0;
 const protocolVersion = '2025-11-25';
 let nextId = 1;
+const cli = parseArgs(process.argv.slice(2));
+
+function isTruthy(value) {
+  return typeof value === 'string' && ['1', 'true', 'yes', 'on'].includes(value.trim().toLowerCase());
+}
+
+function parsePositiveInteger(value, name) {
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    throw new Error(`${name} must be a positive integer: ${value}`);
+  }
+  return parsed;
+}
+
+function validateConfiguration() {
+  okThresholdBytes = parsePositiveInteger(process.env.MCP_SIZE_OK_BYTES || 32 * 1024, 'MCP_SIZE_OK_BYTES');
+  largeThresholdBytes = parsePositiveInteger(process.env.MCP_SIZE_LARGE_BYTES || 100 * 1024, 'MCP_SIZE_LARGE_BYTES');
+  if (okThresholdBytes >= largeThresholdBytes) {
+    throw new Error('MCP_SIZE_OK_BYTES must be smaller than MCP_SIZE_LARGE_BYTES');
+  }
+  if (authToken && authMode !== 'x-header' && authMode !== 'bearer') {
+    throw new Error(`MCP_SIZE_AUTH_MODE must be x-header or bearer: ${authMode}`);
+  }
+}
+
+function parseArgs(argv) {
+  const args = {
+    baselinePath: '',
+    writeBaselinePath: '',
+    failOnLarge: isTruthy(process.env.MCP_SIZE_FAIL_ON_LARGE),
+  };
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === '--baseline') {
+      args.baselinePath = argv[index + 1] || '';
+      index += 1;
+    } else if (arg.startsWith('--baseline=')) {
+      args.baselinePath = arg.slice('--baseline='.length);
+    } else if (arg === '--write-baseline') {
+      args.writeBaselinePath = argv[index + 1] || '';
+      index += 1;
+    } else if (arg.startsWith('--write-baseline=')) {
+      args.writeBaselinePath = arg.slice('--write-baseline='.length);
+    } else if (arg === '--fail-on-large') {
+      args.failOnLarge = true;
+    } else if (arg === '--help' || arg === '-h') {
+      printHelp();
+      process.exit(0);
+    } else {
+      throw new Error(`Unknown argument: ${arg}`);
+    }
+  }
+
+  return args;
+}
+
+function printHelp() {
+  console.log(`Usage: node scripts/tool-response-size-report.mjs [options]
+
+Options:
+  --baseline <file>        Compare response sizes with a previous JSON baseline.
+  --write-baseline <file>  Write the current response-size report as JSON.
+  --fail-on-large          Exit non-zero if any response is LARGE.
+  --help                   Show this help.
+
+Environment:
+  MCP_SIZE_OK_BYTES        OK threshold, default 32768.
+  MCP_SIZE_LARGE_BYTES     LARGE threshold, default 102400.
+  MCP_SIZE_AUTH_MODE       x-header(default) or bearer.
+`);
+}
 
 function authHeaders(token = authToken) {
   if (!token) return {};
@@ -118,7 +193,70 @@ function printSummary(rows) {
   );
 }
 
+function buildReport(rows, failures) {
+  const summary = rows.reduce(
+    (acc, row) => {
+      acc[row.status] += 1;
+      return acc;
+    },
+    { OK: 0, WATCH: 0, LARGE: 0 },
+  );
+
+  return {
+    generatedAt: new Date().toISOString(),
+    baseUrl,
+    auth: authToken ? authMode : 'none',
+    thresholds: {
+      okBytes: okThresholdBytes,
+      largeBytes: largeThresholdBytes,
+    },
+    summary,
+    failures,
+    rows,
+  };
+}
+
+function readBaseline(file) {
+  if (!file) return null;
+  if (!existsSync(file)) throw new Error(`Baseline file not found: ${file}`);
+  return JSON.parse(readFileSync(file, 'utf8'));
+}
+
+function printBaselineDelta(currentRows, baseline) {
+  if (!baseline) return;
+  const previousRows = new Map((baseline.rows || []).map((row) => [row.name, row]));
+  const deltas = currentRows
+    .map((row) => {
+      const previous = previousRows.get(row.name);
+      return {
+        name: row.name,
+        previousBytes: previous?.responseBytes ?? null,
+        currentBytes: row.responseBytes,
+        deltaBytes: previous ? row.responseBytes - previous.responseBytes : null,
+      };
+    })
+    .sort((a, b) => Math.abs(b.deltaBytes ?? 0) - Math.abs(a.deltaBytes ?? 0));
+
+  console.log('');
+  console.log(`[mcp-size-report] baseline=${baseline.generatedAt || 'unknown'} rows=${baseline.rows?.length ?? 0}`);
+  console.log('tool'.padEnd(28), 'previous'.padStart(10), 'current'.padStart(10), 'delta'.padStart(10));
+  console.log('-'.repeat(64));
+  for (const row of deltas.slice(0, 12)) {
+    const previous = row.previousBytes == null ? '-' : formatBytes(row.previousBytes);
+    const delta = row.deltaBytes == null ? 'new' : `${row.deltaBytes >= 0 ? '+' : '-'}${formatBytes(Math.abs(row.deltaBytes))}`;
+    console.log(row.name.padEnd(28), previous.padStart(10), formatBytes(row.currentBytes).padStart(10), delta.padStart(10));
+  }
+}
+
+function writeBaseline(file, report) {
+  if (!file) return;
+  mkdirSync(path.dirname(file), { recursive: true });
+  writeFileSync(file, `${JSON.stringify(report, null, 2)}\n`);
+  console.log(`[mcp-size-report] wrote baseline ${file}`);
+}
+
 async function main() {
+  validateConfiguration();
   console.log(`[mcp-size-report] target=${baseUrl}`);
   console.log(`[mcp-size-report] auth=${authToken ? authMode : 'none'} fixtures=${Object.keys(TOOL_SMOKE_FIXTURES).length}`);
 
@@ -145,6 +283,14 @@ async function main() {
   rows.sort((a, b) => b.responseBytes - a.responseBytes);
   printRows(rows);
   printSummary(rows);
+  const report = buildReport(rows, failures);
+  printBaselineDelta(rows, readBaseline(cli.baselinePath));
+  writeBaseline(cli.writeBaselinePath, report);
+
+  if (cli.failOnLarge && rows.some((row) => row.status === 'LARGE')) {
+    console.error('[mcp-size-report] LARGE response detected');
+    process.exit(1);
+  }
 
   if (failures.length > 0) {
     console.error('');

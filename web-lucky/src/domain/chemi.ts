@@ -1,5 +1,5 @@
-import { Compatibility } from 'manseryeok-engine';
-import type { Gender } from 'manseryeok-engine';
+import type { Gender } from 'manseryeok-engine/engine/types';
+import { getBrowserCalendar, type BrowserCalendar } from './browser-calendar';
 
 export type ChemiPersonInput = {
   year: number;
@@ -12,7 +12,7 @@ export type ChemiPersonInput = {
   minute: number | null;
 };
 
-export type ChemiResult = ReturnType<typeof Compatibility.calculateCompatibility>;
+export type ChemiResult = Awaited<ReturnType<BrowserCalendar['calculateCompatibilityAsync']>>;
 
 export type ChemiOk = {
   ok: true;
@@ -42,18 +42,19 @@ function validatePerson(p: ChemiPersonInput, label: string): string | null {
   return null;
 }
 
-export function runChemi(
+export async function runChemi(
   person1: ChemiPersonInput,
   person2: ChemiPersonInput,
-): ChemiOutcome {
+  calendar: BrowserCalendar = getBrowserCalendar(),
+): Promise<ChemiOutcome> {
   const e1 = validatePerson(person1, '첫 번째 사람');
-  if (e1) return { ok: false, message: e1 };
+  if (e1) return Promise.resolve({ ok: false, message: e1 });
   const e2 = validatePerson(person2, '두 번째 사람');
-  if (e2) return { ok: false, message: e2 };
+  if (e2) return Promise.resolve({ ok: false, message: e2 });
 
   try {
-    const result = Compatibility.calculateCompatibility({
-      person1: {
+    const result = await calendar.calculateCompatibilityAsync(
+      {
         year: person1.year,
         month: person1.month,
         day: person1.day,
@@ -63,7 +64,7 @@ export function runChemi(
         isLunar: person1.isLunar,
         isLeapMonth: person1.isLunar ? Boolean(person1.isLeapMonth) : false,
       },
-      person2: {
+      {
         year: person2.year,
         month: person2.month,
         day: person2.day,
@@ -73,7 +74,7 @@ export function runChemi(
         isLunar: person2.isLunar,
         isLeapMonth: person2.isLunar ? Boolean(person2.isLeapMonth) : false,
       },
-    });
+    );
     if (
       typeof result.totalScore !== 'number' ||
       result.totalScore < 0 ||

@@ -91,6 +91,7 @@ let state: AppState = {
   },
   traces: [],
 };
+let generationSequence = 0;
 
 function normalizeAuthMode(value: string | undefined): AuthMode {
   if (value === 'x-token' || value === 'bearer') return value;
@@ -112,7 +113,7 @@ function formatBytes(bytes: number): string {
 }
 
 function authModeLabel(mode = state.connection.authMode): string {
-  if (mode === 'x-token') return 'X-Token 인증';
+  if (mode === 'x-token') return 'X-MCP-Auth-Token';
   if (mode === 'bearer') return 'Bearer 인증';
   return '로컬 개발 모드';
 }
@@ -145,6 +146,10 @@ function deepSections(mode: DeepMode): SajuSection[] {
 
 function activeLabel(): string {
   return tabs.find((tab) => tab.id === state.activeTab)?.label ?? '운세';
+}
+
+function tabLabel(tabId: ActiveTab): string {
+  return tabs.find((tab) => tab.id === tabId)?.label ?? '운세';
 }
 
 function formFromDom(): FormState {
@@ -210,6 +215,8 @@ function parseBirthInput(form: FormState): BirthInput {
 }
 
 async function generateActiveFortune(): Promise<void> {
+  const sequence = ++generationSequence;
+  const activeTab = state.activeTab;
   const form = formFromDom();
   const connection = connectionFromDom();
   state = { ...state, status: 'loading', form, connection, error: undefined, traces: [], result: undefined };
@@ -227,12 +234,12 @@ async function generateActiveFortune(): Promise<void> {
     const birth = parseBirthInput(form);
     let result: FortuneResult;
 
-    if (state.activeTab === 'daily') {
+    if (activeTab === 'daily') {
       const calendar = await fortune.callCalendarDay(today);
       const palja = await fortune.callSajuPalja(birth);
       const reading = await fortune.callSajuFullReading(birth, dailySections(connection.includeMode));
       result = { kind: 'daily', data: createBriefing({ today, calendar, palja, reading, traces: fortune.getTraces() }) };
-    } else if (state.activeTab === 'weekly') {
+    } else if (activeTab === 'weekly') {
       const dates = Array.from({ length: 7 }, (_, index) => addKstDays(today, index));
       const calendarDays = [];
       for (const date of dates) {
@@ -241,12 +248,12 @@ async function generateActiveFortune(): Promise<void> {
       const palja = await fortune.callSajuPalja(birth);
       const reading = await fortune.callSajuFullReading(birth, ['sipsin']);
       result = { kind: 'weekly', data: createWeeklyFortune({ dates, calendarDays, palja, reading }) };
-    } else if (state.activeTab === 'monthly') {
+    } else if (activeTab === 'monthly') {
       const calendarMonth = await fortune.callCalendarMonth({ year: today.year, month: today.month, compact: true });
       const palja = await fortune.callSajuPalja(birth);
       const reading = await fortune.callSajuFullReading(birth, ['sipsin']);
       result = { kind: 'monthly', data: createMonthlyFortune({ year: today.year, month: today.month, calendarMonth, palja, reading }) };
-    } else if (state.activeTab === 'tojeong') {
+    } else if (activeTab === 'tojeong') {
       const tojeong = await fortune.callTojeongYearly(birth, connection.targetYear);
       result = { kind: 'tojeong', data: createTojeongFortune(tojeong) };
     } else {
@@ -255,8 +262,10 @@ async function generateActiveFortune(): Promise<void> {
       result = { kind: 'deep', data: createDeepCycleFortune({ birth, fullReading, daeun, mode: connection.deepMode }) };
     }
 
+    if (sequence !== generationSequence) return;
     state = { ...state, status: 'success', form, connection, result, traces: fortune.getTraces() };
   } catch (error) {
+    if (sequence !== generationSequence) return;
     const traces = fortune.getTraces();
     if (error instanceof McpClientError) {
       state = {
@@ -266,7 +275,7 @@ async function generateActiveFortune(): Promise<void> {
         connection,
         traces,
         error: {
-          title: `${activeLabel()} 생성 실패`,
+          title: `${tabLabel(activeTab)} 생성 실패`,
           message: error.message,
           kind: error.kind,
         },
@@ -289,6 +298,7 @@ async function generateActiveFortune(): Promise<void> {
 }
 
 function runSampleFortune(): void {
+  const scheduledSequence = ++generationSequence;
   const connection = connectionFromDom();
   state = {
     ...state,
@@ -301,6 +311,7 @@ function runSampleFortune(): void {
   };
   render();
   window.setTimeout(() => {
+    if (scheduledSequence !== generationSequence) return;
     void generateActiveFortune();
   }, 0);
 }
@@ -612,6 +623,7 @@ function render(): void {
     button.addEventListener('click', () => {
       const tab = button.dataset.tab as ActiveTab | undefined;
       if (!tab) return;
+      generationSequence += 1;
       state = { ...state, activeTab: tab, status: 'idle', form: formFromDom(), connection: connectionFromDom(), result: undefined, traces: [], error: undefined };
       render();
     });
@@ -627,6 +639,7 @@ function render(): void {
     });
   });
   document.querySelector<HTMLButtonElement>('#openDeepFromYearly')?.addEventListener('click', () => {
+    generationSequence += 1;
     state = { ...state, activeTab: 'deep', status: 'idle', form: formFromDom(), connection: connectionFromDom(), result: undefined, traces: [], error: undefined };
     render();
   });

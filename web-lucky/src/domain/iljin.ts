@@ -1,33 +1,34 @@
-import { Calendar } from 'manseryeok-engine';
+import { getBrowserCalendar, type BrowserCalendar } from './browser-calendar';
 
 export type IljinDayOk = {
   ok: true;
   year: number;
   month: number;
   day: number;
-  dayInfo: ReturnType<typeof Calendar.getCalendarDay>;
+  dayInfo: Awaited<ReturnType<BrowserCalendar['getCalendarDayAsync']>>;
 };
 
 export type IljinDayErr = { ok: false; message: string };
 
 export type IljinDayOutcome = IljinDayOk | IljinDayErr;
 
-export function runIljinDay(
+export async function runIljinDay(
   year: number,
   month: number,
   day: number,
-): IljinDayOutcome {
+  calendar: BrowserCalendar = getBrowserCalendar(),
+): Promise<IljinDayOutcome> {
   if (!Number.isInteger(year) || year < 1900 || year > 2101) {
-    return { ok: false, message: '연도 범위를 확인해 주세요.' };
+    return Promise.resolve({ ok: false, message: '연도 범위를 확인해 주세요.' });
   }
   if (!Number.isInteger(month) || month < 1 || month > 12) {
-    return { ok: false, message: '월은 1~12여야 합니다.' };
+    return Promise.resolve({ ok: false, message: '월은 1~12여야 합니다.' });
   }
   if (!Number.isInteger(day) || day < 1 || day > 31) {
-    return { ok: false, message: '일이 올바르지 않습니다.' };
+    return Promise.resolve({ ok: false, message: '일이 올바르지 않습니다.' });
   }
   try {
-    const dayInfo = Calendar.getCalendarDay(year, month, day);
+    const dayInfo = await calendar.getCalendarDayAsync(year, month, day);
     if (!dayInfo?.dayGanJi) {
       return { ok: false, message: '일진 데이터를 가져오지 못했습니다.' };
     }

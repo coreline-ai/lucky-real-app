@@ -1,12 +1,21 @@
 import path from 'node:path';
 import { defineConfig } from 'vite';
 
+const engineSrc = path.resolve(__dirname, '../engine/src');
+
 export default defineConfig({
   resolve: {
-    alias: {
+    alias: [
+      {
+        find: /^manseryeok-engine\/engine\/(.+)$/,
+        replacement: `${engineSrc}/engine/$1`,
+      },
       // Prefer source for browser bundle transparency; package still depends on file:../engine.
-      'manseryeok-engine': path.resolve(__dirname, '../engine/src/index.ts'),
-    },
+      {
+        find: 'manseryeok-engine',
+        replacement: path.resolve(engineSrc, 'index.ts'),
+      },
+    ],
   },
   server: {
     fs: {

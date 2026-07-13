@@ -1,20 +1,103 @@
 name: mcp-server
 
 on:
+  workflow_dispatch:
+    inputs:
+      run_browser_smoke:
+        description: "Install Chromium and run both web browser smoke suites"
+        required: false
+        type: boolean
+        default: false
   push:
     paths:
       - "engine/**"
       - "mcp-server/**"
+      - "web-lucky/**"
+      - "web-mcp-daily/**"
+      - "scripts/**"
       - ".github/workflows/mcp-server.yml"
   pull_request:
     paths:
       - "engine/**"
       - "mcp-server/**"
+      - "web-lucky/**"
+      - "web-mcp-daily/**"
+      - "scripts/**"
       - ".github/workflows/mcp-server.yml"
 
 jobs:
+  web-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            engine/package-lock.json
+            web-lucky/package-lock.json
+            web-mcp-daily/package-lock.json
+
+      - name: Install engine dependencies
+        working-directory: engine
+        run: npm ci
+
+      - name: Install web-lucky dependencies
+        working-directory: web-lucky
+        run: npm ci
+
+      - name: Install web-mcp-daily dependencies
+        working-directory: web-mcp-daily
+        run: npm ci
+
+      - name: Typecheck and test engine
+        working-directory: engine
+        run: |
+          npm run type-check
+          npm test
+          npm run build
+
+      - name: Typecheck, test, and build web-lucky
+        working-directory: web-lucky
+        run: |
+          npm run typecheck
+          npm test
+          npm run build
+
+      - name: Enforce web-mcp-daily MCP-only boundary
+        working-directory: web-mcp-daily
+        run: |
+          npm run guard:mcp-only:self-test
+          npm run guard:mcp-only
+
+      - name: Typecheck and build web-mcp-daily
+        working-directory: web-mcp-daily
+        run: npm run build
+
+      - name: Enforce web demo size budgets
+        env:
+          WEB_SIZE_FAIL_ON_BUDGET: "true"
+          WEB_SIZE_WEB_LUCKY_TOTAL_RAW_BYTES: 512KiB
+          WEB_SIZE_WEB_LUCKY_TOTAL_GZIP_BYTES: 128KiB
+          WEB_SIZE_WEB_LUCKY_LARGEST_RAW_BYTES: 256KiB
+          WEB_SIZE_WEB_LUCKY_LARGEST_GZIP_BYTES: 64KiB
+          WEB_SIZE_WEB_MCP_DAILY_TOTAL_RAW_BYTES: 64KiB
+          WEB_SIZE_WEB_MCP_DAILY_TOTAL_GZIP_BYTES: 24KiB
+          WEB_SIZE_WEB_MCP_DAILY_LARGEST_RAW_BYTES: 56KiB
+          WEB_SIZE_WEB_MCP_DAILY_LARGEST_GZIP_BYTES: 20KiB
+        run: node scripts/web-demo-size-report.mjs
+
   test:
     runs-on: ubuntu-latest
+    env:
+      MCP_AUTH_TOKEN: ci-local-mcp-token
+      MCP_SMOKE_AUTH_TOKEN: ci-local-mcp-token
+      MCP_PREFLIGHT_AUTH_TOKEN: ci-local-mcp-token
+      MCP_SIZE_AUTH_TOKEN: ci-local-mcp-token
+      ENABLE_DASHBOARD: "false"
+      MCP_SMOKE_EXPECT_DASHBOARD_DISABLED: "true"
     steps:
       - uses: actions/checkout@v4
 
@@ -64,6 +147,17 @@ jobs:
         working-directory: mcp-server
         run: npm run smoke:prod
 
+      - name: PlayMCP authenticated preflight
+        working-directory: mcp-server
+        run: npm run preflight:playmcp
+
+      - name: Enforce MCP response size threshold
+        working-directory: mcp-server
+        run: npm run report:sizes:ci
+
+      - name: Cross-check engine and MCP structured results
+        run: node scripts/cross-check-engine-mcp.mjs
+
       - name: Stop MCP HTTP server
         if: always()
         run: |
@@ -72,4 +166,70 @@ jobs:
           fi
           if [ -f /tmp/mcp-server.log ]; then
             tail -100 /tmp/mcp-server.log || true
+          fi
+
+  browser-smoke:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_browser_smoke }}
+    needs: [web-contracts, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            engine/package-lock.json
+            mcp-server/package-lock.json
+            web-lucky/package-lock.json
+            web-mcp-daily/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          npm --prefix engine ci
+          npm --prefix mcp-server ci
+          npm --prefix web-lucky ci
+          npm --prefix web-mcp-daily ci
+
+      - name: Build browser smoke targets
+        run: |
+          npm --prefix mcp-server run build
+          npm --prefix web-lucky run build
+          npm --prefix web-mcp-daily run build
+
+      - name: Install Chromium
+        working-directory: web-mcp-daily
+        run: npx playwright install --with-deps chromium
+
+      - name: Run web-mcp-daily browser smoke
+        working-directory: web-mcp-daily
+        run: npm run browser:check
+
+      - name: Start web-lucky preview
+        run: |
+          npm --prefix web-lucky run preview -- --host 127.0.0.1 --port 4173 > /tmp/web-lucky.log 2>&1 &
+          echo $! > /tmp/web-lucky.pid
+          for i in {1..50}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
+              exit 0
+            fi
+            sleep 0.2
+          done
+          cat /tmp/web-lucky.log
+          exit 1
+
+      - name: Run web-lucky browser smoke
+        run: |
+          node web-lucky/scripts/browser-hub-check.mjs
+          node web-lucky/scripts/browser-check.mjs
+
+      - name: Stop web-lucky preview
+        if: always()
+        run: |
+          if [ -f /tmp/web-lucky.pid ]; then
+            kill -TERM "$(cat /tmp/web-lucky.pid)" 2>/dev/null || true
+          fi
+          if [ -f /tmp/web-lucky.log ]; then
+            tail -100 /tmp/web-lucky.log || true
           fi

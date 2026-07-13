@@ -19,6 +19,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./engine/browser": {
+      "types": "./dist/engine/browser/index.d.ts",
+      "default": "./dist/engine/browser/index.js"
+    },
     "./engine/*": {
       "types": "./dist/engine/*.d.ts",
       "default": "./dist/engine/*.js"
@@ -28,13 +32,15 @@
   "files": [
     "dist",
     "src",
-    "docs"
+    "docs",
+    "scripts"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:engine": "vitest run tests/engine",
+    "data-shards:generate": "node scripts/generate-browser-data-shards.mjs",
     "solar-terms:verify": "node scripts/generate-solar-term-verification-report.mjs"
   },
   "dependencies": {},

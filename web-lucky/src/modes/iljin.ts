@@ -14,10 +14,69 @@ export function renderIljinMode(
   let y = kst.year;
   let m = kst.month;
   let d = kst.day;
+  let renderSeq = 0;
+  const handleHome = () => {
+    renderSeq += 1;
+    onHome();
+  };
 
-  const paint = () => {
-    const outcome = runIljinDay(y, m, d);
+  const paint = async () => {
+    const seq = ++renderSeq;
     let body: string;
+    const renderBody = (bodyHtml: string) => {
+      renderShell(root, {
+        title: '오늘의 일진',
+        eyebrow: 'web-lucky · 일진',
+        showHome: true,
+        onHome: handleHome,
+        bodyHtml,
+        testId: 'iljin-body',
+      });
+
+      const applyDate = () => {
+        const val = (root.querySelector('#iljin-date') as HTMLInputElement).value;
+        const [ys, ms, ds] = val.split('-').map(Number);
+        y = ys;
+        m = ms;
+        d = ds;
+        void paint();
+      };
+      root.querySelector('#iljin-apply')?.addEventListener('click', applyDate);
+      root.querySelector('#iljin-prev')?.addEventListener('click', () => {
+        const n = shiftDate(y, m, d, -1);
+        y = n.year;
+        m = n.month;
+        d = n.day;
+        void paint();
+      });
+      root.querySelector('#iljin-next')?.addEventListener('click', () => {
+        const n = shiftDate(y, m, d, 1);
+        y = n.year;
+        m = n.month;
+        d = n.day;
+        void paint();
+      });
+    };
+
+    renderBody(`
+      <section class="card" data-testid="iljin-loading">
+        <h2>일진 요약</h2>
+        <div class="field-row">
+          <div class="field">
+            <label for="iljin-date">조회 날짜 (양력)</label>
+            <input id="iljin-date" type="date" value="${pad(y, m, d)}" />
+          </div>
+        </div>
+        <div class="actions">
+          <button type="button" class="secondary" id="iljin-prev">← 하루 전</button>
+          <button type="button" class="primary" id="iljin-apply">조회</button>
+          <button type="button" class="secondary" id="iljin-next">하루 후 →</button>
+        </div>
+        <p class="help">해당 연도 shard 로딩 중…</p>
+      </section>`);
+
+    const outcome = await runIljinDay(y, m, d);
+    if (seq !== renderSeq) return;
     if (!outcome.ok) {
       body = `
         <div class="error-box" data-testid="error-box" role="alert">${outcome.message}</div>
@@ -69,39 +128,8 @@ export function renderIljinMode(
         </section>`;
     }
 
-    renderShell(root, {
-      title: '오늘의 일진',
-      eyebrow: 'web-lucky · 일진',
-      showHome: true,
-      onHome,
-      bodyHtml: body,
-      testId: 'iljin-body',
-    });
-
-    const applyDate = () => {
-      const val = (root.querySelector('#iljin-date') as HTMLInputElement).value;
-      const [ys, ms, ds] = val.split('-').map(Number);
-      y = ys;
-      m = ms;
-      d = ds;
-      paint();
-    };
-    root.querySelector('#iljin-apply')?.addEventListener('click', applyDate);
-    root.querySelector('#iljin-prev')?.addEventListener('click', () => {
-      const n = shiftDate(y, m, d, -1);
-      y = n.year;
-      m = n.month;
-      d = n.day;
-      paint();
-    });
-    root.querySelector('#iljin-next')?.addEventListener('click', () => {
-      const n = shiftDate(y, m, d, 1);
-      y = n.year;
-      m = n.month;
-      d = n.day;
-      paint();
-    });
+    renderBody(body);
   };
 
-  paint();
+  void paint();
 }

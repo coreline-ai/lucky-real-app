@@ -57,15 +57,16 @@ async function waitForHttp(url, timeoutMs = 30_000) {
 }
 
 async function stopProcess(child) {
-  if (!child || child.killed) return;
+  if (!child || child.exitCode !== null || child.signalCode !== null) return;
   child.kill('SIGTERM');
   await new Promise((resolve) => {
-    const timer = setTimeout(() => {
-      if (!child.killed) child.kill('SIGKILL');
-      resolve();
+    const forceTimer = setTimeout(() => {
+      if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL');
     }, 2500);
+    const settleTimer = setTimeout(resolve, 5000);
     child.once('exit', () => {
-      clearTimeout(timer);
+      clearTimeout(forceTimer);
+      clearTimeout(settleTimer);
       resolve();
     });
   });
@@ -148,6 +149,28 @@ async function runCompactCheck(page, baseUrl) {
   }
 }
 
+async function runStaleTabCheck(page, baseUrl) {
+  await page.goto(baseUrl, { waitUntil: 'networkidle' });
+  await page.route('**/mcp', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    await route.continue();
+  });
+  await clickTab(page, 'daily');
+  await page.click('#topQuickTest');
+  await page.waitForSelector('[data-status="loading"]');
+  await clickTab(page, 'weekly');
+  await page.waitForTimeout(1600);
+  const activeWeekly = await page.locator('[data-tab="weekly"]').getAttribute('aria-pressed');
+  const idle = await page.locator('[data-status="idle"]').count();
+  const staleSuccess = await page.locator('[data-status="success"]').count();
+  await page.unroute('**/mcp');
+  if (activeWeekly !== 'true' || idle !== 1 || staleSuccess !== 0) {
+    throw new Error(
+      `Stale daily result replaced weekly tab: activeWeekly=${activeWeekly} idle=${idle} success=${staleSuccess}`,
+    );
+  }
+}
+
 async function runFailureCheck(page, baseUrl) {
   await page.goto(baseUrl, { waitUntil: 'networkidle' });
   for (const tab of tabChecks) {
@@ -182,7 +205,7 @@ async function runAuthSuccessCheck(page, baseUrl, token) {
   await page.click('#submitBriefing');
   await page.waitForSelector('[data-status="success"]', { timeout: 20_000 });
   const text = await page.locator('body').innerText();
-  for (const expected of ['MCP 서버를 통해 생성됨', 'X-Token 인증', 'calendar_day_info']) {
+  for (const expected of ['MCP 서버를 통해 생성됨', 'X-MCP-Auth-Token', 'calendar_day_info']) {
     if (!text.includes(expected)) throw new Error(`Missing auth success text: ${expected}`);
   }
 }
@@ -201,7 +224,12 @@ async function main() {
   try {
     mcpServer = spawnProcess('node', ['dist/http.js'], {
       cwd: mcpRoot,
-      env: { PORT: String(mcpPort), HOST: '127.0.0.1', CORS_ORIGIN: `http://127.0.0.1:${appPort}` },
+      env: {
+        PORT: String(mcpPort),
+        HOST: '127.0.0.1',
+        MCP_AUTH_TOKEN: '',
+        CORS_ORIGIN: `http://127.0.0.1:${appPort}`,
+      },
     });
     appServer = spawnProcess('npm', ['run', 'dev', '--', '--host', '127.0.0.1', '--port', String(appPort)], {
       cwd: appRoot,
@@ -214,6 +242,7 @@ async function main() {
     const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
     await runSuccessCheck(page, `http://127.0.0.1:${appPort}`);
     await runCompactCheck(page, `http://127.0.0.1:${appPort}`);
+    await runStaleTabCheck(page, `http://127.0.0.1:${appPort}`);
 
     await stopProcess(mcpServer);
     mcpServer = undefined;

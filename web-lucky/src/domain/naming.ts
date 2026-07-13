@@ -1,5 +1,5 @@
-import { Naming } from 'manseryeok-engine';
-import type { NamingAnalysis } from 'manseryeok-engine';
+import { analyzeNames } from 'manseryeok-engine/engine/naming/index';
+import type { NamingAnalysis } from 'manseryeok-engine/engine/types';
 
 export type NamingOk = {
   ok: true;
@@ -25,7 +25,7 @@ export function runNaming(
   givenNames: string[],
 ): NamingOutcome {
   const s = surname.trim();
-  if (!s || [...s].length !== 1) {
+  if (!/^[가-힣]$/u.test(s)) {
     return { ok: false, message: '성은 한글 한 글자로 입력해 주세요.' };
   }
   if (givenNames.length === 0) {
@@ -34,16 +34,15 @@ export function runNaming(
   const truncated = givenNames.length > 6;
   const limited = givenNames.slice(0, 6);
   for (const g of limited) {
-    const len = [...g].length;
-    if (len < 1 || len > 2) {
+    if (!/^[가-힣]{1,2}$/u.test(g)) {
       return {
         ok: false,
-        message: `이름 「${g}」은(는) 1~2글자여야 합니다.`,
+        message: `이름 「${g}」은(는) 한글 1~2글자여야 합니다.`,
       };
     }
   }
   try {
-    const result = Naming.analyzeNames(s, limited);
+    const result = analyzeNames(s, limited);
     const candidates = [...result.candidates].sort(
       (a, b) => b.totalScore - a.totalScore,
     );

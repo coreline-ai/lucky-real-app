@@ -1,6 +1,6 @@
 import { renderShell } from '../app/shell';
 import { runChemi, type ChemiPersonInput } from '../domain/chemi';
-import type { Gender } from 'manseryeok-engine';
+import type { Gender } from 'manseryeok-engine/engine/types';
 
 function parsePerson(
   form: HTMLFormElement,
@@ -103,6 +103,11 @@ export function renderChemiMode(
   onHome: () => void,
 ): void {
   let resultHtml = '';
+  let calculationSequence = 0;
+  const handleHome = () => {
+    calculationSequence += 1;
+    onHome();
+  };
 
   const paint = () => {
     const body = `
@@ -120,7 +125,7 @@ export function renderChemiMode(
       title: '우리 케미',
       eyebrow: 'web-lucky · 궁합',
       showHome: true,
-      onHome,
+      onHome: handleHome,
       bodyHtml: body,
       testId: 'chemi-body',
     });
@@ -145,6 +150,7 @@ export function renderChemiMode(
 
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
+      const sequence = ++calculationSequence;
       const p1 = parsePerson(form, 'p1');
       if ('error' in p1) {
         resultHtml = `<div class="error-box" role="alert">${p1.error}</div>`;
@@ -157,30 +163,35 @@ export function renderChemiMode(
         paint();
         return;
       }
-      const outcome = runChemi(p1, p2);
-      if (!outcome.ok) {
-        resultHtml = `<div class="error-box" data-testid="error-box" role="alert">${outcome.message}</div>`;
-      } else {
-        const r = outcome.result;
-        const cats = r.categories
-          .map(
-            (c: { name: string; score: number; maxScore: number; description: string }) =>
-              `<li><strong>${c.name}</strong> ${c.score}/${c.maxScore} — ${c.description}</li>`,
-          )
-          .join('');
-        const advice = r.advice.map((a: string) => `<li>${a}</li>`).join('');
-        resultHtml = `
-          <section class="card" data-testid="chemi-result-card">
-            <h2>결과</h2>
-            <p class="score-line" data-testid="chemi-score"><span class="score-num">${r.totalScore}</span>점 · <span class="grade">${r.grade}</span>등급</p>
-            <p>${r.summary}</p>
-            <ul class="plain">${cats}</ul>
-            <h3>조언</h3>
-            <ul class="plain" data-testid="chemi-advice">${advice}</ul>
-          </section>`;
-      }
+      resultHtml = '<section class="card" data-testid="chemi-loading"><h2>결과</h2><p class="help">궁합 shard 로딩 중…</p></section>';
       paint();
-      root.querySelector('#chemi-result')?.scrollIntoView({ behavior: 'smooth' });
+      void (async () => {
+        const outcome = await runChemi(p1, p2);
+        if (sequence !== calculationSequence) return;
+        if (!outcome.ok) {
+          resultHtml = `<div class="error-box" data-testid="error-box" role="alert">${outcome.message}</div>`;
+        } else {
+          const r = outcome.result;
+          const cats = r.categories
+            .map(
+              (c: { name: string; score: number; maxScore: number; description: string }) =>
+                `<li><strong>${c.name}</strong> ${c.score}/${c.maxScore} — ${c.description}</li>`,
+            )
+            .join('');
+          const advice = r.advice.map((a: string) => `<li>${a}</li>`).join('');
+          resultHtml = `
+            <section class="card" data-testid="chemi-result-card">
+              <h2>결과</h2>
+              <p class="score-line" data-testid="chemi-score"><span class="score-num">${r.totalScore}</span>점 · <span class="grade">${r.grade}</span>등급</p>
+              <p>${r.summary}</p>
+              <ul class="plain">${cats}</ul>
+              <h3>조언</h3>
+              <ul class="plain" data-testid="chemi-advice">${advice}</ul>
+            </section>`;
+        }
+        paint();
+        root.querySelector('#chemi-result')?.scrollIntoView({ behavior: 'smooth' });
+      })();
     });
   };
 

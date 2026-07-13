@@ -42,6 +42,40 @@
 
 ---
 
+## 🌐 웹 데모와 MCP 검증
+
+이 저장소에는 목적이 다른 웹 데모가 2개 있습니다. 두 앱은 통합하지 않고, 같은 입력에 대한 결과 교차검증으로만 연결합니다.
+
+| 구분 | `web-lucky` | `web-mcp-daily` |
+|---|---|---|
+| 목적 | 브라우저에서 `manseryeok-engine` 직접 실행 | `manseryeok-mcp` 서버의 `/mcp` 실전 호출 검증 |
+| 계산 위치 | 브라우저 내부 | MCP HTTP 서버 |
+| 서버 필요 | 없음 | 필요 |
+| 현재 구현 | 연도별 data shard, 비동기 browser API, bundle budget | MCP-only guard, 인증 preflight, 응답 크기 budget |
+| 남은 외부 과제 | 공개 호스팅 또는 오프라인 설치 요구 확정 시 PWA 재검토 | PlayMCP 콘솔 확인과 운영 HTTPS 호스팅 |
+| 금지 조건 | MCP 서버 의존으로 전환하지 않음 | 엔진 직접 import 또는 local fallback 금지 |
+
+현재 기준선은 다음 명령으로 확인합니다.
+
+```bash
+npm --prefix web-lucky run build
+npm --prefix web-mcp-daily run build
+node scripts/web-demo-size-report.mjs
+```
+
+엔진 직접 경로와 MCP 경로의 구조화 결과 일치는 다음 명령으로 확인합니다.
+
+```bash
+npm --prefix mcp-server run build
+node scripts/cross-check-engine-mcp.mjs
+```
+
+현재 구현과 종료 검증 범위는 [웹/MCP 고도화 계획](dev-plan/implement_20260713_103828.md)과
+[종료 문서 정합성 계획](dev-plan/implement_20260713_154958.md)에 기록합니다. 실제 PlayMCP
+콘솔 등록과 운영 HTTPS 배포는 로컬 완료 범위에 포함하지 않습니다.
+
+---
+
 ## 📱 realapp 대표 화면
 
 아래 이미지는 **S25 안드로이드 디바이스**에서 `realapp` 디버그 빌드를 실행한 뒤 2026-07-09에 다시 캡쳐한 6개 하단 탭의 대표 화면입니다.
@@ -348,12 +382,13 @@ TS `compatibility` 산식이 정본이며 총점 100점입니다.
 
 | 경로 | 역할 |
 |---|---|
-| [`realapp/`](realapp/) | **오행가디언즈 Flutter 앱**. 화면, 로컬 DB, Dart 엔진 포팅, 공유/알림 포함 (Dart 소스 69개) |
+| [`realapp/`](realapp/) | **오행가디언즈 Flutter 앱**. 화면, 로컬 DB, Dart 엔진 포팅, 공유/알림 포함 |
 | [`engine/`](engine/) | TypeScript 만세력·명리 계산 엔진 패키지 `manseryeok-engine` (정본) |
-| [`mcp-server/`](mcp-server/) | `manseryeok-engine`을 MCP 툴 20종·리소스·프롬프트로 노출하는 stdio 서버 |
+| [`mcp-server/`](mcp-server/) | `manseryeok-engine`을 MCP 툴 20종·리소스·프롬프트로 노출하는 stdio + Streamable HTTP 서버 |
 | [`game/`](game/) | 엔진을 활용한 Vite 기반 브라우저 미니게임 *일진 수호신 카드 배틀* |
 | [`web-lucky/`](web-lucky/) | 경량 웹 도구 허브 — 일진·케미·작명·절기·토정 5모드 (`?mode=`) |
-| [`dev-plan-generator/`](dev-plan-generator/) | 단계형 개발 계획 문서를 생성하는 Claude 스킬/도구 |
+| [`web-mcp-daily/`](web-mcp-daily/) | 엔진을 직접 import하지 않고 `/mcp`만 호출하는 5개 운세 브리핑 검증 앱 |
+| [`dev-plan-generator/`](dev-plan-generator/) | 단계형 개발 계획 문서를 생성하는 스킬/도구 |
 
 ### `engine/` — TypeScript 계산 엔진
 
@@ -361,7 +396,7 @@ TS `compatibility` 산식이 정본이며 총점 100점입니다.
 
 - **`core/`** 간지·법정시·음양력·절기·정규화 컨텍스트 · **`saju/`** 팔자·대운/세운·십신·신살·격국·용신·원진
 - **`compatibility/`** 궁합 산식 · **`ziwei/`** 자미두수 · **`qimen/`** 기문둔갑 · **`tojeong/`** 토정비결 · **`daejeong/`** 대정수 · **`daeyukim/`** 대육임 · **`guseong/`** 구성학 · **`harak/`** 하락이수 · **`hongyeon/`** 홍연 · **`maehwa/`** 매화역수 · **`naming/`** 작명(한자·자원오행) · **`calendar/`** · **`adapter/`** 한자·학파·시간 보정
-- **npm 스크립트**: `build`(tsc), `type-check`, `test`(vitest), `test:engine`, `solar-terms:verify`. `tests/engine/`에 16개 회귀·골든·정책·전문가 대조 스위트.
+- **npm 스크립트**: `build`(tsc), `type-check`, `test`(vitest), `test:engine`, `data-shards:generate`, `solar-terms:verify`. `tests/engine/`에 회귀·골든·정책·전문가 대조 스위트가 있습니다.
 
 ### realapp 주요 코드
 

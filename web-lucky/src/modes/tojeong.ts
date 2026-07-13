@@ -60,6 +60,11 @@ export function renderTojeongMode(
   let expandedMonth: number | null = null;
   let lastBirth: BirthInput | null = null;
   let lastTargetYear = defaultTargetYear();
+  let calculationSequence = 0;
+  const handleHome = () => {
+    calculationSequence += 1;
+    onHome();
+  };
 
   const parseForm = (
     form: HTMLFormElement,
@@ -93,24 +98,28 @@ export function renderTojeongMode(
   };
 
   const runCalculation = (birth: BirthInput, targetYear: number) => {
+    const sequence = ++calculationSequence;
     lastBirth = birth;
     lastTargetYear = targetYear;
     state = { kind: 'loading' };
     paint();
     window.setTimeout(() => {
-      const outcome = runTojeongYearly(birth, targetYear);
-      if (!outcome.ok) {
-        state = {
-          kind: 'error',
-          message: outcome.message,
-          birth,
-          targetYear,
-        };
-      } else {
-        expandedMonth = null;
-        state = { kind: 'result', outcome, birth };
-      }
-      paint();
+      void (async () => {
+        const outcome = await runTojeongYearly(birth, targetYear);
+        if (sequence !== calculationSequence) return;
+        if (!outcome.ok) {
+          state = {
+            kind: 'error',
+            message: outcome.message,
+            birth,
+            targetYear,
+          };
+        } else {
+          expandedMonth = null;
+          state = { kind: 'result', outcome, birth };
+        }
+        paint();
+      })();
     }, 40);
   };
 
@@ -120,7 +129,7 @@ export function renderTojeongMode(
         title: '토정 한 해 요약',
         eyebrow: 'web-lucky · 토정',
         showHome: true,
-        onHome,
+        onHome: handleHome,
         bodyHtml: `<div class="card loading" data-testid="loading">144괘 중 배정 중…</div>`,
       });
       return;
@@ -132,7 +141,7 @@ export function renderTojeongMode(
         title: '토정 한 해 요약',
         eyebrow: 'web-lucky · 토정',
         showHome: true,
-        onHome,
+        onHome: handleHome,
         bodyHtml: `
           <div class="error-box" data-testid="error-box" role="alert">${st.message}</div>
           <div class="actions">
@@ -181,7 +190,7 @@ export function renderTojeongMode(
         title: '토정 한 해 요약',
         eyebrow: 'web-lucky · 토정',
         showHome: true,
-        onHome,
+        onHome: handleHome,
         bodyHtml: `
           <section class="card result-hero" data-testid="result-hero">
             <div class="year-label">${targetYear}년 신수</div>
@@ -271,7 +280,7 @@ export function renderTojeongMode(
       title: '토정 한 해 요약',
       eyebrow: 'web-lucky · 토정',
       showHome: true,
-      onHome,
+      onHome: handleHome,
       bodyHtml: `
         <section class="card" id="input-section">
           <h2>생일 · 대상 연도</h2>

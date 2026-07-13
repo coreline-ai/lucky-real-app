@@ -2,7 +2,17 @@ const MCP_PROTOCOL_VERSION = '2025-11-25';
 const DEFAULT_TIMEOUT_MS = 12_000;
 
 export type AuthMode = 'none' | 'x-token' | 'bearer';
-export type McpErrorKind = 'network' | 'timeout' | 'auth' | 'http' | 'protocol' | 'tool' | 'size';
+export type McpErrorKind =
+  | 'network'
+  | 'timeout'
+  | 'auth'
+  | 'cors'
+  | 'endpoint'
+  | 'http'
+  | 'protocol'
+  | 'tool'
+  | 'size'
+  | 'server';
 
 interface JsonRpcSuccess<T> {
   jsonrpc: '2.0';
@@ -71,14 +81,20 @@ function byteLength(text: string): number {
 }
 
 function classifyHttp(status: number, message: string): McpErrorKind {
-  if (status === 401 || status === 403) return 'auth';
+  if (status === 401) return 'auth';
+  if (status === 403) return 'cors';
+  if (status === 404) return 'endpoint';
+  if (status === 405) return 'protocol';
   if (status === 413 || message.toLowerCase().includes('too large')) return 'size';
+  if (status >= 500) return 'server';
   return 'http';
 }
 
 function summarizeJsonRpcError(method: string, toolName: string | undefined, code: number): McpErrorKind {
+  if (code === -32001) return 'auth';
   if (method === 'tools/call' || toolName) return 'tool';
-  if (code === -32602 || code === -32601 || code === -32600) return 'protocol';
+  if (code === -32000 || code === -32602 || code === -32601 || code === -32600) return 'protocol';
+  if (code === -32603) return 'server';
   return 'protocol';
 }
 
@@ -115,7 +131,7 @@ export class McpClient {
       },
       { includeProtocolHeader: false, label: 'initialize' },
     );
-    await this.sendNotification('notifications/initialized', { label: 'initialized notification' });
+    await this.sendNotification('notifications/initialized', { label: 'notifications/initialized' });
     this.initialized = true;
   }
 

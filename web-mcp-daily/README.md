@@ -60,6 +60,7 @@ MCP_HTTP_TARGET=http://127.0.0.1:3100
 - `선택 메뉴 샘플 실행`: 현재 선택한 탭의 샘플 출생 정보로 MCP 브리핑을 생성합니다.
 - `연결/인증/응답 정책`: auth mode, token, 오늘 응답 정책, 대운/세운 깊이, 토정 대상 연도를 현재 화면에서만 지정합니다.
 - `MCP 검증 정보`: tool 이름, HTTP status, 응답 byte size, `structuredContent` 여부를 표시합니다.
+- 실패 분류는 서버 대시보드/PlayMCP preflight와 같은 용어를 사용합니다: `auth`, `cors`, `endpoint`, `protocol`, `size`, `server`, `tool`, `network`, `timeout`.
 
 토큰 서버를 수동으로 확인하려면 MCP 서버와 앱을 같은 proxy target에 맞춰 실행합니다.
 
@@ -74,8 +75,12 @@ MCP_HTTP_TARGET=http://127.0.0.1:3101 npm --prefix web-mcp-daily run dev:local
 
 ```bash
 npm run build
+npm run guard:mcp-only:self-test
+npm run guard:mcp-only
 npm run browser:check
 ```
+
+`guard:mcp-only`는 `src`의 `manseryeok-engine`, `../engine`, `engine/src` 직접 import와 명시적인 local-engine fallback 심볼을 차단합니다. README 같은 문서는 검사하지 않습니다. `guard:mcp-only:self-test`는 허용/차단 fixture를 함께 실행해 guard 자체의 오탐·누락을 확인합니다.
 
 `browser:check`는 MCP 서버와 Vite dev server를 임시로 띄운 뒤 다음을 확인합니다.
 
@@ -95,13 +100,31 @@ npm run browser:check
 ```bash
 npm --prefix mcp-server test
 npm --prefix web-mcp-daily run build
+npm --prefix web-mcp-daily run guard:mcp-only
 npm --prefix web-mcp-daily run browser:check
 npm --prefix web-mcp-daily audit --omit=dev
-rg -g '!README.md' "manseryeok-engine|\\.\\./engine|engine/src" web-mcp-daily
 rg "localStorage|sessionStorage" web-mcp-daily/src
 ```
 
-마지막 두 `rg` 명령은 매칭이 없어야 정상입니다.
+마지막 `rg` 명령은 매칭이 없어야 정상입니다.
+
+두 웹 빌드의 raw/gzip total 및 largest asset budget은 루트 size report로 확인합니다. CI 기준은 `web-lucky`가 total raw `512KiB`, total gzip `128KiB`, largest raw `256KiB`, largest gzip `64KiB`이고, `web-mcp-daily`가 각각 `64KiB`, `24KiB`, `56KiB`, `20KiB`입니다. 어느 항목이든 초과하면 실패합니다.
+
+```bash
+npm --prefix web-lucky run build
+npm --prefix web-mcp-daily run build
+node scripts/web-demo-size-report.mjs --fail-on-budget \
+  --budget web-lucky.totalRawBytes=512KiB \
+  --budget web-lucky.totalGzipBytes=128KiB \
+  --budget web-lucky.largestRawBytes=256KiB \
+  --budget web-lucky.largestGzipBytes=64KiB \
+  --budget web-mcp-daily.totalRawBytes=64KiB \
+  --budget web-mcp-daily.totalGzipBytes=24KiB \
+  --budget web-mcp-daily.largestRawBytes=56KiB \
+  --budget web-mcp-daily.largestGzipBytes=20KiB
+```
+
+기준선 기록/비교는 각각 `--write-baseline <json>`, `--baseline <json>`을 사용합니다. budget은 같은 `--budget` 옵션이나 `WEB_SIZE_<TARGET>_*_BYTES` 환경 변수로 관리하며, 환경 변수의 target 이름에서는 하이픈을 밑줄로 바꿉니다(`WEB_SIZE_WEB_LUCKY_*`, `WEB_SIZE_WEB_MCP_DAILY_*`).
 
 ## Troubleshooting
 
@@ -120,6 +143,12 @@ npm --prefix web-mcp-daily run dev:local
 ```bash
 CORS_ORIGIN=http://127.0.0.1:5200 npm --prefix mcp-server run dev:http
 ```
+
+## 문서
+
+- [MCP 브리핑 구현 계획](../dev-plan/implement_20260710_144214.md)
+- [웹앱·MCP 통합 검증 계획](../dev-plan/implement_20260713_103828.md)
+- [프로젝트 종료 문서 정합성 계획](../dev-plan/implement_20260713_154958.md)
 
 ## web-lucky와의 차이
 

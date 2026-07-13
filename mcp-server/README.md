@@ -1,6 +1,6 @@
 # manseryeok-mcp
 
-`manseryeok-mcp`는 repo 루트의 TypeScript 계산 엔진 `manseryeok-engine@0.1.0`을 MCP(Model Context Protocol) stdio 서버로 노출합니다. Claude Code, Claude Desktop, MCP Inspector 같은 클라이언트가 로컬 프로세스 연결만으로 만세력·사주·궁합·토정비결·명반형 차트·작명 계산을 호출할 수 있습니다.
+`manseryeok-mcp`는 repo 루트의 TypeScript 계산 엔진 `manseryeok-engine@0.1.0`을 MCP(Model Context Protocol) stdio 및 Streamable HTTP 서버로 노출합니다. Claude Code, Claude Desktop, MCP Inspector는 로컬 프로세스로 연결할 수 있고, 브라우저 데모와 PlayMCP 사전 검증은 `POST /mcp`를 사용합니다.
 
 계산 규칙은 `krlt-yaja-2026.07`이며, 모든 응답은 오락·자기성찰 목적의 계산값입니다. 의료, 투자, 법률, 재무 판단의 근거로 사용할 수 없습니다.
 
@@ -94,11 +94,18 @@ npm run dashboard
 
 ### Production-style local smoke
 
-빌드 후 실행 중인 HTTP 서버를 대상으로 운영 전 로컬 smoke를 실행합니다.
+빌드 후 HTTP 서버를 실행하고, 다른 터미널에서 운영 전 로컬 smoke를 실행합니다.
 
 ```bash
 cd mcp-server
 npm run build
+npm run start:http
+```
+
+다른 터미널에서:
+
+```bash
+cd mcp-server
 npm run smoke:prod
 ```
 
@@ -127,6 +134,25 @@ MCP_SMOKE_EXPECT_DASHBOARD_DISABLED=true npm run smoke:prod
 
 Smoke는 `/health`, CORS 차단, body limit `413`, `tools/list`, 20개 fixture 기반 `tools/call`, 선택적 auth negative path, 선택적 dashboard disabled gate를 확인합니다.
 
+### PlayMCP preflight
+
+PlayMCP 콘솔에서 "정보 불러오기"를 누르기 전에 같은 성격의 흐름을 CLI로 재현합니다. 실행 중인 HTTP 서버를 대상으로 `/health`, auth negative path, `initialize`, `notifications/initialized`, `tools/list`, 대표 `tools/call`, 404/405/403/413 오류 분류를 확인합니다.
+
+```bash
+cd mcp-server
+MCP_PREFLIGHT_AUTH_TOKEN="$MCP_AUTH_TOKEN" npm run preflight:playmcp
+```
+
+기본 대상은 `http://127.0.0.1:3100`입니다. 임시 HTTPS 터널이나 다른 endpoint를 확인할 때는 `MCP_PREFLIGHT_BASE_URL`을 지정합니다. 값은 origin 또는 `/mcp`가 붙은 endpoint 둘 다 허용합니다.
+
+```bash
+MCP_PREFLIGHT_BASE_URL="https://<random>.trycloudflare.com/mcp" \
+MCP_PREFLIGHT_AUTH_TOKEN="$MCP_AUTH_TOKEN" \
+npm run preflight:playmcp
+```
+
+토큰이 있으면 `X-MCP-Auth-Token`과 `Authorization: Bearer`를 모두 검증합니다. 토큰은 출력하지 않고, 요청 header에만 사용합니다.
+
 ### Tool response size report
 
 PlayMCP 등록 전에는 smoke fixture 기준 HTTP 응답 크기를 함께 확인합니다.
@@ -138,6 +164,23 @@ MCP_SIZE_AUTH_TOKEN="$MCP_AUTH_TOKEN" npm run report:sizes
 ```
 
 `report:sizes`는 기본적으로 PlayMCP 등록과 같은 커스텀 헤더 방식(`X-MCP-Auth-Token`)으로 `/mcp`를 호출합니다. Bearer 방식으로 확인하려면 `MCP_SIZE_AUTH_MODE=bearer`를 추가합니다.
+
+기준선 JSON을 저장하거나 이전 기준선과 비교할 수 있습니다.
+
+```bash
+MCP_SIZE_AUTH_TOKEN="$MCP_AUTH_TOKEN" npm run report:sizes -- --write-baseline reports/mcp-size-baseline.json
+MCP_SIZE_AUTH_TOKEN="$MCP_AUTH_TOKEN" npm run report:sizes -- --baseline reports/mcp-size-baseline.json
+```
+
+CI와 같은 실패 정책은 실행 중인 인증 로컬 HTTP 서버를 대상으로 다음처럼 재현합니다. 아래 토큰은 로컬 검증 전용이며, `LARGE` 응답(`>100KB`)이 하나라도 있거나 인증 경로가 실패하면 비정상 종료합니다.
+
+```bash
+MCP_AUTH_TOKEN=local-ci-token npm run start:http
+# 다른 터미널
+MCP_SIZE_AUTH_TOKEN=local-ci-token npm run report:sizes:ci
+```
+
+CI는 같은 방식으로 인증 production smoke, PlayMCP preflight, response size gate를 연속 실행합니다. `MCP_SIZE_OK_BYTES`, `MCP_SIZE_LARGE_BYTES`, preflight body limit이 양의 정수가 아니거나 임계값 순서가 잘못되면 네트워크 호출 전에 실패합니다.
 
 | Status | 기준 | 처리 |
 |---|---:|---|
@@ -160,7 +203,8 @@ MCP_SIZE_AUTH_TOKEN="$MCP_AUTH_TOKEN" npm run report:sizes
 - [ ] `npm --prefix mcp-server test`
 - [ ] `npm --prefix mcp-server audit --omit=dev`
 - [ ] `npm --prefix mcp-server run smoke:prod`
-- [ ] `npm --prefix mcp-server run report:sizes`
+- [ ] `npm --prefix mcp-server run preflight:playmcp`
+- [ ] `npm --prefix mcp-server run report:sizes:ci`
 - [ ] 외부 bind(`HOST=0.0.0.0`)에서는 `MCP_AUTH_TOKEN`을 secret manager/process manager에서 주입한다. 토큰이 없으면 서버가 시작되지 않는다.
 - [ ] 외부 bind에서는 `ENABLE_DASHBOARD=false` 또는 미설정 상태를 유지한다.
 - [ ] Internet-facing 배포는 in-memory limit 외에도 reverse proxy/gateway rate limit을 적용한다.
@@ -282,3 +326,4 @@ npx @modelcontextprotocol/inspector node dist/index.js
 
 구현 범위와 P5 품질 게이트는 [`dev-plan/implement_20260709_112451.md`](dev-plan/implement_20260709_112451.md)에 고정되어 있습니다.
 운영 배포 전 로컬 검증 가능한 보완 계획은 [`dev-plan/implement_20260709_232143.md`](dev-plan/implement_20260709_232143.md)에 정리되어 있습니다.
+두 웹앱과 MCP의 최신 통합 검증은 [`../dev-plan/implement_20260713_103828.md`](../dev-plan/implement_20260713_103828.md), 프로젝트 종료 문서 정합성은 [`../dev-plan/implement_20260713_154958.md`](../dev-plan/implement_20260713_154958.md)에 기록되어 있습니다.

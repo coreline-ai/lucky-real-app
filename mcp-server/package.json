@@ -18,8 +18,12 @@
     "dev:http": "npm run build && node dist/http.js",
     "dashboard": "npm run build && node dist/http.js",
     "smoke:prod": "node scripts/production-smoke.mjs",
+    "prepreflight:playmcp": "npm run build",
+    "preflight:playmcp": "node scripts/playmcp-preflight.mjs",
     "prereport:sizes": "npm run build",
-    "report:sizes": "node scripts/tool-response-size-report.mjs"
+    "report:sizes": "node scripts/tool-response-size-report.mjs",
+    "prereport:sizes:ci": "npm run build",
+    "report:sizes:ci": "node scripts/tool-response-size-report.mjs --fail-on-large"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",

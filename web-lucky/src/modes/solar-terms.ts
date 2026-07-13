@@ -8,9 +8,39 @@ export function renderSolarTermsMode(
 ): void {
   const kst = kstNowParts();
   let year = kst.year;
+  let renderSeq = 0;
+  const handleHome = () => {
+    renderSeq += 1;
+    onHome();
+  };
 
-  const paint = () => {
-    const outcome = runSolarTermsYear(year, kst);
+  const paint = async () => {
+    const seq = ++renderSeq;
+    const requestedYear = year;
+    renderShell(root, {
+      title: '절기 타임라인',
+      eyebrow: 'web-lucky · 절기',
+      showHome: true,
+      onHome: handleHome,
+      bodyHtml: `<section class="card loading" data-testid="loading">
+        <div class="actions">
+          <button type="button" class="secondary" id="year-prev">← ${requestedYear - 1}</button>
+          <strong>${requestedYear}년 shard 로딩 중…</strong>
+          <button type="button" class="secondary" id="year-next">${requestedYear + 1} →</button>
+        </div>
+      </section>`,
+      testId: 'solar-terms-body',
+    });
+    root.querySelector('#year-prev')?.addEventListener('click', () => {
+      year = requestedYear - 1;
+      void paint();
+    });
+    root.querySelector('#year-next')?.addEventListener('click', () => {
+      year = requestedYear + 1;
+      void paint();
+    });
+    const outcome = await runSolarTermsYear(requestedYear, kst);
+    if (seq !== renderSeq) return;
     let body: string;
     if (!outcome.ok) {
       body = `<div class="error-box" role="alert">${outcome.message}</div>`;
@@ -55,9 +85,9 @@ export function renderSolarTermsMode(
       body = `
         <section class="card" data-testid="solar-terms-result">
           <div class="actions">
-            <button type="button" class="secondary" id="year-prev">← ${year - 1}</button>
-            <strong data-testid="solar-year">${year}년</strong>
-            <button type="button" class="secondary" id="year-next">${year + 1} →</button>
+            <button type="button" class="secondary" id="year-prev">← ${requestedYear - 1}</button>
+            <strong data-testid="solar-year">${requestedYear}년</strong>
+            <button type="button" class="secondary" id="year-next">${requestedYear + 1} →</button>
           </div>
           ${nextBanner}
           ${curBanner}
@@ -69,20 +99,20 @@ export function renderSolarTermsMode(
       title: '절기 타임라인',
       eyebrow: 'web-lucky · 절기',
       showHome: true,
-      onHome,
+      onHome: handleHome,
       bodyHtml: body,
       testId: 'solar-terms-body',
     });
 
     root.querySelector('#year-prev')?.addEventListener('click', () => {
-      year -= 1;
-      paint();
+      year = requestedYear - 1;
+      void paint();
     });
     root.querySelector('#year-next')?.addEventListener('click', () => {
-      year += 1;
-      paint();
+      year = requestedYear + 1;
+      void paint();
     });
   };
 
-  paint();
+  void paint();
 }

@@ -1,5 +1,6 @@
-import { listSolarTermsForYear, type SolarTermInfo } from 'manseryeok-engine';
+import type { SolarTermInfo } from 'manseryeok-engine/engine/core/solar-terms';
 import { kstNowParts } from './kst';
+import { getBrowserCalendar, type BrowserCalendar } from './browser-calendar';
 
 export type SolarTermsOk = {
   ok: true;
@@ -70,15 +71,16 @@ export function findCurrentTerm(
   return cur;
 }
 
-export function runSolarTermsYear(
+export async function runSolarTermsYear(
   year: number,
   now: { year: number; month: number; day: number; hour?: number; minute?: number; second?: number } = kstNowParts(),
-): SolarTermsOutcome {
+  calendar: BrowserCalendar = getBrowserCalendar(),
+): Promise<SolarTermsOutcome> {
   if (!Number.isInteger(year) || year < 1900 || year > 2101) {
-    return { ok: false, message: '연도 범위를 확인해 주세요.' };
+    return Promise.resolve({ ok: false, message: '연도 범위를 확인해 주세요.' });
   }
   try {
-    const terms = listSolarTermsForYear(year);
+    const terms = await calendar.listSolarTermsForYearAsync(year);
     if (!terms || terms.length === 0) {
       return { ok: false, message: '해당 연도 절기 데이터가 없습니다.' };
     }

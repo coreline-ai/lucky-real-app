@@ -5,9 +5,17 @@
   "type": "module",
   "description": "Seasonal lightweight web demos using manseryeok-engine (Tojeong yearly summary first).",
   "scripts": {
+    "data:generate": "npm --prefix ../engine run data-shards:generate -- --output ../web-lucky/public/manseryeok-data",
+    "shards": "npm run data:generate",
+    "predev": "npm run data:generate",
     "dev": "vite",
+    "prebuild": "npm run data:generate",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "browser:check": "node scripts/browser-check.mjs",
+    "browser:hub-check": "node scripts/browser-hub-check.mjs",
+    "browser:perf": "node scripts/browser-performance-check.mjs",
+    "pretest": "npm run data:generate",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

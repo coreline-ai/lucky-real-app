@@ -23,4 +23,9 @@ describe('naming domain (real engine)', () => {
     const out = runNaming('김', []);
     expect(out.ok).toBe(false);
   });
+
+  it('rejects non-Hangul surname and candidate text', () => {
+    expect(runNaming('<', ['민준']).ok).toBe(false);
+    expect(runNaming('김', ['a>']).ok).toBe(false);
+  });
 });

@@ -1,4 +1,4 @@
-import type { TojeongResult } from 'manseryeok-engine';
+import type { TojeongResult } from 'manseryeok-engine/engine/types';
 
 /**
  * Clipboard share line: year + hexagram + overall excerpt only.

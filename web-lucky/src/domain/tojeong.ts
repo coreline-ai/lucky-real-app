@@ -1,5 +1,6 @@
-import { Tojeong, solarToLunar } from 'manseryeok-engine';
-import type { TojeongResult } from 'manseryeok-engine';
+import { analyzeTojeong } from 'manseryeok-engine/engine/tojeong/index';
+import type { TojeongResult } from 'manseryeok-engine/engine/types';
+import { getBrowserCalendar, type BrowserCalendar } from './browser-calendar';
 
 export type CalendarType = 'solar' | 'lunar';
 
@@ -48,7 +49,10 @@ function validateBirth(birth: BirthInput): string | null {
   return null;
 }
 
-export function resolveLunarBirth(birth: BirthInput): LunarBirth {
+export async function resolveLunarBirth(
+  birth: BirthInput,
+  calendar: BrowserCalendar = getBrowserCalendar(),
+): Promise<LunarBirth> {
   if (birth.calendarType === 'lunar') {
     return {
       year: birth.year,
@@ -57,7 +61,7 @@ export function resolveLunarBirth(birth: BirthInput): LunarBirth {
       isLeapMonth: Boolean(birth.isLeapMonth),
     };
   }
-  const converted = solarToLunar({
+  const converted = await calendar.solarToLunarAsync({
     year: birth.year,
     month: birth.month,
     day: birth.day,
@@ -74,16 +78,17 @@ export function resolveLunarBirth(birth: BirthInput): LunarBirth {
  * Pure yearly Tojeong path: solar→lunar when needed, then analyzeTojeong.
  * Does not use birth time or gender.
  */
-export function runTojeongYearly(
+export async function runTojeongYearly(
   birth: BirthInput,
   targetYear: number,
-): TojeongYearlyOutcome {
+  calendar: BrowserCalendar = getBrowserCalendar(),
+): Promise<TojeongYearlyOutcome> {
   const birthError = validateBirth(birth);
   if (birthError) {
-    return { ok: false, message: birthError };
+    return Promise.resolve({ ok: false, message: birthError });
   }
   if (!Number.isInteger(targetYear) || targetYear < 1900 || targetYear > 2101) {
-    return { ok: false, message: '대상 연도 범위를 확인해 주세요.' };
+    return Promise.resolve({ ok: false, message: '대상 연도 범위를 확인해 주세요.' });
   }
   if (targetYear < birth.year - 1) {
     // Soft allow but warn via message only when clearly before plausible birth era
@@ -91,8 +96,8 @@ export function runTojeongYearly(
   }
 
   try {
-    const lunarBirth = resolveLunarBirth(birth);
-    const result = Tojeong.analyzeTojeong(
+    const lunarBirth = await resolveLunarBirth(birth, calendar);
+    const result = analyzeTojeong(
       lunarBirth.year,
       lunarBirth.month,
       lunarBirth.day,

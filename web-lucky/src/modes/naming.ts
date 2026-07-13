@@ -1,6 +1,15 @@
 import { renderShell } from '../app/shell';
 import { parseGivenNameCandidates, runNaming } from '../domain/naming';
 
+function escapeHtml(value: unknown): string {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
 export function renderNamingMode(
   root: HTMLElement,
   onHome: () => void,
@@ -47,17 +56,17 @@ export function renderNamingMode(
       const names = parseGivenNameCandidates(raw);
       const outcome = runNaming(surname, names);
       if (!outcome.ok) {
-        resultHtml = `<div class="error-box" data-testid="error-box" role="alert">${outcome.message}</div>`;
+        resultHtml = `<div class="error-box" data-testid="error-box" role="alert">${escapeHtml(outcome.message)}</div>`;
       } else {
         const rows = outcome.candidates
           .map((c) => {
             const suri = `원${c.suri81.won.gilhyung}/형${c.suri81.hyeong.gilhyung}/이${c.suri81.yi.gilhyung}/정${c.suri81.jeong.gilhyung}`;
             return `<tr>
-              <td>${c.name}</td>
-              <td data-testid="score-${c.name}">${c.totalScore}</td>
-              <td>${c.strokes.join('-')}</td>
-              <td>${c.balumOhaeng.join('·')}</td>
-              <td>${suri}</td>
+              <td>${escapeHtml(c.name)}</td>
+              <td data-testid="score-${escapeHtml(c.name)}">${escapeHtml(c.totalScore)}</td>
+              <td>${escapeHtml(c.strokes.join('-'))}</td>
+              <td>${escapeHtml(c.balumOhaeng.join('·'))}</td>
+              <td>${escapeHtml(suri)}</td>
             </tr>`;
           })
           .join('');

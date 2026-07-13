@@ -203,6 +203,40 @@ const context = ManseryeokEngine.getSolarContext({
 console.log({ lunar, solar, terms, context });
 ```
 
+## 브라우저 연도별 데이터 로딩
+
+기존 root import와 동기 API는 전체 generated JSON을 계속 사용하며 호환성을 유지합니다. 브라우저에서 필요한 연도만 요청하려면 별도 entrypoint와 비동기 API를 사용합니다.
+
+먼저 배포 앱의 public 디렉터리에 deterministic shard를 생성합니다. 생성물은 원천 데이터에서 재생성할 수 있으므로 엔진 저장소에는 커밋하지 않습니다. 다음 명령은 모노레포 저장소 루트에서 실행합니다.
+
+```bash
+npm --prefix engine run data-shards:generate -- \
+  --output ../web-lucky/public/manseryeok-data
+```
+
+생성 URL은 `manifest.json`, `lunar-solar/<year>.json`, `solar-terms/<year>.json`입니다. 앱에서는 public base URL만 지정합니다.
+
+```ts
+import { createBrowserShardedCalendar } from 'manseryeok-engine/engine/browser';
+
+const calendar = createBrowserShardedCalendar({
+  baseUrl: '/manseryeok-data',
+});
+
+const lunar = await calendar.solarToLunarAsync({ year: 2024, month: 2, day: 10 });
+const solar = await calendar.lunarToSolarAsync({
+  year: 2023,
+  month: 2,
+  day: 1,
+  isLeapMonth: true,
+});
+const terms = await calendar.listSolarTermsForYearAsync(2026);
+```
+
+loader는 성공한 manifest와 shard를 메모리에 캐시하고, 같은 URL의 동시 요청을 하나로 합칩니다. 테스트나 커스텀 전송 계층은 `fetch` 옵션으로 주입할 수 있으며 `clearCache()`로 메모리 캐시를 비울 수 있습니다.
+
+`--output`은 shard 전용 디렉터리로 지정해야 합니다. 재생성 시 manifest가 확인된 기존 shard만 교체하며, 관리 대상이 아닌 파일이 있거나 저장소 상위 경로처럼 위험한 경로가 지정되면 삭제하지 않고 실패합니다.
+
 ## 정규화 컨텍스트 확인
 
 ```ts
